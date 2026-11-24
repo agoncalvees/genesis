@@ -2,7 +2,13 @@ import { readdir } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 
 const studioDisabled = process.env.VITE_STUDIO_DISABLED === "1";
-const studioPaths = ["/studio", "/studio/catalog", "/studio/layouts/workspace"];
+const studioPaths = [
+	"/studio",
+	"/studio/catalog",
+	"/studio/layouts/workspace",
+	"/studio/worlds",
+	"/studio/worlds/precision",
+];
 
 for (const path of [
 	"/",
@@ -54,6 +60,7 @@ test("served client JavaScript excludes server credentials", async ({
 			script,
 		).toBe(false);
 		if (studioDisabled) {
+			expect(source.includes("A smaller output."), script).toBe(false);
 			expect(
 				source.includes("Design system primitives and interaction states."),
 				script,

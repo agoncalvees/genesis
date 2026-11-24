@@ -16,6 +16,7 @@ export function FadeIn({
 			style={
 				{
 					"--enter-duration": `var(${durations[duration]})`,
+					"--enter-delay": `var(--delay-${duration}, 0ms)`,
 					...style,
 				} as CSSProperties
 			}

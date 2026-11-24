@@ -31,5 +31,13 @@
 		--duration-slow: 0ms;
 		--duration-showcase: 0ms;
 		--motion-intensity: 0;
+		--spring-stiffness: 0;
+		--spring-damping: 0;
+		--spring-mass: 0;
+		--delay-instant: 0ms;
+		--delay-fast: 0ms;
+		--delay-normal: 0ms;
+		--delay-slow: 0ms;
+		--delay-showcase: 0ms;
 	}
 }

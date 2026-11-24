@@ -7,13 +7,25 @@ export {
 export { EmptyState, ErrorState } from "./components/states";
 export { Tabs } from "./components/tabs";
 export { Toast, ToastProvider, useToast } from "./components/toast";
+export {
+	BarChart,
+	type ChartDatum,
+	Legend,
+	LineChart,
+	Sparkline,
+} from "./dataviz";
 export { cn } from "./lib/cn";
 export { AnimatedNumber } from "./motion/animated-number";
 export { AnimatedTabsIndicator } from "./motion/animated-tabs-indicator";
 export { FadeIn, StaggerGroup } from "./motion/entrances";
 export { Expandable } from "./motion/expandable";
 export { MotionProvider } from "./motion/motion-provider";
-export { durations, easings, type MotionDuration } from "./motion/presets";
+export {
+	durations,
+	easings,
+	type MotionDuration,
+	readMotionProfile,
+} from "./motion/presets";
 export { ProcessingFeedback } from "./motion/processing-feedback";
 export { BeforeAfter } from "./patterns/before-after";
 export { EvidenceExcerpt } from "./patterns/evidence-excerpt";

@@ -23,6 +23,14 @@ colors:
   info: "#1d4ed8"
   on-info: "#ffffff"
   control-border: "#52525b"
+  data-1: "#1d4ed8"
+  data-2: "#15803d"
+  data-3: "#b91c1c"
+  data-4: "#a16207"
+  data-5: "#7e22ce"
+  data-6: "#0e7490"
+  data-grid: "#d4d4d8"
+  data-axis: "#52525b"
 typography:
   display:
     fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
@@ -49,18 +57,83 @@ components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-    rounded: "{rounded.control}"
+  button-primary-hover:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
+  button-secondary:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.foreground}"
+  button-secondary-hover:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+  button-ghost:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+  button-ghost-hover:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.foreground}"
+  card:
+    backgroundColor: "{colors.surface-raised}"
+    textColor: "{colors.foreground}"
+  card-divider:
+    backgroundColor: "{colors.border}"
+  input:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.muted}"
+  input-outline:
+    backgroundColor: "{colors.control-border}"
+  badge-neutral:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.on-accent}"
+  focus-ring:
+    backgroundColor: "{colors.focus}"
+  chart:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.data-axis}"
+  chart-grid:
+    backgroundColor: "{colors.data-grid}"
+  badge-success:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.on-success}"
+  alert-success:
+    backgroundColor: "{colors.success}"
+    textColor: "{colors.on-success}"
+  badge-warning:
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.on-warning}"
+  alert-warning:
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.on-warning}"
+  badge-danger:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.on-danger}"
+  alert-danger:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.on-danger}"
+  badge-info:
+    backgroundColor: "{colors.info}"
+    textColor: "{colors.on-info}"
+  alert-info:
+    backgroundColor: "{colors.info}"
+    textColor: "{colors.on-info}"
+  chart-series-1:
+    backgroundColor: "{colors.data-1}"
+  chart-series-2:
+    backgroundColor: "{colors.data-2}"
+  chart-series-3:
+    backgroundColor: "{colors.data-3}"
+  chart-series-4:
+    backgroundColor: "{colors.data-4}"
+  chart-series-5:
+    backgroundColor: "{colors.data-5}"
+  chart-series-6:
+    backgroundColor: "{colors.data-6}"
 motion:
-  durations:
-    instant: 100
-    fast: 150
-    normal: 250
-    slow: 400
-    showcase: 600
-  easing:
-    standard: [0.2, 0, 0, 1]
-    enter: [0, 0, 0, 1]
-    exit: [0.3, 0, 1, 1]
+  instant: {duration: 100ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
+  fast: {duration: 150ms, timingFunction: "cubic-bezier(0.3, 0, 1, 1)", delay: 0ms}
+  normal: {duration: 250ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
+  slow: {duration: 400ms, timingFunction: "cubic-bezier(0, 0, 0, 1)", delay: 0ms}
+  showcase: {duration: 600ms, timingFunction: "cubic-bezier(0, 0, 0, 1)", delay: 0ms}
 genesis:
   density: 1
   borderWidth: 1px
@@ -78,7 +151,8 @@ genesis:
   motionProfile:
     name: crisp
     intensity: 1
-    spring: { stiffness: 300, damping: 30 }
+    scale: 1
+    spring: { stiffness: 300, damping: 30, mass: 1 }
   data:
     data-1: "#1d4ed8"
     data-2: "#15803d"

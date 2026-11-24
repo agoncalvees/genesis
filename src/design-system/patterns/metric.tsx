@@ -20,8 +20,12 @@ export function Metric({
 		<dl className="grid min-w-0 gap-1 wrap-anywhere">
 			<dt className="text-ds-sm font-medium text-muted">{metric}</dt>
 			<dd className="font-metric text-ds-2xl font-ds-heading tabular-nums">
-				{formatter.format(value)}
-				{unit && <span className="ms-1 text-ds-sm font-medium">{unit}</span>}
+				<span className="align-baseline">{formatter.format(value)}</span>
+				{unit && (
+					<span className="ms-1 align-baseline font-body text-ds-sm font-medium normal-case [font-variant-caps:normal]">
+						{unit}
+					</span>
+				)}
 			</dd>
 			{delta !== undefined && (
 				<div className="flex flex-wrap gap-x-2 text-ds-sm text-muted">

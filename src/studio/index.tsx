@@ -14,6 +14,9 @@ function Studio() {
 					<Link className="underline underline-offset-4" to="/studio/catalog">
 						Component catalog
 					</Link>
+					<Link className="underline underline-offset-4" to="/studio/worlds">
+						Genesis Worlds
+					</Link>
 				</Stack>
 			</Container>
 		</main>

@@ -98,3 +98,29 @@ test("detects missing or changed generated output", () => {
 		rmSync(dir, { recursive: true, force: true });
 	}
 });
+
+test.each(["precision", "expressive", "cinematic", "civic"])(
+	"%s validates motion, colors and semantic component declarations",
+	(name) => {
+		const source = readFileSync(`design/worlds/${name}/DESIGN.md`, "utf8");
+		const { findings, identity } = loadDesign(source);
+		expect(
+			findings.filter(
+				({ severity, rule }) =>
+					severity === "error" || rule === "orphaned-tokens",
+			),
+		).toEqual([]);
+		expect(identity.light["data-6"]).toMatch(/^#[\da-f]{6}$/);
+		expect(identity.light["duration-showcase"]).toBe(
+			{
+				precision: "420ms",
+				expressive: "540ms",
+				cinematic: "600ms",
+				civic: "0ms",
+			}[name],
+		);
+		expect(identity.light["spring-mass"]).toBeTruthy();
+		if (name === "cinematic")
+			expect(identity.dark?.primary).not.toBe(identity.light.primary);
+	},
+);

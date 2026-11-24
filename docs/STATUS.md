@@ -25,4 +25,6 @@ P09-CDX-01 concluído na máquina local. `check`, `typecheck`, `test` (210 passa
 
 P09-CDX-02: `genesis:new` validado localmente antes da integração com o design engine. Instalação congelada, check, typecheck, test, build e E2E retornaram 0 no clone descartável. [Comandos, resultados e verificação pendente](engineering/phase-09/checkpoints/P09-CDX-02.md).
 
+P09-CDX-03: quatro Genesis Worlds, gráficos SVG, perfis de movimento e fontes escopadas entregues localmente. Check, typecheck, build, testes (252 passaram, 1 opt-in ignorado), E2E (44), E2E de produção nas duas variantes (12 cada), design:check e os dois linters retornaram 0. O lint oficial encontrou zero tokens órfãos e registrou avisos sobre as duas extensões. A revisão independente está pendente. [Checkpoint e 12 capturas](engineering/phase-09/checkpoints/P09-CDX-03.md).
+
 Estados: pendente / em andamento / bloqueado / validado. Não marcar validado sem evidência.

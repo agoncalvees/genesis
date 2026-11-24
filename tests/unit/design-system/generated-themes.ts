@@ -26,6 +26,7 @@ export function readGeneratedThemes() {
 		);
 	}
 	for (const [, selector, body] of worlds.matchAll(blocks)) {
+		if (selector.trim().startsWith("html:has(")) continue;
 		const id = selector.match(/\[data-world="([^"]+)"\]/)?.[1];
 		if (!id) throw new Error(`Unexpected world selector: ${selector}`);
 		const declarations = Object.entries(parseDeclarations(body));

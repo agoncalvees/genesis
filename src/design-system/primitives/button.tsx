@@ -5,7 +5,7 @@ import { cn } from "../lib/cn";
 import { SpinnerMark } from "./feedback";
 
 const buttonStyles = cva(
-	"inline-flex min-w-(--target-min) shrink-0 select-none items-center justify-center gap-2 rounded-control border-(length:--border-width) font-body text-ds-sm font-medium transition-[opacity,transform] duration-(--duration-instant) ease-standard active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100",
+	"inline-flex min-w-(--target-min) shrink-0 select-none items-center justify-center gap-2 rounded-control border-(length:--border-width) font-body text-ds-sm font-medium transition-[opacity,transform] duration-(--duration-instant) ease-standard motion-safe:active:scale-[calc(1-0.02*var(--motion-intensity))] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100",
 	{
 		variants: {
 			variant: {

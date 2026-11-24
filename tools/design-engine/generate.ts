@@ -91,7 +91,15 @@ export function renderWorld(id: string, identity: Identity) {
 			];
 		}),
 	);
-	return block(`[data-world="${id}"]`, tokens);
+	const scope = `[data-world="${id}"]`;
+	const canvas = `html:has(:where(.world-detail > ${scope}`;
+	return (
+		block(scope, tokens) +
+		`\n${canvas}${identity.dark ? '[data-theme="light"]' : ""})) {\n\t--world-canvas: ${identity.light.background};\n}\n` +
+		(identity.dark
+			? `\n${canvas}[data-theme="dark"])) {\n\t--world-canvas: ${identity.dark.background};\n}\n`
+			: "")
+	);
 }
 
 export function worldPaths() {
@@ -110,12 +118,26 @@ export function worldPaths() {
 
 export function renderFiles(product = readFileSync(productPath, "utf8")) {
 	const active = loadDesign(product).identity;
-	const worlds = worldPaths().map(({ name, path }) =>
-		renderWorld(name, loadDesign(readFileSync(path, "utf8")).identity),
-	);
+	const worlds = worldPaths().map(({ name, path }) => ({
+		name,
+		identity: loadDesign(readFileSync(path, "utf8")).identity,
+	}));
+	const metadata = worlds
+		.map(
+			({ name, identity }) =>
+				`\t${/^[a-z][a-z0-9]*$/.test(name) ? name : JSON.stringify(name)}: {\n\t\tcomposition: "${identity.light.composition}",\n\t\thasDark: ${Boolean(identity.dark)},\n\t},\n`,
+		)
+		.join("");
+
 	return {
 		[join(generatedDirectory, "product.css")]: renderProduct(active),
-		[join(generatedDirectory, "worlds.css")]: header + worlds.join("\n"),
+		[join(generatedDirectory, "worlds.css")]:
+			header +
+			worlds
+				.map(({ name, identity }) => renderWorld(name, identity))
+				.join("\n"),
+		[join(generatedDirectory, "worlds.ts")]:
+			`${header}export const worldThemes = {\n${metadata}} as const;\n`,
 	};
 }
 

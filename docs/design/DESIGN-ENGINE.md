@@ -13,6 +13,7 @@ tools/design-engine/           # adaptador + normalizador + gerador (build-time;
 src/design-system/themes/generated/
   product.css                  # :root ← design/DESIGN.md
   worlds.css                   # [data-world="<id>"] ← design/worlds/*/DESIGN.md
+  worlds.ts                    # composição e presença de variante escura para o Studio
 ```
 Scripts: `design:lint`, `design:build`, `design:check` (drift, CI), `design:diff <a> <b>`, `design:import <arquivo|url>`, `design:apply <id|import>`.
 
@@ -28,16 +29,22 @@ Toda identidade precisa produzir **todas** estas variáveis, para claro e, se de
 | Ação | `--primary --on-primary --accent --on-accent --focus` |
 | Estado | `--success/--on-success --warning/--on-warning --danger/--on-danger --info/--on-info` |
 | Dados | `--data-1 … --data-6`, `--data-grid`, `--data-axis` |
-| Tipografia | `--typeface-display --typeface-body --typeface-mono`, `--display-weight`, `--display-tracking`, `--heading-weight`, `--type-scale` (razão), `--text-base` |
+| Tipografia | `--typeface-display --typeface-body --typeface-mono`, `--display-weight`, `--display-tracking`, `--heading-weight`, `--section-heading-*`, `--type-scale` (razão), `--text-base` |
 | Geometria | `--radius-sm --radius-md --radius-lg --radius-control` (forma de botão/input), `--border-width` |
 | Densidade | `--density` (0.75 compacto · 1 padrão · 1.25 amplo), `--control-height`, `--space-unit` |
 | Superfície | `--surface-style` (`border` · `elevation` · `tint`), `--shadow-sm/md/lg`, `--dialog-scrim` |
-| Motion | `--duration-*` (escalados pelo perfil), `--ease-standard/enter/exit`, `--motion-intensity` (0–1), spring (`--spring-stiffness`, `--spring-damping`) |
+| Motion | `--duration-*` e `--delay-*` (escalados pelo perfil), `--ease-standard/enter/exit`, `--motion-intensity` (0–1), spring (`--spring-stiffness`, `--spring-damping`, `--spring-mass`) |
 | Ícones | `--icon-weight` (Phosphor: thin/light/regular/bold) |
 
 Mapeamento a partir da spec do Google: `colors.*` → superfícies/texto/ação/estado por nome canônico (`primary`, `on-primary`, `surface`, …; nomes ausentes → erro, não autogeração); `typography.display|headline|body|label|mono` → tipografia; `rounded` → geometria; `spacing` → escala; `motion` → durações/easing. Chave de extensão **`genesis:`** carrega: `density`, `surfaceStyle`, `iconWeight`, `typeScale`, `displayWeight`, `displayTracking`, `motionProfile` (`still|calm|crisp|lively` + spring), `data` (paleta categórica), `composition`, `darkColors` (variante escura).
 
+Declare `motion.instant|fast|normal|slow|showcase` com `duration`, `timingFunction` e `delay`. O motor multiplica duração e atraso por `genesis.motionProfile.scale` e limita a soma a 400 ms nas interações e 600 ms nas revelações. `normal`, `showcase` e `fast` fornecem as curvas semânticas padrão, de entrada e de saída, respectivamente. O lint do Google 0.4.0 verifica cores, tipografia e componentes e sinaliza `motion` e `genesis` como extensões fora de seu exportador.
+
 Use `rounded.sm|md|lg|control` e `spacing.unit|control` em px ou rem. `genesis.darkColors` exige todas as cores semânticas quando declarado. `genesis.darkData` permite uma paleta de dados escura independente. `genesis.metricTypeface: mono` escolhe a família monoespaçada para métricas.
+
+O eixo opcional `genesis.sectionHeading` define tamanho mínimo, escala fluida em unidades de largura do contêiner (`fluid`), tamanho máximo, peso e tracking para títulos de seção. A manchete segue os tokens de display.
+
+A rota `/studio/worlds` compara os mundos usando o mesmo conjunto de dados sintético. Use `?compare=precision,expressive` para inspecionar duas composições. As fontes OFL são carregadas pelo módulo assíncrono dessa rota.
 
 A validação rejeita identidades que falham nos pares de `VISUAL-ENGINEERING.md` ou usam fontes fora do registro licenciado em `tools/design-engine/fonts.ts`. As seis séries precisam de contraste ≥ 3:1 contra `--surface` e distância ΔE OK ≥ 0,07 entre si, calculada em OKLab na escala 0–1. `--control-border` passa pelo contraste de controles e `--border` fica disponível para divisores decorativos.
 

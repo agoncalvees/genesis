@@ -68,6 +68,15 @@ const extension = z.object({
 	typeScale: z.number().positive(),
 	displayWeight: weight,
 	displayTracking: tracking,
+	sectionHeading: z
+		.object({
+			size: length,
+			fluid: z.number().min(0).max(8).default(0),
+			maxSize: length.optional(),
+			weight,
+			tracking,
+		})
+		.optional(),
 	metricTypeface: z.enum(["display", "mono"]).optional(),
 	composition,
 	darkColors: z.record(z.string(), color).optional(),
@@ -78,9 +87,11 @@ const extension = z.object({
 	motionProfile: z.object({
 		name: z.enum(["still", "calm", "crisp", "lively"]),
 		intensity: z.number().min(0).max(1),
+		scale: z.number().min(0).max(4).default(1),
 		spring: z.object({
 			stiffness: z.number().positive(),
 			damping: z.number().positive(),
+			mass: z.number().positive().default(1),
 		}),
 	}),
 });
@@ -95,6 +106,37 @@ const motion = z.object({
 	}),
 	easing: z.object({ standard: curve, enter: curve, exit: curve }),
 });
+
+const motionNames = ["instant", "fast", "normal", "slow", "showcase"] as const;
+const motionToken = z.object({
+	duration: z.union([
+		duration(600),
+		z
+			.string()
+			.regex(/^\d+(?:\.\d+)?ms$/)
+			.transform(Number.parseFloat)
+			.pipe(duration(600)),
+	]),
+	timingFunction: z.union([
+		curve,
+		z
+			.string()
+			.regex(/^cubic-bezier\([\d., -]+\)$/)
+			.transform((value) => value.slice(13, -1).split(",").map(Number))
+			.pipe(curve),
+	]),
+	delay: z
+		.union([
+			duration(400),
+			z
+				.string()
+				.regex(/^\d+(?:\.\d+)?ms$/)
+				.transform(Number.parseFloat)
+				.pipe(duration(400)),
+		])
+		.default(0),
+});
+const specMotion = z.record(z.enum(motionNames), motionToken);
 
 function required<T>(value: T | undefined, path: string): T {
 	if (value === undefined || value === "")
@@ -121,7 +163,30 @@ export interface Identity {
 export function normalize(report: ReturnType<typeof parseDesign>): Identity {
 	const model = report.designSystem;
 	const axes = extension.parse(model.unknownKeyValues?.genesis);
-	const timing = motion.parse(model.unknownKeyValues?.motion);
+	const rawMotion = model.unknownKeyValues?.motion;
+	const legacy = motion.safeParse(rawMotion);
+	const timing = legacy.success
+		? {
+				entries: motionNames.map(
+					(name) =>
+						[
+							name,
+							{ duration: legacy.data.durations[name], delay: 0 },
+						] as const,
+				),
+				easing: legacy.data.easing,
+			}
+		: (() => {
+				const entries = specMotion.parse(rawMotion);
+				return {
+					entries: Object.entries(entries),
+					easing: {
+						standard: entries.normal.timingFunction,
+						enter: entries.showcase.timingFunction,
+						exit: entries.fast.timingFunction,
+					},
+				};
+			})();
 	const families = Object.fromEntries(
 		["display", "body", "mono"].map((role) => [
 			`typeface-${role}`,
@@ -136,6 +201,14 @@ export function normalize(report: ReturnType<typeof parseDesign>): Identity {
 		"metric-typeface": `var(--typeface-${axes.metricTypeface ?? "display"})`,
 		"display-weight": String(axes.displayWeight),
 		"display-tracking": axes.displayTracking,
+		"section-heading-size": axes.sectionHeading?.size ?? "1.25rem",
+		"section-heading-fluid": `${axes.sectionHeading?.fluid ?? 0}cqi`,
+		"section-heading-max":
+			axes.sectionHeading?.maxSize ?? axes.sectionHeading?.size ?? "1.25rem",
+		"section-heading-weight": axes.sectionHeading
+			? String(axes.sectionHeading.weight)
+			: "var(--heading-weight)",
+		"section-heading-tracking": axes.sectionHeading?.tracking ?? "0em",
 		"heading-weight": String(
 			weight.parse(
 				required(
@@ -164,6 +237,7 @@ export function normalize(report: ReturnType<typeof parseDesign>): Identity {
 		"motion-intensity": String(axes.motionProfile.intensity),
 		"spring-stiffness": String(axes.motionProfile.spring.stiffness),
 		"spring-damping": String(axes.motionProfile.spring.damping),
+		"spring-mass": String(axes.motionProfile.spring.mass),
 	};
 	for (const role of ["sm", "md", "lg", "control"]) {
 		tokens[`radius-${role}`] = dimension(
@@ -173,9 +247,17 @@ export function normalize(report: ReturnType<typeof parseDesign>): Identity {
 	}
 	for (const [role, value] of Object.entries(axes.shadows))
 		tokens[`shadow-${role}`] = value === "none" ? "0 0 #0000" : value;
-	for (const [role, value] of Object.entries(timing.durations)) {
-		tokens[`duration-${role}`] =
-			`${axes.motionProfile.name === "still" ? 0 : value}ms`;
+	const scale =
+		axes.motionProfile.name === "still" ? 0 : axes.motionProfile.scale;
+	for (const [role, value] of timing.entries) {
+		const maximum = role === "showcase" ? 600 : 400;
+		if ((value.duration + value.delay) * scale > maximum)
+			throw new Error(`motion.${role} exceeds ${maximum}ms after scaling`);
+		tokens[`duration-${role}`] = `${value.duration * scale}ms`;
+		tokens[`delay-${role}`] = `${value.delay * scale}ms`;
+		if ("timingFunction" in value)
+			tokens[`ease-${role}`] =
+				`cubic-bezier(${value.timingFunction.join(", ")})`;
 	}
 	for (const [role, value] of Object.entries(timing.easing))
 		tokens[`ease-${role}`] = `cubic-bezier(${value.join(", ")})`;

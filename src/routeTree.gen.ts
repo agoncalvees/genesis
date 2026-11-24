@@ -19,6 +19,8 @@ import { Route as DemosRouteOptRouteImport } from './routes/demos.route-opt'
 import { Route as StudioIndexRouteImport } from './routes/studio.index'
 import { Route as StudioCatalogRouteImport } from './routes/studio.catalog'
 import { Route as StudioLayoutsNameRouteImport } from './routes/studio.layouts.$name'
+import { Route as StudioWorldsIndexRouteImport } from './routes/studio.worlds.index'
+import { Route as StudioWorldsIdRouteImport } from './routes/studio.worlds.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +72,16 @@ const StudioLayoutsNameRoute = StudioLayoutsNameRouteImport.update({
   path: '/layouts/$name',
   getParentRoute: () => StudioRoute,
 } as any)
+const StudioWorldsIndexRoute = StudioWorldsIndexRouteImport.update({
+  id: '/worlds/',
+  path: '/worlds/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioWorldsIdRoute = StudioWorldsIdRouteImport.update({
+  id: '/worlds/$id',
+  path: '/worlds/$id',
+  getParentRoute: () => StudioRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +94,8 @@ export interface FileRoutesByFullPath {
   '/demos/': typeof DemosIndexRoute
   '/studio/': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
+  '/studio/worlds/$id': typeof StudioWorldsIdRoute
+  '/studio/worlds/': typeof StudioWorldsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,6 +106,8 @@ export interface FileRoutesByTo {
   '/demos': typeof DemosIndexRoute
   '/studio': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
+  '/studio/worlds/$id': typeof StudioWorldsIdRoute
+  '/studio/worlds': typeof StudioWorldsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -105,6 +121,8 @@ export interface FileRoutesById {
   '/demos/': typeof DemosIndexRoute
   '/studio/': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
+  '/studio/worlds/$id': typeof StudioWorldsIdRoute
+  '/studio/worlds/': typeof StudioWorldsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,6 +137,8 @@ export interface FileRouteTypes {
     | '/demos/'
     | '/studio/'
     | '/studio/layouts/$name'
+    | '/studio/worlds/$id'
+    | '/studio/worlds/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -129,6 +149,8 @@ export interface FileRouteTypes {
     | '/demos'
     | '/studio'
     | '/studio/layouts/$name'
+    | '/studio/worlds/$id'
+    | '/studio/worlds'
   id:
     | '__root__'
     | '/'
@@ -141,6 +163,8 @@ export interface FileRouteTypes {
     | '/demos/'
     | '/studio/'
     | '/studio/layouts/$name'
+    | '/studio/worlds/$id'
+    | '/studio/worlds/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -222,6 +246,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioLayoutsNameRouteImport
       parentRoute: typeof StudioRoute
     }
+    '/studio/worlds/': {
+      id: '/studio/worlds/'
+      path: '/worlds'
+      fullPath: '/studio/worlds/'
+      preLoaderRoute: typeof StudioWorldsIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/worlds/$id': {
+      id: '/studio/worlds/$id'
+      path: '/worlds/$id'
+      fullPath: '/studio/worlds/$id'
+      preLoaderRoute: typeof StudioWorldsIdRouteImport
+      parentRoute: typeof StudioRoute
+    }
   }
 }
 
@@ -243,12 +281,16 @@ interface StudioRouteChildren {
   StudioCatalogRoute: typeof StudioCatalogRoute
   StudioIndexRoute: typeof StudioIndexRoute
   StudioLayoutsNameRoute: typeof StudioLayoutsNameRoute
+  StudioWorldsIdRoute: typeof StudioWorldsIdRoute
+  StudioWorldsIndexRoute: typeof StudioWorldsIndexRoute
 }
 
 const StudioRouteChildren: StudioRouteChildren = {
   StudioCatalogRoute: StudioCatalogRoute,
   StudioIndexRoute: StudioIndexRoute,
   StudioLayoutsNameRoute: StudioLayoutsNameRoute,
+  StudioWorldsIdRoute: StudioWorldsIdRoute,
+  StudioWorldsIndexRoute: StudioWorldsIndexRoute,
 }
 
 const StudioRouteWithChildren =
