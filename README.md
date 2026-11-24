@@ -1,7 +1,7 @@
 # Genesis
 Built for the unknown.
 
-Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é um produto, SaaS ou solução inscrita. Este pacote é **planejamento inicial**, não uma aplicação executável.
+Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é um produto, SaaS ou solução inscrita. A aplicação local reúne a fundação, o catálogo de componentes e os ensaios.
 
 ## Comece aqui
 1. Leia `docs/BLUEPRINT.md` e `docs/strategy/COMPETITION.md`.
@@ -23,9 +23,11 @@ Requer Bun 1.4.5 e Node 24.
 - `bun run test:e2e:prod` — compila com o preset Nitro `node-server`, serve `.output/` com Node e executa o projeto Playwright de produção.
 - `bun run bench` — executa o benchmark local.
 
-## Studio
+## Demos e Studio
 
-Com `bun run dev`, abra `/studio` para acessar o catálogo em `/studio/catalog` e as prévias em `/studio/layouts/$name`. Em produção, o acesso direto a essas rotas retorna HTTP 404.
+A página inicial leva a `/demos`, `/studio` e `/smoke`. Em `/demos`, a comparação de rotas e a extração de evidências de documentos rodam no navegador, com exemplos sintéticos identificados e sem chamadas de IA. Os tempos de construção vêm dos [relatórios dos ensaios](docs/engineering/phase-07/).
+
+O Studio é público por padrão. Acesse o catálogo em `/studio/catalog` e as prévias em `/studio/layouts/$name`. Defina `VITE_STUDIO_DISABLED=1` antes de compilar para remover o link da página inicial e responder HTTP 404 nas rotas do Studio. O CI verifica as duas configurações com `bun run test:e2e:prod` e `VITE_STUDIO_DISABLED=1 bun run test:e2e:prod`.
 
 ## Mapa
 - `AGENTS.md`: regras canônicas de trabalho.

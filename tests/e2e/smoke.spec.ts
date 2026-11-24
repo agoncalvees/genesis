@@ -4,9 +4,7 @@ test("serves the neutral home page", async ({ page }) => {
 	const response = await page.goto("/");
 
 	expect(response?.status()).toBe(200);
-	await expect(
-		page.getByRole("heading", { name: "Application" }),
-	).toBeVisible();
+	await expect(page.getByRole("heading", { name: "Genesis" })).toBeVisible();
 });
 
 test("hydrates the smoke route without page errors", async ({ page }) => {

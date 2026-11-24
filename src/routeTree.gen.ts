@@ -10,8 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemosRouteImport } from './routes/demos'
 import { Route as SmokeRouteImport } from './routes/smoke'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as DemosIndexRouteImport } from './routes/demos.index'
+import { Route as DemosDocEvidenceRouteImport } from './routes/demos.doc-evidence'
+import { Route as DemosRouteOptRouteImport } from './routes/demos.route-opt'
 import { Route as StudioIndexRouteImport } from './routes/studio.index'
 import { Route as StudioCatalogRouteImport } from './routes/studio.catalog'
 import { Route as StudioLayoutsNameRouteImport } from './routes/studio.layouts.$name'
@@ -19,6 +23,11 @@ import { Route as StudioLayoutsNameRouteImport } from './routes/studio.layouts.$
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemosRoute = DemosRouteImport.update({
+  id: '/demos',
+  path: '/demos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmokeRoute = SmokeRouteImport.update({
@@ -30,6 +39,21 @@ const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DemosIndexRoute = DemosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemosRoute,
+} as any)
+const DemosDocEvidenceRoute = DemosDocEvidenceRouteImport.update({
+  id: '/doc-evidence',
+  path: '/doc-evidence',
+  getParentRoute: () => DemosRoute,
+} as any)
+const DemosRouteOptRoute = DemosRouteOptRouteImport.update({
+  id: '/route-opt',
+  path: '/route-opt',
+  getParentRoute: () => DemosRoute,
 } as any)
 const StudioIndexRoute = StudioIndexRouteImport.update({
   id: '/',
@@ -49,25 +73,36 @@ const StudioLayoutsNameRoute = StudioLayoutsNameRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demos': typeof DemosRouteWithChildren
   '/smoke': typeof SmokeRoute
   '/studio': typeof StudioRouteWithChildren
+  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
+  '/demos/route-opt': typeof DemosRouteOptRoute
   '/studio/catalog': typeof StudioCatalogRoute
+  '/demos/': typeof DemosIndexRoute
   '/studio/': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/smoke': typeof SmokeRoute
+  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
+  '/demos/route-opt': typeof DemosRouteOptRoute
   '/studio/catalog': typeof StudioCatalogRoute
+  '/demos': typeof DemosIndexRoute
   '/studio': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/demos': typeof DemosRouteWithChildren
   '/smoke': typeof SmokeRoute
   '/studio': typeof StudioRouteWithChildren
+  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
+  '/demos/route-opt': typeof DemosRouteOptRoute
   '/studio/catalog': typeof StudioCatalogRoute
+  '/demos/': typeof DemosIndexRoute
   '/studio/': typeof StudioIndexRoute
   '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
@@ -75,25 +110,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/demos'
     | '/smoke'
     | '/studio'
+    | '/demos/doc-evidence'
+    | '/demos/route-opt'
     | '/studio/catalog'
+    | '/demos/'
     | '/studio/'
     | '/studio/layouts/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/smoke' | '/studio/catalog' | '/studio' | '/studio/layouts/$name'
+  to:
+    | '/'
+    | '/smoke'
+    | '/demos/doc-evidence'
+    | '/demos/route-opt'
+    | '/studio/catalog'
+    | '/demos'
+    | '/studio'
+    | '/studio/layouts/$name'
   id:
     | '__root__'
     | '/'
+    | '/demos'
     | '/smoke'
     | '/studio'
+    | '/demos/doc-evidence'
+    | '/demos/route-opt'
     | '/studio/catalog'
+    | '/demos/'
     | '/studio/'
     | '/studio/layouts/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DemosRoute: typeof DemosRouteWithChildren
   SmokeRoute: typeof SmokeRoute
   StudioRoute: typeof StudioRouteWithChildren
 }
@@ -105,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demos': {
+      id: '/demos'
+      path: '/demos'
+      fullPath: '/demos'
+      preLoaderRoute: typeof DemosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/smoke': {
@@ -120,6 +179,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/demos/': {
+      id: '/demos/'
+      path: '/'
+      fullPath: '/demos/'
+      preLoaderRoute: typeof DemosIndexRouteImport
+      parentRoute: typeof DemosRoute
+    }
+    '/demos/doc-evidence': {
+      id: '/demos/doc-evidence'
+      path: '/doc-evidence'
+      fullPath: '/demos/doc-evidence'
+      preLoaderRoute: typeof DemosDocEvidenceRouteImport
+      parentRoute: typeof DemosRoute
+    }
+    '/demos/route-opt': {
+      id: '/demos/route-opt'
+      path: '/route-opt'
+      fullPath: '/demos/route-opt'
+      preLoaderRoute: typeof DemosRouteOptRouteImport
+      parentRoute: typeof DemosRoute
     }
     '/studio/': {
       id: '/studio/'
@@ -145,6 +225,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface DemosRouteChildren {
+  DemosDocEvidenceRoute: typeof DemosDocEvidenceRoute
+  DemosRouteOptRoute: typeof DemosRouteOptRoute
+  DemosIndexRoute: typeof DemosIndexRoute
+}
+
+const DemosRouteChildren: DemosRouteChildren = {
+  DemosDocEvidenceRoute: DemosDocEvidenceRoute,
+  DemosRouteOptRoute: DemosRouteOptRoute,
+  DemosIndexRoute: DemosIndexRoute,
+}
+
+const DemosRouteWithChildren = DemosRoute._addFileChildren(DemosRouteChildren)
+
 interface StudioRouteChildren {
   StudioCatalogRoute: typeof StudioCatalogRoute
   StudioIndexRoute: typeof StudioIndexRoute
@@ -162,6 +256,7 @@ const StudioRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DemosRoute: DemosRouteWithChildren,
   SmokeRoute: SmokeRoute,
   StudioRoute: StudioRouteWithChildren,
 }
