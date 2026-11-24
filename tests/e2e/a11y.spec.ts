@@ -4,10 +4,9 @@ import { expect, type Page, test } from "@playwright/test";
 /*
  * Gate 02 (docs/ROADMAP.md:9, test-strategy.md:50-75): axe WCAG 2.2 AA,
  * no horizontal overflow and a visible keyboard focus indicator across the
- * required viewports and both themes. /catalog is written in parallel, so a
- * missing route (404) skips instead of failing the suite.
+ * required viewports and both themes.
  */
-const CATALOG = "/catalog";
+const CATALOG = "/studio/catalog";
 const VIEWPORTS = [
 	{ name: "mobile", width: 360, height: 800 },
 	{ name: "tablet", width: 768, height: 1024 },
@@ -26,17 +25,14 @@ async function openCatalog(
 		height: viewport.height,
 	});
 	const response = await page.goto(CATALOG);
-	if (response?.status() === 404) {
-		test.skip(
-			true,
-			"/catalog is being built in parallel and is not available yet",
-		);
-		return;
-	}
 	expect(response?.status()).toBe(200);
-	await page.evaluate((value) => {
-		document.documentElement.dataset.theme = value;
-	}, theme);
+	const themeToggle = page.getByRole("button", { name: "Dark theme" });
+	await expect(themeToggle).toBeEnabled();
+	if (theme === "dark") await themeToggle.click();
+	await expect(themeToggle).toHaveAttribute(
+		"aria-pressed",
+		String(theme === "dark"),
+	);
 }
 
 for (const viewport of VIEWPORTS) {
@@ -106,7 +102,7 @@ for (const viewport of VIEWPORTS) {
 test.describe("reduced motion", () => {
 	test.use({ reducedMotion: "reduce" });
 
-	test("renders /catalog with prefers-reduced-motion: reduce", async ({
+	test("renders /studio/catalog with prefers-reduced-motion: reduce", async ({
 		page,
 	}) => {
 		await openCatalog(page, VIEWPORTS[0], "light");

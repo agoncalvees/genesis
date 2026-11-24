@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createLazyFileRoute, getRouteApi, Link } from "@tanstack/react-router";
 import { FadeIn, Heading, MotionProvider, Text } from "../design-system";
 import {
 	ApplicationLayout,
@@ -7,53 +7,52 @@ import {
 	WorkspaceLayout,
 } from "../layouts";
 
-const names = {
+export const layoutNames = {
 	presentation: "Presentation",
 	application: "Application",
 	workspace: "Workspace",
 	focused: "Focused",
 } as const;
 
-export const Route = createFileRoute("/layouts/$name")({
-	loader: ({ params }) => {
-		if (!Object.hasOwn(names, params.name)) throw notFound();
-		return params.name as keyof typeof names;
-	},
-	head: ({ loaderData }) => ({
-		meta: [
-			{ title: loaderData ? `${names[loaderData]} layout` : "Layout preview" },
-		],
-	}),
+const route = getRouteApi("/studio/layouts/$name");
+
+export const LazyRoute = createLazyFileRoute("/studio/layouts/$name")({
 	component: LayoutPreview,
 });
 
 function LayoutPreview() {
-	const name = Route.useLoaderData();
+	const { name, label } = route.useLoaderData();
 	return (
 		<MotionProvider>
-			<Preview name={name} />
+			<Preview name={name} label={label} />
 		</MotionProvider>
 	);
 }
 
-function Preview({ name }: { name: keyof typeof names }) {
+function Preview({
+	name,
+	label,
+}: {
+	name: keyof typeof layoutNames;
+	label: string;
+}) {
 	const header = (
 		<Link
-			to="/catalog"
+			to="/studio/catalog"
 			hash="layouts"
 			className="inline-block rounded-sm text-sm font-medium underline underline-offset-4"
 		>
 			Back to layout catalog
 		</Link>
 	);
-	const title = <Heading level={1}>{names[name]} layout</Heading>;
+	const heading = <Heading level={1}>{label} layout</Heading>;
 
 	switch (name) {
 		case "presentation":
 			return (
 				<PresentationLayout header={header}>
 					<FadeIn className="grid max-w-xl gap-4">
-						{title}
+						{heading}
 						<Text muted>
 							A wide reading surface for a single narrative or a guided
 							demonstration.
@@ -75,7 +74,7 @@ function Preview({ name }: { name: keyof typeof names }) {
 					}
 				>
 					<FadeIn id="overview" className="grid max-w-xl gap-4">
-						{title}
+						{heading}
 						<Text muted>
 							Navigation sits alongside the main content on wider screens and
 							moves above it on smaller screens.
@@ -99,7 +98,7 @@ function Preview({ name }: { name: keyof typeof names }) {
 					}
 				>
 					<FadeIn className="grid min-h-56 w-full max-w-3xl content-center gap-3 rounded-lg border border-dashed border-muted bg-surface-raised p-5 sm:p-8">
-						{title}
+						{heading}
 						<Text muted>
 							A central work surface with optional tools and an inspector.
 						</Text>
@@ -110,7 +109,7 @@ function Preview({ name }: { name: keyof typeof names }) {
 			return (
 				<FocusedLayout header={header}>
 					<FadeIn className="grid gap-4">
-						{title}
+						{heading}
 						<Text muted>
 							A single column for a short task or a small-screen flow.
 						</Text>

@@ -19,7 +19,12 @@ Requer Bun 1.4.5 e Node 24.
 - `bun run build` — saída Vercel em `.vercel/output/`
 - `bun run check` (Biome), `bun run typecheck` (TS 7 strict)
 - `bun run test` (Vitest: projetos `unit` e `component`), `bun run test:e2e` (Playwright, Chromium)
-- `bun run bench` — previsto para a fase 05, ainda inexistente.
+- `bun run test:e2e:prod` — compila com o preset Nitro `node-server`, serve `.output/` com Node e executa o projeto Playwright de produção.
+- `bun run bench` — executa o benchmark local.
+
+## Studio
+
+Com `bun run dev`, abra `/studio` para acessar o catálogo em `/studio/catalog` e as prévias em `/studio/layouts/$name`. Em produção, o acesso direto a essas rotas retorna HTTP 404.
 
 ## Mapa
 - `AGENTS.md`: regras canônicas de trabalho.

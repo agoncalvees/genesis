@@ -1,5 +1,5 @@
 import { DotsThreeIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import {
 	AnimatedNumber,
@@ -43,16 +43,15 @@ import {
 	useToast,
 } from "../design-system";
 
-export const Route = createFileRoute("/catalog")({
-	head: () => ({ meta: [{ title: "Component catalog" }] }),
-	component: Catalog,
-});
-
 const options = [
 	{ value: "first", label: "Option one" },
 	{ value: "second", label: "Option two" },
 	{ value: "unavailable", label: "Unavailable option", disabled: true },
 ];
+
+export const LazyRoute = createLazyFileRoute("/studio/catalog")({
+	component: Catalog,
+});
 
 function Catalog() {
 	return (
@@ -509,7 +508,7 @@ function LayoutLinks() {
 					{layoutLinks.map(({ name, title, description }) => (
 						<li key={name} className="min-w-0">
 							<Link
-								to="/layouts/$name"
+								to="/studio/layouts/$name"
 								params={{ name }}
 								className="grid gap-1 rounded-lg border border-border bg-surface-raised p-4 hover:border-muted"
 							>

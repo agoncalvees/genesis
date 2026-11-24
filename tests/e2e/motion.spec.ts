@@ -1,10 +1,13 @@
 import { expect, type Page, test } from "@playwright/test";
 
 const layouts = ["presentation", "application", "workspace", "focused"];
-const paths = ["/catalog", ...layouts.map((name) => `/layouts/${name}`)];
+const paths = [
+	"/studio/catalog",
+	...layouts.map((name) => `/studio/layouts/${name}`),
+];
 
 async function openCatalog(page: Page) {
-	await page.goto("/catalog");
+	await page.goto("/studio/catalog");
 	await expect(page.getByRole("button", { name: "Dark theme" })).toBeEnabled();
 }
 

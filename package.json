@@ -12,6 +12,7 @@
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
+		"test:e2e:prod": "NITRO_PRESET=node-server bun run build && GENESIS_E2E_PROD=1 playwright test --project=production",
 		"bench": "bun benchmarks/run.ts"
 	},
 	"dependencies": {

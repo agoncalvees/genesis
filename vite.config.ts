@@ -9,7 +9,7 @@ const config = defineConfig({
 	plugins: [
 		tailwindcss(),
 		tanstackStart(),
-		nitro({ preset: "vercel" }),
+		nitro({ preset: process.env.NITRO_PRESET ?? "vercel" }),
 		viteReact(),
 	],
 });

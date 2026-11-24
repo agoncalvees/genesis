@@ -10,18 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as SmokeRouteImport } from './routes/smoke'
-import { Route as LayoutsNameRouteImport } from './routes/layouts.$name'
+import { Route as StudioRouteImport } from './routes/studio'
+import { Route as StudioIndexRouteImport } from './routes/studio.index'
+import { Route as StudioCatalogRouteImport } from './routes/studio.catalog'
+import { Route as StudioLayoutsNameRouteImport } from './routes/studio.layouts.$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CatalogRoute = CatalogRouteImport.update({
-  id: '/catalog',
-  path: '/catalog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmokeRoute = SmokeRouteImport.update({
@@ -29,44 +26,76 @@ const SmokeRoute = SmokeRouteImport.update({
   path: '/smoke',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutsNameRoute = LayoutsNameRouteImport.update({
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudioIndexRoute = StudioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioCatalogRoute = StudioCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
+  getParentRoute: () => StudioRoute,
+} as any)
+const StudioLayoutsNameRoute = StudioLayoutsNameRouteImport.update({
   id: '/layouts/$name',
   path: '/layouts/$name',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => StudioRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
-  '/layouts/$name': typeof LayoutsNameRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/studio/catalog': typeof StudioCatalogRoute
+  '/studio/': typeof StudioIndexRoute
+  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
-  '/layouts/$name': typeof LayoutsNameRoute
+  '/studio/catalog': typeof StudioCatalogRoute
+  '/studio': typeof StudioIndexRoute
+  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
-  '/layouts/$name': typeof LayoutsNameRoute
+  '/studio': typeof StudioRouteWithChildren
+  '/studio/catalog': typeof StudioCatalogRoute
+  '/studio/': typeof StudioIndexRoute
+  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catalog' | '/smoke' | '/layouts/$name'
+  fullPaths:
+    | '/'
+    | '/smoke'
+    | '/studio'
+    | '/studio/catalog'
+    | '/studio/'
+    | '/studio/layouts/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catalog' | '/smoke' | '/layouts/$name'
-  id: '__root__' | '/' | '/catalog' | '/smoke' | '/layouts/$name'
+  to: '/' | '/smoke' | '/studio/catalog' | '/studio' | '/studio/layouts/$name'
+  id:
+    | '__root__'
+    | '/'
+    | '/smoke'
+    | '/studio'
+    | '/studio/catalog'
+    | '/studio/'
+    | '/studio/layouts/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CatalogRoute: typeof CatalogRoute
   SmokeRoute: typeof SmokeRoute
-  LayoutsNameRoute: typeof LayoutsNameRoute
+  StudioRoute: typeof StudioRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -78,13 +107,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catalog': {
-      id: '/catalog'
-      path: '/catalog'
-      fullPath: '/catalog'
-      preLoaderRoute: typeof CatalogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/smoke': {
       id: '/smoke'
       path: '/smoke'
@@ -92,21 +114,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SmokeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/layouts/$name': {
-      id: '/layouts/$name'
-      path: '/layouts/$name'
-      fullPath: '/layouts/$name'
-      preLoaderRoute: typeof LayoutsNameRouteImport
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/studio/': {
+      id: '/studio/'
+      path: '/'
+      fullPath: '/studio/'
+      preLoaderRoute: typeof StudioIndexRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/catalog': {
+      id: '/studio/catalog'
+      path: '/catalog'
+      fullPath: '/studio/catalog'
+      preLoaderRoute: typeof StudioCatalogRouteImport
+      parentRoute: typeof StudioRoute
+    }
+    '/studio/layouts/$name': {
+      id: '/studio/layouts/$name'
+      path: '/layouts/$name'
+      fullPath: '/studio/layouts/$name'
+      preLoaderRoute: typeof StudioLayoutsNameRouteImport
+      parentRoute: typeof StudioRoute
     }
   }
 }
 
+interface StudioRouteChildren {
+  StudioCatalogRoute: typeof StudioCatalogRoute
+  StudioIndexRoute: typeof StudioIndexRoute
+  StudioLayoutsNameRoute: typeof StudioLayoutsNameRoute
+}
+
+const StudioRouteChildren: StudioRouteChildren = {
+  StudioCatalogRoute: StudioCatalogRoute,
+  StudioIndexRoute: StudioIndexRoute,
+  StudioLayoutsNameRoute: StudioLayoutsNameRoute,
+}
+
+const StudioRouteWithChildren =
+  StudioRoute._addFileChildren(StudioRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CatalogRoute: CatalogRoute,
   SmokeRoute: SmokeRoute,
-  LayoutsNameRoute: LayoutsNameRoute,
+  StudioRoute: StudioRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
