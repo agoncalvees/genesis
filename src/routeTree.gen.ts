@@ -10,32 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemosRouteImport } from './routes/demos'
-import { Route as ProjetosRouteImport } from './routes/projetos'
 import { Route as SmokeRouteImport } from './routes/smoke'
-import { Route as StudioRouteImport } from './routes/studio'
-import { Route as DemosIndexRouteImport } from './routes/demos.index'
-import { Route as DemosDocEvidenceRouteImport } from './routes/demos.doc-evidence'
-import { Route as DemosRouteOptRouteImport } from './routes/demos.route-opt'
-import { Route as StudioIndexRouteImport } from './routes/studio.index'
-import { Route as StudioCatalogRouteImport } from './routes/studio.catalog'
-import { Route as StudioLayoutsNameRouteImport } from './routes/studio.layouts.$name'
-import { Route as StudioWorldsIndexRouteImport } from './routes/studio.worlds.index'
-import { Route as StudioWorldsIdRouteImport } from './routes/studio.worlds.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemosRoute = DemosRouteImport.update({
-  id: '/demos',
-  path: '/demos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjetosRoute = ProjetosRouteImport.update({
-  id: '/projetos',
-  path: '/projetos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmokeRoute = SmokeRouteImport.update({
@@ -43,148 +22,31 @@ const SmokeRoute = SmokeRouteImport.update({
   path: '/smoke',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StudioRoute = StudioRouteImport.update({
-  id: '/studio',
-  path: '/studio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemosIndexRoute = DemosIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DemosRoute,
-} as any)
-const DemosDocEvidenceRoute = DemosDocEvidenceRouteImport.update({
-  id: '/doc-evidence',
-  path: '/doc-evidence',
-  getParentRoute: () => DemosRoute,
-} as any)
-const DemosRouteOptRoute = DemosRouteOptRouteImport.update({
-  id: '/route-opt',
-  path: '/route-opt',
-  getParentRoute: () => DemosRoute,
-} as any)
-const StudioIndexRoute = StudioIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => StudioRoute,
-} as any)
-const StudioCatalogRoute = StudioCatalogRouteImport.update({
-  id: '/catalog',
-  path: '/catalog',
-  getParentRoute: () => StudioRoute,
-} as any)
-const StudioLayoutsNameRoute = StudioLayoutsNameRouteImport.update({
-  id: '/layouts/$name',
-  path: '/layouts/$name',
-  getParentRoute: () => StudioRoute,
-} as any)
-const StudioWorldsIndexRoute = StudioWorldsIndexRouteImport.update({
-  id: '/worlds/',
-  path: '/worlds/',
-  getParentRoute: () => StudioRoute,
-} as any)
-const StudioWorldsIdRoute = StudioWorldsIdRouteImport.update({
-  id: '/worlds/$id',
-  path: '/worlds/$id',
-  getParentRoute: () => StudioRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/demos': typeof DemosRouteWithChildren
-  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
-  '/studio': typeof StudioRouteWithChildren
-  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
-  '/demos/route-opt': typeof DemosRouteOptRoute
-  '/studio/catalog': typeof StudioCatalogRoute
-  '/demos/': typeof DemosIndexRoute
-  '/studio/': typeof StudioIndexRoute
-  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
-  '/studio/worlds/$id': typeof StudioWorldsIdRoute
-  '/studio/worlds/': typeof StudioWorldsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
-  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
-  '/demos/route-opt': typeof DemosRouteOptRoute
-  '/studio/catalog': typeof StudioCatalogRoute
-  '/demos': typeof DemosIndexRoute
-  '/studio': typeof StudioIndexRoute
-  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
-  '/studio/worlds/$id': typeof StudioWorldsIdRoute
-  '/studio/worlds': typeof StudioWorldsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/demos': typeof DemosRouteWithChildren
-  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
-  '/studio': typeof StudioRouteWithChildren
-  '/demos/doc-evidence': typeof DemosDocEvidenceRoute
-  '/demos/route-opt': typeof DemosRouteOptRoute
-  '/studio/catalog': typeof StudioCatalogRoute
-  '/demos/': typeof DemosIndexRoute
-  '/studio/': typeof StudioIndexRoute
-  '/studio/layouts/$name': typeof StudioLayoutsNameRoute
-  '/studio/worlds/$id': typeof StudioWorldsIdRoute
-  '/studio/worlds/': typeof StudioWorldsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/demos'
-    | '/projetos'
-    | '/smoke'
-    | '/studio'
-    | '/demos/doc-evidence'
-    | '/demos/route-opt'
-    | '/studio/catalog'
-    | '/demos/'
-    | '/studio/'
-    | '/studio/layouts/$name'
-    | '/studio/worlds/$id'
-    | '/studio/worlds/'
+  fullPaths: '/' | '/smoke'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/projetos'
-    | '/smoke'
-    | '/demos/doc-evidence'
-    | '/demos/route-opt'
-    | '/studio/catalog'
-    | '/demos'
-    | '/studio'
-    | '/studio/layouts/$name'
-    | '/studio/worlds/$id'
-    | '/studio/worlds'
-  id:
-    | '__root__'
-    | '/'
-    | '/demos'
-    | '/projetos'
-    | '/smoke'
-    | '/studio'
-    | '/demos/doc-evidence'
-    | '/demos/route-opt'
-    | '/studio/catalog'
-    | '/demos/'
-    | '/studio/'
-    | '/studio/layouts/$name'
-    | '/studio/worlds/$id'
-    | '/studio/worlds/'
+  to: '/' | '/smoke'
+  id: '__root__' | '/' | '/smoke'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DemosRoute: typeof DemosRouteWithChildren
-  ProjetosRoute: typeof ProjetosRoute
   SmokeRoute: typeof SmokeRoute
-  StudioRoute: typeof StudioRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -196,20 +58,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demos': {
-      id: '/demos'
-      path: '/demos'
-      fullPath: '/demos'
-      preLoaderRoute: typeof DemosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/projetos': {
-      id: '/projetos'
-      path: '/projetos'
-      fullPath: '/projetos'
-      preLoaderRoute: typeof ProjetosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/smoke': {
       id: '/smoke'
       path: '/smoke'
@@ -217,111 +65,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SmokeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/studio': {
-      id: '/studio'
-      path: '/studio'
-      fullPath: '/studio'
-      preLoaderRoute: typeof StudioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demos/': {
-      id: '/demos/'
-      path: '/'
-      fullPath: '/demos/'
-      preLoaderRoute: typeof DemosIndexRouteImport
-      parentRoute: typeof DemosRoute
-    }
-    '/demos/doc-evidence': {
-      id: '/demos/doc-evidence'
-      path: '/doc-evidence'
-      fullPath: '/demos/doc-evidence'
-      preLoaderRoute: typeof DemosDocEvidenceRouteImport
-      parentRoute: typeof DemosRoute
-    }
-    '/demos/route-opt': {
-      id: '/demos/route-opt'
-      path: '/route-opt'
-      fullPath: '/demos/route-opt'
-      preLoaderRoute: typeof DemosRouteOptRouteImport
-      parentRoute: typeof DemosRoute
-    }
-    '/studio/': {
-      id: '/studio/'
-      path: '/'
-      fullPath: '/studio/'
-      preLoaderRoute: typeof StudioIndexRouteImport
-      parentRoute: typeof StudioRoute
-    }
-    '/studio/catalog': {
-      id: '/studio/catalog'
-      path: '/catalog'
-      fullPath: '/studio/catalog'
-      preLoaderRoute: typeof StudioCatalogRouteImport
-      parentRoute: typeof StudioRoute
-    }
-    '/studio/layouts/$name': {
-      id: '/studio/layouts/$name'
-      path: '/layouts/$name'
-      fullPath: '/studio/layouts/$name'
-      preLoaderRoute: typeof StudioLayoutsNameRouteImport
-      parentRoute: typeof StudioRoute
-    }
-    '/studio/worlds/': {
-      id: '/studio/worlds/'
-      path: '/worlds'
-      fullPath: '/studio/worlds/'
-      preLoaderRoute: typeof StudioWorldsIndexRouteImport
-      parentRoute: typeof StudioRoute
-    }
-    '/studio/worlds/$id': {
-      id: '/studio/worlds/$id'
-      path: '/worlds/$id'
-      fullPath: '/studio/worlds/$id'
-      preLoaderRoute: typeof StudioWorldsIdRouteImport
-      parentRoute: typeof StudioRoute
-    }
   }
 }
 
-interface DemosRouteChildren {
-  DemosDocEvidenceRoute: typeof DemosDocEvidenceRoute
-  DemosRouteOptRoute: typeof DemosRouteOptRoute
-  DemosIndexRoute: typeof DemosIndexRoute
-}
-
-const DemosRouteChildren: DemosRouteChildren = {
-  DemosDocEvidenceRoute: DemosDocEvidenceRoute,
-  DemosRouteOptRoute: DemosRouteOptRoute,
-  DemosIndexRoute: DemosIndexRoute,
-}
-
-const DemosRouteWithChildren = DemosRoute._addFileChildren(DemosRouteChildren)
-
-interface StudioRouteChildren {
-  StudioCatalogRoute: typeof StudioCatalogRoute
-  StudioIndexRoute: typeof StudioIndexRoute
-  StudioLayoutsNameRoute: typeof StudioLayoutsNameRoute
-  StudioWorldsIdRoute: typeof StudioWorldsIdRoute
-  StudioWorldsIndexRoute: typeof StudioWorldsIndexRoute
-}
-
-const StudioRouteChildren: StudioRouteChildren = {
-  StudioCatalogRoute: StudioCatalogRoute,
-  StudioIndexRoute: StudioIndexRoute,
-  StudioLayoutsNameRoute: StudioLayoutsNameRoute,
-  StudioWorldsIdRoute: StudioWorldsIdRoute,
-  StudioWorldsIndexRoute: StudioWorldsIndexRoute,
-}
-
-const StudioRouteWithChildren =
-  StudioRoute._addFileChildren(StudioRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DemosRoute: DemosRouteWithChildren,
-  ProjetosRoute: ProjetosRoute,
   SmokeRoute: SmokeRoute,
-  StudioRoute: StudioRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

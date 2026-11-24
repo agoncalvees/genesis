@@ -1,5 +1,5 @@
 {
-	"name": "genesis",
+	"name": "aceiro",
 	"private": true,
 	"type": "module",
 	"engines": {
@@ -7,7 +7,6 @@
 	},
 	"scripts": {
 		"dev": "vite dev",
-		"dev:projects": "bun scripts/dev-projects.ts",
 		"build": "vite build",
 		"build:local": "NITRO_PRESET=node-server vite build",
 		"serve": "node .output/server/index.mjs",
