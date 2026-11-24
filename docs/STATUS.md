@@ -11,6 +11,6 @@
 ## Registro por fase
 | Fase | Estado | Comandos e evidências | Bloqueios | Próximo passo |
 |---|---|---|---|---|
-| 00 | Validado (aprovação humana 2026-11-24) | Run Orca `run_738dcd161d50`: P00-CDX-01 (Codex), P00-OC-01 e P00-OC-02 (OpenCode hy4-flash-free) concluídos com `worker_done`. Probe `opencode run` em 10 modelos gratuitos. Versões-chave reverificadas via `curl registry.npmjs.org/<pkg>/latest`. Detalhes: `docs/engineering/phase-00/PLAN.md`. Experimento isolado P00-CDX-02 (Codex, `ctx_9427d9c2e014`) em andamento em /tmp | Nitro pré-release (risco aceito) | Concluir P00-CDX-02 e iniciar fase 01 |
+| 00 | Validado (aprovação humana 2026-11-24) | Run Orca `run_738dcd161d50`: P00-CDX-01 (Codex), P00-OC-01 e P00-OC-02 (OpenCode hy4-flash-free) concluídos com `worker_done`. Probe `opencode run` em 10 modelos gratuitos. Versões-chave reverificadas via `curl registry.npmjs.org/<pkg>/latest`. Detalhes: `docs/engineering/phase-00/PLAN.md`. Experimento isolado P00-CDX-02 (Codex, `ctx_9427d9c2e014`) concluído: scaffold, install frozen, build, `tsc --noEmit` (TS 7.0.2), Biome, Vitest e Playwright passaram em /tmp; reverificado pelo coordenador (tsc=0, build=0) | Nitro pré-release (risco aceito) | Concluir P00-CDX-02 e iniciar fase 01 |
 
 Estados: pendente / em andamento / bloqueado / validado. Não marcar validado sem evidência.

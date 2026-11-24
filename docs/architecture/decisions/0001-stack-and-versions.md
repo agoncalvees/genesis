@@ -3,7 +3,7 @@ Status: aceito (aprovação humana em 2026-11-24)
 Data: 2026-11-24
 
 ## Contexto e restrições
-BLUEPRINT propõe TanStack Start + React + TS strict + Bun, Tailwind v4, Base UI, Motion, Convex, AI SDK + OpenRouter, Biome, Vitest, Playwright. Fase 00 não instala nada. Evidência completa: `docs/engineering/phase-00/compat-matrix.md` (P00-CDX-01, Codex), com versões lidas do registro npm em 2026-11-24 — **nenhuma testada**.
+BLUEPRINT propõe TanStack Start + React + TS strict + Bun, Tailwind v4, Base UI, Motion, Convex, AI SDK + OpenRouter, Biome, Vitest, Playwright. Fase 00 não instala nada. Evidência completa: `docs/engineering/phase-00/compat-matrix.md` (P00-CDX-01, Codex), com versões lidas do registro npm em 2026-11-24. Núcleo, qualidade, Tailwind, Base UI, Motion e opcionais (convex, ai, openrouter, zod — só import) **testados** em scaffold isolado por P00-CDX-02; TS 7.0.2 aprovado.
 
 ## Decisão
 Instalação inicial da fase 01 limitada ao núcleo; demais pacotes entram quando usados.
