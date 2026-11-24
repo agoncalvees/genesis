@@ -41,6 +41,20 @@ export const fonts: Record<
 		license: "OFL-1.1",
 		imports: ["@fontsource-variable/sora"],
 	},
+	"Instrument Serif": {
+		package: "@fontsource/instrument-serif",
+		license: "OFL-1.1",
+		imports: [
+			"@fontsource/instrument-serif/400.css",
+			"@fontsource/instrument-serif/400-italic.css",
+		],
+	},
+	"Archivo Variable": {
+		package: "@fontsource-variable/archivo",
+		license: "OFL-1.1",
+		imports: ["@fontsource-variable/archivo/wdth.css"],
+	},
+	Georgia: { package: null, license: "system", imports: [] },
 	"JetBrains Mono Variable": {
 		package: "@fontsource-variable/jetbrains-mono",
 		license: "OFL-1.1",

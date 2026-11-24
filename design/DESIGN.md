@@ -1,65 +1,65 @@
 ---
 version: alpha
-name: Genesis Neutral
-description: Identidade neutra da fundação Genesis.
+name: Aceiro
+description: Carta de campo ao entardecer. Um mapa ilustrado do Cerrado em que o fogo é a única luz, ao lado de um caderno de instrumentos em giz sobre carvão.
 colors:
-  background: "#ffffff"
-  surface: "#f7f7f8"
-  surface-raised: "#ffffff"
-  foreground: "#18181b"
-  muted: "#52525b"
-  border: "#d4d4d8"
-  primary: "#27272a"
-  on-primary: "#ffffff"
-  accent: "#3f3f46"
-  on-accent: "#ffffff"
-  focus: "#1d4ed8"
-  success: "#15803d"
-  on-success: "#ffffff"
-  warning: "#a16207"
-  on-warning: "#ffffff"
-  danger: "#b91c1c"
-  on-danger: "#ffffff"
-  info: "#1d4ed8"
-  on-info: "#ffffff"
-  control-border: "#52525b"
-  data-1: "#1d4ed8"
-  data-2: "#15803d"
-  data-3: "#b91c1c"
-  data-4: "#a16207"
-  data-5: "#7e22ce"
-  data-6: "#0e7490"
-  data-grid: "#d4d4d8"
-  data-axis: "#52525b"
+  background: "#15110e"
+  surface: "#1c1713"
+  surface-raised: "#251f1a"
+  foreground: "#efe6d2"
+  muted: "#b5a78f"
+  border: "#3d352e"
+  primary: "#ff5a1f"
+  on-primary: "#15110e"
+  accent: "#e8b04a"
+  on-accent: "#15110e"
+  focus: "#f6efe0"
+  success: "#9cbf7a"
+  on-success: "#15110e"
+  warning: "#ffb347"
+  on-warning: "#15110e"
+  danger: "#ff8a6b"
+  on-danger: "#15110e"
+  info: "#8fc3c0"
+  on-info: "#15110e"
+  control-border: "#8c7d68"
+  data-1: "#ff5a1f"
+  data-2: "#efe6d2"
+  data-3: "#9cbf7a"
+  data-4: "#e8b04a"
+  data-5: "#8fc3c0"
+  data-6: "#c99be0"
+  data-grid: "#3d352e"
+  data-axis: "#b5a78f"
 typography:
   display:
-    fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
-    fontWeight: 600
-    letterSpacing: -0.025em
+    fontFamily: '"Instrument Serif", Georgia, serif'
+    fontWeight: 400
+    letterSpacing: -0.02em
   headline:
-    fontWeight: 600
+    fontWeight: 400
   body:
-    fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+    fontFamily: '"Archivo Variable", system-ui, sans-serif'
     fontSize: 1rem
   label:
-    fontWeight: 500
+    fontWeight: 600
   mono:
-    fontFamily: ui-monospace, "SF Mono", Menlo, Consolas, monospace
+    fontFamily: '"JetBrains Mono Variable", monospace'
 rounded:
-  sm: 0.25rem
-  md: 0.5rem
-  lg: 0.75rem
-  control: "{rounded.md}"
+  sm: 2px
+  md: 3px
+  lg: 4px
+  control: 3px
 spacing:
   unit: 0.25rem
-  control: 2.5rem
+  control: 44px
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
   button-primary-hover:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
+    backgroundColor: "{colors.warning}"
+    textColor: "{colors.on-warning}"
   button-secondary:
     backgroundColor: "{colors.surface-raised}"
     textColor: "{colors.foreground}"
@@ -79,7 +79,7 @@ components:
     backgroundColor: "{colors.border}"
   input:
     backgroundColor: "{colors.surface}"
-    textColor: "{colors.muted}"
+    textColor: "{colors.foreground}"
   input-outline:
     backgroundColor: "{colors.control-border}"
   badge-neutral:
@@ -118,113 +118,112 @@ components:
     textColor: "{colors.on-info}"
   chart-series-1:
     backgroundColor: "{colors.data-1}"
-  chart-series-2:
-    backgroundColor: "{colors.data-2}"
-  chart-series-3:
-    backgroundColor: "{colors.data-3}"
-  chart-series-4:
-    backgroundColor: "{colors.data-4}"
-  chart-series-5:
-    backgroundColor: "{colors.data-5}"
-  chart-series-6:
-    backgroundColor: "{colors.data-6}"
 motion:
-  instant: {duration: 100ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
-  fast: {duration: 150ms, timingFunction: "cubic-bezier(0.3, 0, 1, 1)", delay: 0ms}
-  normal: {duration: 250ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
-  slow: {duration: 400ms, timingFunction: "cubic-bezier(0, 0, 0, 1)", delay: 0ms}
-  showcase: {duration: 600ms, timingFunction: "cubic-bezier(0, 0, 0, 1)", delay: 0ms}
+  instant: {duration: 90ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
+  fast: {duration: 140ms, timingFunction: "cubic-bezier(0.4, 0, 1, 1)", delay: 0ms}
+  normal: {duration: 220ms, timingFunction: "cubic-bezier(0.2, 0, 0, 1)", delay: 0ms}
+  slow: {duration: 320ms, timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)", delay: 0ms}
+  showcase: {duration: 560ms, timingFunction: "cubic-bezier(0.16, 1, 0.3, 1)", delay: 0ms}
 genesis:
   density: 1
   borderWidth: 1px
   surfaceStyle: border
-  iconWeight: regular
-  typeScale: 1
-  displayWeight: 600
-  displayTracking: -0.025em
-  composition: neutral
-  dialogScrim: "#18181b73"
+  iconWeight: light
+  metricTypeface: mono
+  typeScale: 1.2
+  displayWeight: 400
+  displayTracking: -0.02em
+  sectionHeading: { size: 0.75rem, fluid: 0.9, maxSize: 0.8125rem, weight: 650, tracking: 0.08em }
+  composition: immersive
+  dialogScrim: "#0a0807cc"
   shadows:
-    sm: 0 1px 2px rgb(0 0 0 / 0.06)
-    md: 0 4px 12px rgb(0 0 0 / 0.08)
-    lg: 0 12px 32px rgb(0 0 0 / 0.12)
+    sm: 0 0 0 transparent
+    md: 0 0 0 transparent
+    lg: 0 24px 48px rgb(0 0 0 / 0.45)
   motionProfile:
     name: crisp
-    intensity: 1
+    intensity: 0.8
     scale: 1
-    spring: { stiffness: 300, damping: 30, mass: 1 }
+    spring: { stiffness: 520, damping: 38, mass: 0.8 }
   data:
-    data-1: "#1d4ed8"
-    data-2: "#15803d"
-    data-3: "#b91c1c"
-    data-4: "#a16207"
-    data-5: "#7e22ce"
-    data-6: "#0e7490"
-    data-grid: "#d4d4d8"
-    data-axis: "#52525b"
-  darkData:
-    data-1: "#60a5fa"
-    data-2: "#4ade80"
-    data-3: "#f87171"
-    data-4: "#facc15"
-    data-5: "#c084fc"
-    data-6: "#22d3ee"
-    data-grid: "#3f3f46"
-    data-axis: "#a1a1aa"
-  darkColors:
-    background: "#0b0b0c"
-    surface: "#18181b"
-    surface-raised: "#222225"
-    foreground: "#fafafa"
-    muted: "#a1a1aa"
-    border: "#3f3f46"
-    primary: "#fafafa"
-    on-primary: "#18181b"
-    accent: "#d4d4d8"
-    on-accent: "#18181b"
-    focus: "#60a5fa"
-    success: "#4ade80"
-    on-success: "#0b0b0c"
-    warning: "#facc15"
-    on-warning: "#0b0b0c"
-    danger: "#f87171"
-    on-danger: "#0b0b0c"
-    info: "#60a5fa"
-    on-info: "#0b0b0c"
-    control-border: "#a1a1aa"
+    data-1: "#ff5a1f"
+    data-2: "#efe6d2"
+    data-3: "#9cbf7a"
+    data-4: "#e8b04a"
+    data-5: "#8fc3c0"
+    data-6: "#c99be0"
+    data-grid: "#3d352e"
+    data-axis: "#b5a78f"
 ---
 
-# Genesis Neutral
+# Aceiro
 
-## Overview
+## Direção
+- Metáfora: **carta de campo ao entardecer** — o caderno de um brigadista aberto sobre uma carta topográfica do Cerrado, na estação seca. O fogo é a única fonte de luz da tela.
+- Atributos: preciso, tátil, sóbrio. Antiatributos: alarmista, gamificado, painel administrativo.
+- Mecanismo em tela: o usuário vê **vento, umidade e combustível transformarem um foco em uma cicatriz de queimada**, e vê **o aceiro que ele desenhou mudar essa cicatriz** — comparado com o mesmo foco sem aceiro (mesma semente).
+- Referências:
+  - Cartas topográficas impressas (IBGE/DSG) → linhas de construção finas, anotações pequenas em versalete, hachura como linguagem de área. Aplicar: área queimada hachurada, rótulos de eixo/anotações do mapa.
+  - Gravura em metal botânica (pranchas de naturalistas) → traço creme fino sobre fundo escuro, densidade de linha em vez de sombra. Aplicar: espécime, ícones de ferramenta em traço, regras horizontais.
+  - Infografia de incêndios de grandes redações (frente de fogo por hora) → camadas temporais, anotação direta sobre o mapa, uma única cor quente. Aplicar: frente luminosa, marcas de hora simulada, comparação contrafactual sobre o próprio mapa.
 
-Identidade neutra para a fundação Genesis e para as demonstrações do sistema de design.
+## Composição
+- Desktop (≥ 1024 px): **mapa sangrando à esquerda, 68 % da largura e 100 % da altura da janela** (sem moldura, sem raio). Coluna de instrumentos à direita, 32 %, fundo `background`, com régua vertical de 1 px `border` separando.
+- Título de exibição **sobreposto ao mapa** no canto superior esquerdo, sobre um véu escuro radial muito suave apenas atrás do texto (não um card).
+- O mapa mantém proporção 4:3 do terreno com `object-fit: cover`; a grade de simulação acompanha a imagem (mesmo recorte).
+- Instrumentos em sequência vertical: cabeçalho (eyebrow + subtítulo) → vento | umidade lado a lado → ferramentas → ação "Acender foco" → leituras queimada/preservada → espécime + nota editorial no rodapé da coluna.
+- Quebras permitidas: título invade o mapa; marcador de comparação (alça vertical) atravessa o mapa de cima a baixo; anotações em giz sobre o mapa.
+- Mobile (< 768 px): título acima do mapa sobre `background`; mapa em largura total 4:3; instrumentos abaixo; barra fixa inferior com ferramentas + "Acender". Nada de gaveta escondendo o mecanismo.
+- Tablet (768–1023): mapa em cima, largura total; instrumentos em duas colunas abaixo.
 
-## Colors
+## Ritmo, proporção e escala
+- Unidade 4 px; coluna de instrumentos com padding 32 px (desktop), 20 px (mobile); blocos separados por regra 1 px `border` + 24 px.
+- Escala: exibição `clamp(3rem, 6.2vw, 6.5rem)` line-height 0.92; subtítulo 15 px itálico serifado; rótulos 12–13 px versalete (`text-transform: uppercase`, tracking 0.08em, Archivo condensado `font-stretch: 75%`, peso 650); corpo 15 px; leituras numéricas 28–34 px mono tabular; microanotações do mapa 11 px mono.
+- Proporção dominante 2:1 (mapa : instrumentos).
 
-Superfícies em cinza neutro, foco azul e cores de estado reservadas a mensagens com significado. A borda de controles usa o contraste do texto secundário. A paleta categórica deve vir acompanhada de rótulos ou padrões.
+## Tipografia
+- Exibição: Instrument Serif 400; a palavra-sinal ("vento") em itálico na cor `--ember`. Nunca negrito na serifa.
+- Corpo e rótulos: Archivo Variable; rótulos e botões em largura condensada (`font-stretch: 75%`) e caixa alta.
+- Leituras: JetBrains Mono, `font-variant-numeric: tabular-nums`, unidade em tamanho menor e `muted` ("ha", "%", "km/h").
+- Números em pt-BR (vírgula decimal, ponto de milhar).
 
-## Typography
+## Cor e materiais
+- Material dominante: carvão quente (`background`) com grão de papel sutil (ruído SVG `feTurbulence` em 4–6 % de opacidade, estático); giz (`foreground`) para traço e texto.
+- Tokens do produto (definir em CSS em `:root`):
+  - `--ember: #ff5a1f` (frente de fogo, palavra-sinal, ação Acender) · `--ember-hot: #ffb347` (núcleo da chama, brilho) · `--ash: #3a332e` (área queimada) · `--chalk: #efe6d2` (aceiro, anotações) · `--vereda: #2f5552` (água) · `--hatch: rgb(239 230 210 / 0.18)` (hachura).
+- Cor de sinal: `--ember` **somente** para fogo, a palavra-sinal do título e a ação de ignição. Nada decorativo em laranja.
+- Escala de risco (inspetor de célula): sequencial `#3d352e → #8c6a3a → #e8b04a → #ff5a1f`.
 
-A fonte do sistema dá continuidade à plataforma. Use a família monoespaçada em trechos de código.
+## Profundidade
+- Camadas: terreno (imagem) → cicatriz (cinza `--ash` com hachura diagonal de 45° em giz a 18 %) → aceiros (traço de giz com borda irregular) → fogo (aditivo, brilho `--ember-hot` com `globalCompositeOperation: lighter`) → anotações → controles. Sem sombras em painéis; separação só por régua e luz do fogo.
 
-## Layout
+## Densidade
+- Média-baixa: público geral e brigadistas em formação. Máximo 35 palavras por bloco de texto. Cada instrumento tem rótulo + uma linha de instrução.
 
-A unidade de espaço é 4 px com densidade padrão. Espaço e altura dos controles usam a mesma configuração de densidade.
+## Recursos gráficos
+- `public/art/terrain.webp` — mapa base **e fonte de dados**: a cor de cada célula define o combustível (água/mata úmida, cerrado arbustivo, campo seco, rocha/estrada).
+- `public/art/specimen.webp` — pequizeiro rebrotando, rodapé da coluna, com legenda editorial.
+- `design/concept.webp` — conceito de referência (não usar na interface).
+- Ícones de ferramenta: Phosphor `light`, ou traço SVG próprio. Sem emoji.
 
-## Elevation & Depth
+## Narrativa
+- Primeiros 5 s: título "O fogo lê o **vento**." sobre o mapa; partículas de vento cruzando o campo na direção atual; três anotações em giz numeradas sobre o mapa: "1 Trace um aceiro", "2 Marque o foco", "3 Acenda".
+- Fluxo: desenhar aceiro(s) → marcar foco(s) (máx. 3) → ajustar vento/umidade → Acender → frente avança (hora simulada no canto do mapa) → resultado com comparação.
+- **Momento-assinatura**: ao terminar, uma alça vertical aparece no meio do mapa; arrastá-la revela, de um lado, a cicatriz **sem aceiros** e, do outro, **com aceiros** (mesma semente). A leitura "Área preservada" conta até o valor.
 
-Bordas discretas delimitam os cartões. A sombra fica mais visível em camadas flutuantes.
+## Comportamento e motion
+- Vazio: anotações de instrução; botão Acender desabilitado com motivo textual se não houver foco.
+- Executando: o fogo é a animação principal (células acesas cintilam; a frente avança em passos de simulação, ~12 passos/s). Controles de vento/umidade continuam ajustáveis e afetam o próximo passo. Botão vira "Pausar"; "Recomeçar" disponível.
+- Resultado: máscara de comparação entra com `clip-path` de 0 → 50 % (560 ms, `--ease-enter`); leituras rolam até o valor.
+- Desatualizado: alterar aceiro, foco, vento ou umidade após o resultado marca as leituras com "desatualizado" e esmaece a comparação, sem apagá-la.
+- Erro: sem foco → mensagem inline em giz junto ao botão.
+- Vento: rosa dos ventos arrastável (rotação segue o ponteiro 1:1; soltar assenta com spring rígido em múltiplos de 5°); teclado ←/→ 15°, ↑/↓ velocidade 0–40 km/h. Partículas de vento correm na direção e velocidade definidas.
+- Umidade: escala vertical 10–80 %, arrastável e por teclado; o líquido da escala transita 220 ms.
+- Aceiro: traço segue o ponteiro 1:1, largura constante de 1 célula, giz com bordas levemente irregulares.
+- Inspetor: ao passar ou focar uma célula, anotação pequena em mono mostra classe de combustível e probabilidade de ignição atual com o vento.
+- Reduced motion: sem partículas de vento (setas estáticas), simulação mostra o resultado final de uma vez (com os mesmos números), comparação aparece em 50 % sem transição, leituras sem contagem.
 
-## Shapes
-
-Controles têm cantos moderadamente arredondados. Painéis usam o próximo tamanho da escala.
-
-## Components
-
-A ação primária usa fundo escuro e texto claro no modo claro. No modo escuro, os valores se invertem. O scrim escurece o fundo nos dois modos.
-
-## Do's and Don'ts
-
-- Preserve o foco visível e os estados com texto.
-- Respeite a preferência de movimento reduzido.
+## Não fazer
+- Cards com sombra, cantos arredondados > 4 px, gradientes decorativos, glassmorphism, emoji, ícones coloridos.
+- Laranja fora do fogo/ignição. Texto em inglês. Números sem unidade.
+- Dizer que o modelo prevê incêndios reais: rotular como **modelo didático**.

@@ -1,8 +1,3 @@
-# Challenge — preencher apenas após revelação
-Texto literal:
-Fonte e horário:
-Requisitos obrigatórios:
-Critérios oficiais e pesos:
-Restrições (IA, código, dados, tecnologia, equipe):
-Formato de entrega e duração do pitch:
-Permissão de reutilização:
+# Desafio (ensaio P10)
+
+Ensaio experimental do Genesis, sem tema oficial. Objetivo: verificar se o protocolo de direção artística produz uma primeira tela visualmente convincente sem muitas intervenções humanas. Não é produto nem submissão.
