@@ -86,6 +86,18 @@ export const productDocs = [
 	"PRODUCT-BRIEF.md",
 ];
 
+/**
+ * E2E specs that navigate to Studio or demo routes cannot run in a product
+ * (those routes are removed). Detected by content so new specs are covered.
+ */
+export function isStudioDependentSpec(path: string, content: string) {
+	return (
+		/^tests\/e2e\/.+\.spec\.ts$/.test(path) &&
+		path !== "tests/e2e/production.spec.ts" &&
+		/["'`]\/(studio|demos)(?=[/"'`?#$]|\b)/.test(content)
+	);
+}
+
 export function createPlan(input: {
 	worktrees: readonly string[];
 	target: string;
@@ -94,6 +106,8 @@ export function createPlan(input: {
 	tracked: readonly string[];
 	world: string;
 	hasDesignApply: boolean;
+	/** Contents of tracked e2e specs, used to drop Studio/demo-dependent ones. */
+	specContents?: Readonly<Record<string, string>>;
 }) {
 	if (input.dirty)
 		throw new Error("A árvore de trabalho do Genesis deve estar limpa.");
@@ -130,7 +144,8 @@ export function createPlan(input: {
 				removedPrefixes.some(
 					(prefix) => path === prefix.slice(0, -1) || path.startsWith(prefix),
 				) ||
-				/^src\/routes\/(demos|studio)(?:\.[^/]+)?\.tsx$/.test(path),
+				/^src\/routes\/(demos|studio)(?:\.[^/]+)?\.tsx$/.test(path) ||
+				isStudioDependentSpec(path, input.specContents?.[path] ?? ""),
 		),
 		modify: [
 			".env.example",

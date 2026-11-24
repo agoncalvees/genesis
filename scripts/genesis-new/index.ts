@@ -77,6 +77,12 @@ function run() {
 			.filter(Boolean),
 		world: options.world,
 		hasDesignApply: Boolean(sourcePackage.scripts?.["design:apply"]),
+		specContents: Object.fromEntries(
+			git(root, "ls-tree", "-r", "--name-only", "-z", sha, "tests/e2e")
+				.split("\0")
+				.filter((path) => path.endsWith(".spec.ts"))
+				.map((path) => [path, git(root, "show", `${sha}:${path}`)]),
+		),
 	});
 	const branch = `product/${options.slug}`;
 	if (options.dryRun) {

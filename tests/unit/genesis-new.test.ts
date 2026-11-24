@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
 	createPlan,
 	isLocalArtifact,
+	isStudioDependentSpec,
 	parseArgs,
 } from "../../scripts/genesis-new/plan";
 
@@ -132,5 +133,31 @@ describe("genesis:new", () => {
 			dryRun: true,
 			e2e: true,
 		});
+	});
+});
+
+describe("studio-dependent e2e specs", () => {
+	test("drops specs that navigate to Studio or demo routes", () => {
+		expect(
+			isStudioDependentSpec(
+				"tests/e2e/x.spec.ts",
+				'await page.goto("/studio/worlds")',
+			),
+		).toBe(true);
+		expect(
+			isStudioDependentSpec("tests/e2e/y.spec.ts", "page.goto(`/demos`)"),
+		).toBe(true);
+	});
+
+	test("keeps product specs and the production template", () => {
+		expect(
+			isStudioDependentSpec("tests/e2e/smoke.spec.ts", 'page.goto("/smoke")'),
+		).toBe(false);
+		expect(
+			isStudioDependentSpec("tests/e2e/production.spec.ts", '"/studio"'),
+		).toBe(false);
+		expect(
+			isStudioDependentSpec("tests/e2e/z.spec.ts", 'text("studio apartment")'),
+		).toBe(false);
 	});
 });
