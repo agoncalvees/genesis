@@ -222,7 +222,13 @@ function Trend({
 					fillOpacity={0.16}
 				/>
 			)}
-			<path d={line} stroke={color} className="ds-chart-line" fill="none" />
+			<path
+				d={line}
+				stroke={color}
+				className={small ? "ds-chart-line ds-chart-draw" : "ds-chart-line"}
+				pathLength={small ? 1 : undefined}
+				fill="none"
+			/>
 			{(!small || points.length === 1) &&
 				points.map(({ x, y }, index) => (
 					<circle key={data[index].label} cx={x} cy={y} r={2.5} fill={color} />

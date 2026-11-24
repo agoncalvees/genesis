@@ -6,7 +6,19 @@ export type ProcessStep = {
 	label: string;
 	status: ExecutionStatus;
 	detail?: string;
+	/** Measured duration of the step, shown when present. */
+	durationMs?: number;
 };
+
+export function formatDuration(ms: number, locale = "en") {
+	const seconds = ms >= 1000;
+	return new Intl.NumberFormat(locale, {
+		style: "unit",
+		unit: seconds ? "second" : "millisecond",
+		unitDisplay: "short",
+		maximumFractionDigits: seconds ? 1 : 0,
+	}).format(seconds ? ms / 1000 : ms);
+}
 
 const stepPresentation = {
 	idle: { label: "Pending", tone: "neutral" },
@@ -19,9 +31,11 @@ const stepPresentation = {
 export function ProcessTimeline({
 	steps,
 	label = "Execution steps",
+	locale = "en",
 }: {
 	steps: readonly ProcessStep[];
 	label?: string;
+	locale?: string;
 }) {
 	return (
 		<ol
@@ -35,6 +49,12 @@ export function ProcessTimeline({
 						<div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
 							<span className="font-medium">{step.label}</span>
 							<Badge tone={tone}>{label}</Badge>
+							{step.durationMs != null && Number.isFinite(step.durationMs) && (
+								<span className="text-muted tabular-nums">
+									<span className="sr-only">Duration: </span>
+									{formatDuration(step.durationMs, locale)}
+								</span>
+							)}
 						</div>
 						{step.detail && <p className="mt-1 text-muted">{step.detail}</p>}
 					</li>

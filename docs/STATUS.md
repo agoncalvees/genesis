@@ -27,4 +27,6 @@ P09-CDX-02: `genesis:new` validado localmente antes da integração com o design
 
 P09-CDX-03: quatro Genesis Worlds, gráficos SVG, perfis de movimento e fontes escopadas entregues localmente. Check, typecheck, build, testes (252 passaram, 1 opt-in ignorado), E2E (44), E2E de produção nas duas variantes (12 cada), design:check e os dois linters retornaram 0. O lint oficial encontrou zero tokens órfãos e registrou avisos sobre as duas extensões. A revisão independente está pendente. [Checkpoint e 12 capturas](engineering/phase-09/checkpoints/P09-CDX-03.md).
 
+P09-CDX-04: padrões de experiência (editorial, IA apresentacional com mock rotulado, upload, processamento com tempos e sparkline, AppNav/BottomNav com Drawer, ResizablePanels) integrados ao catálogo e aos quatro mundos. Check, typecheck, test (269 passaram, 1 opt-in), build, E2E (57), E2E de produção nas duas variantes (12 cada) e design:check retornaram 0. Revisão independente pendente. [Checkpoint](engineering/phase-09/checkpoints/P09-CDX-04.md).
+
 Estados: pendente / em andamento / bloqueado / validado. Não marcar validado sem evidência.

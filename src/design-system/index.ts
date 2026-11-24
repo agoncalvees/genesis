@@ -1,9 +1,15 @@
 export {
+	AppNav,
+	BottomNav,
+	type NavItem,
+} from "./components/navigation";
+export {
 	Dialog,
 	Popover,
 	Tooltip,
 	TooltipProvider,
 } from "./components/overlays";
+export { ResizablePanels } from "./components/resizable-panels";
 export { EmptyState, ErrorState } from "./components/states";
 export { Tabs } from "./components/tabs";
 export { Toast, ToastProvider, useToast } from "./components/toast";
@@ -27,8 +33,33 @@ export {
 	readMotionProfile,
 } from "./motion/presets";
 export { ProcessingFeedback } from "./motion/processing-feedback";
+export {
+	AiStatus,
+	type AiStatusValue,
+	aiStatusMessage,
+	Citation,
+	PromptComposer,
+	type Source,
+	SourceList,
+	StreamingText,
+} from "./patterns/ai-interface";
 export { BeforeAfter } from "./patterns/before-after";
+export {
+	EvidenceHeadline,
+	Figure,
+	Kicker,
+	Lede,
+	PullQuote,
+} from "./patterns/editorial";
 export { EvidenceExcerpt } from "./patterns/evidence-excerpt";
+export {
+	FileDrop,
+	FileList,
+	FilePreview,
+	type FileRules,
+	formatBytes,
+	validateFiles,
+} from "./patterns/file-drop";
 export { Metric } from "./patterns/metric";
 export { type ProcessStep, ProcessTimeline } from "./patterns/process-timeline";
 export { ResultPanel } from "./patterns/result-panel";

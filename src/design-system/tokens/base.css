@@ -1,6 +1,8 @@
 /* Escalas compartilhadas. Cada identidade define a unidade e a densidade. */
 :root {
 	--content-max: 72rem;
+	/* Comprimento de linha legível para texto corrido (editorial). */
+	--measure: 65ch;
 	--focus-ring-width: 2px;
 	--focus-ring-offset: 2px;
 	--target-min: 24px;

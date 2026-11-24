@@ -1,11 +1,20 @@
-import { DotsThreeIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
+import {
+	DotsThreeIcon,
+	FileIcon,
+	HouseIcon,
+	MoonIcon,
+	SunIcon,
+} from "@phosphor-icons/react";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { type ReactNode, useState } from "react";
 import {
+	AiStatus,
 	AnimatedNumber,
 	AnimatedTabsIndicator,
+	AppNav,
 	Badge,
 	BeforeAfter,
+	BottomNav,
 	Button,
 	Card,
 	Checkbox,
@@ -15,6 +24,7 @@ import {
 	EmptyState,
 	ErrorState,
 	EvidenceExcerpt,
+	EvidenceHeadline,
 	Expandable,
 	FadeIn,
 	Field,
@@ -28,6 +38,7 @@ import {
 	ProcessingFeedback,
 	type ProcessStep,
 	Progress,
+	ResizablePanels,
 	ResultPanel,
 	Select,
 	Skeleton,
@@ -43,6 +54,7 @@ import {
 	TooltipProvider,
 	useToast,
 } from "../design-system";
+import { AiDemo, EditorialDemo, UploadDemo } from "./patterns/demos";
 
 const options = [
 	{ value: "first", label: "Option one" },
@@ -221,6 +233,7 @@ function CatalogContent() {
 							</CatalogSection>
 							<MotionExamples />
 							<ResultExamples />
+							<PatternExamples />
 							<LayoutLinks />
 						</Stack>
 					</Container>
@@ -504,6 +517,129 @@ function ResultExamples() {
 				</Card>
 			</Grid>
 		</CatalogSection>
+	);
+}
+
+const timedSteps: readonly ProcessStep[] = [
+	{ id: "read", label: "Read fixture", status: "completed", durationMs: 420 },
+	{
+		id: "compare",
+		label: "Compare passes",
+		status: "completed",
+		durationMs: 1830,
+	},
+	{ id: "report", label: "Write report", status: "running" },
+];
+
+const throughput = [
+	{ label: "0 s", value: 12 },
+	{ label: "1 s", value: 30 },
+	{ label: "2 s", value: 26 },
+	{ label: "3 s", value: 41 },
+	{ label: "4 s", value: 38 },
+];
+
+const navItems = [
+	{
+		href: "#patterns",
+		label: "Overview",
+		current: true,
+		icon: <HouseIcon size={20} />,
+	},
+	{ href: "#patterns-upload", label: "Files", icon: <FileIcon size={20} /> },
+	{ href: "#layouts", label: "Layouts", icon: <DotsThreeIcon size={20} /> },
+];
+
+const aiStatusExamples = [
+	{ status: "unavailable" },
+	{
+		status: "failed",
+		error: { code: "forbidden", message: "Fixture.", retryable: false },
+	},
+	{
+		status: "failed",
+		error: { code: "rate_limited", message: "Fixture.", retryable: true },
+	},
+	{
+		status: "failed",
+		error: { code: "timeout", message: "Fixture.", retryable: true },
+	},
+	{ status: "cancelled" },
+] as const;
+
+function PatternExamples() {
+	const [panelSize, setPanelSize] = useState(40);
+	const [retried, setRetried] = useState(false);
+	return (
+		<div id="patterns" className="grid min-w-0 gap-4">
+			<CatalogSection title="Patterns">
+				<Grid>
+					<Card className="grid content-start gap-4">
+						<Heading level={3}>Editorial</Heading>
+						<p className="font-display text-ds-2xl font-ds-heading">
+							<EvidenceHeadline before="2.4 MB" after="168 KB" change="−93%" />
+						</p>
+						<EditorialDemo headingLevel={4} />
+					</Card>
+					<Card className="grid content-start gap-4">
+						<Heading level={3}>AI response</Heading>
+						<AiDemo />
+					</Card>
+					<Card className="grid content-start gap-4">
+						<Heading level={3}>AI status messages</Heading>
+						<ul className="grid gap-3">
+							{aiStatusExamples.map((example) => (
+								<li
+									key={"error" in example ? example.error.code : example.status}
+								>
+									<AiStatus {...example} onRetry={() => setRetried(true)} />
+								</li>
+							))}
+						</ul>
+						{retried && (
+							<Text role="status">Retry requested in this example.</Text>
+						)}
+					</Card>
+					<Card id="patterns-upload" className="grid content-start gap-4">
+						<Heading level={3}>File upload</Heading>
+						<UploadDemo />
+					</Card>
+					<Card className="grid content-start gap-4">
+						<Heading level={3}>Processing with timing</Heading>
+						<ProcessingFeedback
+							label="Fixture processing"
+							progress={66}
+							steps={timedSteps}
+							throughput={{
+								title: "Fixture throughput (records per second)",
+								data: throughput,
+								unit: "records/s",
+							}}
+						/>
+					</Card>
+				</Grid>
+				<Card className="grid content-start gap-4 p-0">
+					<Heading level={3} className="px-4 pt-4">
+						Navigation
+					</Heading>
+					<AppNav label="Example navigation" brand="Product" items={navItems} />
+					<Text muted className="px-4">
+						Below 768 px the links move into a drawer.
+					</Text>
+					<BottomNav label="Example bottom navigation" items={navItems} />
+				</Card>
+				<Card className="grid content-start gap-4">
+					<Heading level={3}>Resizable panels</Heading>
+					<ResizablePanels
+						label="Resize example panels"
+						defaultSize={panelSize}
+						onSizeChange={setPanelSize}
+						start={<Text>Tools ({panelSize}%)</Text>}
+						end={<Text>Work surface</Text>}
+					/>
+				</Card>
+			</CatalogSection>
+		</div>
 	);
 }
 

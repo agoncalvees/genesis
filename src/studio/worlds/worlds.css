@@ -66,15 +66,6 @@ body:has(.world-detail) {
 	overflow-wrap: anywhere;
 }
 
-.world-evidence-inline {
-	color: var(--primary);
-	font-variant-numeric: tabular-nums lining-nums;
-}
-
-.world-evidence-inline > span {
-	white-space: nowrap;
-}
-
 [data-composition="editorial"] .world-evidence-inline > span {
 	letter-spacing: 0;
 }
@@ -188,11 +179,13 @@ body:has(.world-detail) {
 		grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
 	}
 
-	[data-composition="workspace"] :is(.world-hero, .world-metrics, .world-log) {
+	[data-composition="workspace"]
+		:is(.world-hero, .world-metrics, .world-log, .world-editorial) {
 		grid-column: 1 / -1;
 	}
 
-	[data-composition="workspace"] :is(.world-process, .world-compare-content) {
+	[data-composition="workspace"]
+		:is(.world-process, .world-compare-content, .world-upload) {
 		border-inline-start: 1px solid var(--border);
 	}
 }
@@ -242,6 +235,9 @@ body:has(.world-detail) {
 
 [data-composition="immersive"]
 	:is(
+		.world-editorial .world-inner,
+		.world-ai .world-inner,
+		.world-upload .world-inner,
 		.world-form,
 		.world-process ol,
 		.world-review section,
@@ -280,7 +276,10 @@ body:has(.world-detail) {
 		.world-process,
 		.world-review,
 		.world-compare-content,
-		.world-log
+		.world-log,
+		.world-editorial,
+		.world-ai,
+		.world-upload
 	) {
 	counter-increment: world-step;
 	border-block-start: var(--border-width) solid var(--border);
@@ -348,4 +347,11 @@ body:has(.world-detail) {
 	.world-comparison {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
+}
+
+.world-figure {
+	inline-size: 100%;
+	max-inline-size: 40rem;
+	background: var(--surface);
+	color: var(--primary);
 }

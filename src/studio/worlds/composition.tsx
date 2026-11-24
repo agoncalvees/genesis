@@ -6,18 +6,24 @@ import {
 	BeforeAfter,
 	Button,
 	EvidenceExcerpt,
+	EvidenceHeadline,
 	FadeIn,
 	Field,
+	Figure,
 	Input,
+	Kicker,
+	Lede,
 	Legend,
 	LineChart,
 	Metric,
 	ProcessTimeline,
+	PullQuote,
 	ResultPanel,
 	readMotionProfile,
 	StaggerGroup,
 } from "../../design-system";
 import { worldThemes } from "../../design-system/themes/generated/worlds";
+import { AiDemo, UploadDemo } from "../patterns/demos";
 import { syntheticAnalysis as fixture } from "./fixture";
 
 export type WorldId = keyof typeof worldThemes;
@@ -166,10 +172,11 @@ export function WorldComposition({
 						<Title ref={hero} id={titleId} className="world-title">
 							A smaller output.
 							<br />
-							<span className="world-evidence-inline">
-								<span>{fixture.originalSize}</span> →{" "}
-								<span>{fixture.outputSize}</span>
-							</span>
+							<EvidenceHeadline
+								className="world-evidence-inline"
+								before={fixture.originalSize}
+								after={fixture.outputSize}
+							/>
 						</Title>
 						<p className="world-intro">
 							A {fixture.reduction}% reduction across three passes in this
@@ -321,6 +328,66 @@ export function WorldComposition({
 								end={evidenceStart + fixture.evidenceKey.length}
 							/>
 						</FadeIn>
+					</div>
+				</section>
+
+				<section className="world-section world-editorial">
+					<div className="world-inner">
+						<div className="grid gap-2">
+							<Kicker>Reading the result</Kicker>
+							<SectionHeading className="world-heading">
+								What changed
+							</SectionHeading>
+						</div>
+						<Lede>
+							The first pass removed most of the size; the later passes refined
+							what remained.
+						</Lede>
+						<PullQuote cite="Synthetic log, final pass">
+							The final pass retained {fixture.outputSize} from a{" "}
+							{fixture.originalSize} source.
+						</PullQuote>
+						<Figure
+							caption={`Relative size after each pass: −${fixture.reduction}% overall.`}
+							credit="Genesis Studio"
+							licence="Synthetic fixture, project-owned"
+						>
+							<svg
+								role="img"
+								aria-label="Bars shrinking from full width to 7 percent"
+								viewBox="0 0 320 96"
+								className="world-figure"
+							>
+								{fixture.series.map(({ label, value }, index) => (
+									<rect
+										key={label}
+										x="12"
+										y={12 + index * 20}
+										width={(296 * value) / fixture.series[0].value}
+										height="12"
+										fill="currentColor"
+									/>
+								))}
+							</svg>
+						</Figure>
+					</div>
+				</section>
+
+				<section className="world-section world-ai">
+					<div className="world-inner">
+						<SectionHeading className="world-heading">
+							Ask about the result
+						</SectionHeading>
+						<AiDemo headingLevel={preview ? 4 : 3} />
+					</div>
+				</section>
+
+				<section className="world-section world-upload">
+					<div className="world-inner">
+						<SectionHeading className="world-heading">
+							Preview a file
+						</SectionHeading>
+						<UploadDemo />
 					</div>
 				</section>
 			</div>

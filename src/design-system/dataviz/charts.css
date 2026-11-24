@@ -92,3 +92,21 @@
 	inline-size: 0.7em;
 	block-size: 0.7em;
 }
+
+/* Sparkline path draw: only when motion is allowed; still profiles resolve to 0 ms. */
+@media (prefers-reduced-motion: no-preference) {
+	.ds-chart-draw {
+		vector-effect: none;
+		stroke-dasharray: 1;
+		animation: ds-chart-draw var(--duration-showcase) var(--ease-enter) both;
+	}
+}
+
+@keyframes ds-chart-draw {
+	from {
+		stroke-dashoffset: 1;
+	}
+	to {
+		stroke-dashoffset: 0;
+	}
+}
