@@ -32,6 +32,7 @@ Toda spec define: Task ID (`P<fase>-<AGT>-<nn>`, ex. `P01-CDX-02`), objetivo, re
 - `--worktree current` quando os arquivos são disjuntos e não há build concorrente; `--worktree new-child --name <task-id>` para implementações paralelas que rodam install/build.
 - Conclusão só é aceita do dispatch vigente (comparar Dispatch ID).
 - **`--worktree new-child` cria a branch a partir do branch default (`main`), não do HEAD do coordenador** (observado em Orca 1.4.272, fases 03/04). Sempre passar `--base-branch <branch-da-fase>` e conferir com `git worktree list` logo após o start.
+- OpenCode com `--model` recusa `--worktree new-child` (`capability_unsupported`). Criar antes: `orca worktree create --name <n> --base-branch <branch> --parent-worktree current --setup skip`, depois `worker-start --worktree path:<caminho>`.
 - Workers em worktrees irmãs que rodam `test:e2e` disputam a porta 3000 (`--strictPort`); serializar E2E ou instruir retry.
 
 ## Checkpoints
