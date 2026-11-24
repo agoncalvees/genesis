@@ -27,3 +27,7 @@ Para ensaiar a entrega compilada localmente, execute `bun run build:local` e
 saída Node existente do Nitro. Os comandos funcionam pelo terminal em
 Codex e Claude Code. O [índice de componentes](../design/COMPONENTS.md)
 continua disponível no produto mesmo após a remoção do Studio.
+
+Ao trocar a manchete inicial do scaffold, atualize a asserção correspondente
+em `tests/e2e/smoke.spec.ts`. Preserve a verificação do título do documento
+e da hidratação de `/smoke`.

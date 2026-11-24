@@ -43,4 +43,39 @@ Escopo e responsabilidade do agente desta sessão: protocolo em AGENTS/CLAUDE e 
 
 - ISOTERMA encontrou desvios em tamanho de títulos e numerais apesar dos tokens gerados, além de textos fixos e dificuldade de descobrir componentes. `Heading variant="section"` usa os tokens de seção; dataviz e etapas aceitam rótulos da aplicação. O índice de componentes acompanha o clone. Progresso e legendas preservam os valores padrão de consumidores existentes.
 - `bun run check`, `typecheck`, `design:check` e `test` passaram na fundação (277 testes passaram, um opt-in de IA ignorado). Os testes novos de título e gráfico acusaram a ausência das respectivas capacidades antes das mudanças.
-- `bun run build:local` produziu a saída Node do Nitro. Rolldown emitiu o aviso conhecido de diretiva de módulo do Router. Sem mudanças em dependências, tema neutro ou lockfile. A revisão desta rodada foi feita pelo próprio agente.
+- `bun run build:local` produziu a saída Node do Nitro. Rolldown emitiu o aviso conhecido de diretiva de módulo do Router. Sem mudanças em dependências, tema neutro ou lockfile. A etapa inicial passou por autorrevisão.
+
+O ensaio **Entrelaços** foi iniciado em repositório separado com `genesis:new`.
+O motor de temas, o bootstrap, Button, Heading, BarChart e a guarda de hidratação
+foram reutilizados. A detecção de padrões em frações, a composição e a escala
+cromática ficaram no produto. Voltou à fundação apenas o teto de referência
+`maxValue` do gráfico de barras. Ele permite comparar contagens e cenários
+sem redimensionar o eixo quando os dados mudam.
+
+Uma revisão independente identificou a formatação automática quando o locale
+era omitido e o indicador de seleção invisível em cores forçadas. Ambos foram
+corrigidos, com regressões automatizadas. O ensaio verificou tamanho, peso,
+tracking, fontes carregadas e cor de ação no Chromium. O [índice de
+componentes](design/COMPONENTS.md) e o [protocolo visual](design/VISUAL-ENGINEERING.md)
+são os pontos de entrada para retomar em qualquer agente.
+
+Limites: avaliação humana cega do ISOTERMA segue pendente. O ensaio não mede
+ganho de tempo, eficácia pedagógica ou vantagem entre agentes. Não houve
+sessão no Claude Code nesta rodada, teste em dispositivo físico ou uso da
+integração remota de IA.
+
+### Verificação final
+
+- Genesis: `bun run check`, `typecheck`, `design:check`, `build` e
+  `test` retornaram 0 (278 passaram, um opt-in de IA ignorado).
+  `PORT=3184 bun run test:e2e:prod`: 12 passaram.
+  `CI=true PORT=3188 bun run test:e2e --workers=3`, com saída isolada
+  do Playwright: 57 passaram. A primeira execução concorrente teve
+  45 aprovações e 12 falhas, incluindo timeouts de hidratação; a
+  reexecução com os timeouts já configurados para CI passou integralmente.
+- Entrelaços: commit local `5ed8346`; build, lint, typecheck e
+  verificação de tema passaram. Vitest: 273 passaram, um opt-in ignorado.
+  Playwright Chromium: 7 em dev e 14 na saída Node, com axe, teclado,
+  cores forçadas, movimento reduzido e estilos computados a 360/768/1440 px.
+- Avisos de build: diretivas de módulo de dependências e configuração
+  de cor do console. Git preservado; nenhum push, merge remoto ou deploy.

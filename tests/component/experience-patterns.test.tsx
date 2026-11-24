@@ -361,7 +361,7 @@ test("processing feedback shows per-step durations and a throughput sparkline", 
 				title: "Throughput",
 				data: [
 					{ label: "0", value: 1 },
-					{ label: "1", value: 3 },
+					{ label: "1", value: 1000 },
 				],
 			}}
 		/>,
@@ -370,6 +370,12 @@ test("processing feedback shows per-step durations and a throughput sparkline", 
 	expect(steps.textContent).toContain("Duration: 420 ms");
 	expect(steps.textContent).toContain("Duration: 1.8 sec");
 	expect(screen.getByRole("img", { name: "Throughput" })).toBeTruthy();
+	expect(
+		within(screen.getByRole("table", { name: "Throughput" })).getByRole(
+			"cell",
+			{ name: "1000" },
+		),
+	).toBeTruthy();
 	expect(
 		document.querySelector(".ds-chart-draw")?.getAttribute("pathLength"),
 	).toBe("1");

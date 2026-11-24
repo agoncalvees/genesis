@@ -106,3 +106,24 @@ test("chart exposes localized labels, description and values", () => {
 	).toBeTruthy();
 	expect(within(table).getByRole("cell", { name: "1,5" })).toBeTruthy();
 });
+
+test("bar charts can keep a common upper scale across changing data", () => {
+	const { container, rerender } = render(
+		<BarChart
+			title="Acertos"
+			data={[{ label: "Soma", value: 1 }]}
+			maxValue={2}
+		/>,
+	);
+	const width = Number(container.querySelector("rect")?.getAttribute("width"));
+	rerender(
+		<BarChart
+			title="Acertos"
+			data={[{ label: "Soma", value: 2 }]}
+			maxValue={2}
+		/>,
+	);
+	expect(Number(container.querySelector("rect")?.getAttribute("width"))).toBe(
+		width * 2,
+	);
+});

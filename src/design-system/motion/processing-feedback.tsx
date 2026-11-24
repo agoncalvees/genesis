@@ -11,7 +11,7 @@ export function ProcessingFeedback({
 	label = "Processing",
 	progress,
 	throughput,
-	locale = "en",
+	locale,
 	timelineLabels,
 }: {
 	/** Steps may carry `durationMs` to show per-step timing. */

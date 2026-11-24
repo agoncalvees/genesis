@@ -30,4 +30,4 @@ Aplicação e funções server-side na Vercel se validado, Convex para persistê
 - https://motion.dev/docs/react
 - https://robin-dashboard-amber.vercel.app/ (referência visual; código do frontend não fornecido)
 
-Versões, preços, quotas, compatibilidade, permissões e regras do evento não foram testados neste pacote. Fase 00 deve verificar e registrar.
+As versões decididas estão nos [ADRs](architecture/decisions/). Consulte o [STATUS](STATUS.md) para distinguir validação local, integrações opcionais e regras confirmadas pelo responsável.

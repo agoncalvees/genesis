@@ -1,6 +1,6 @@
 # Roadmap e gates
 
-**Estado inicial:** planejamento entregue; nenhuma fase de código executada. P0 antes de P1. Se houver falta de tempo, reduzir escopo, não qualidade dos gates.
+O quadro descreve os gates originais. Consulte o [STATUS](STATUS.md) para o progresso atual, aprovações, revisões dos gates e evoluções após a fase 07. Priorize P0 antes de P1.
 
 | Fase | Entregável | Gate verificável |
 |---|---|---|

@@ -88,9 +88,9 @@ function formatValue(value: number, locale?: string) {
 		: String(value);
 }
 
-function bounds(data: readonly ChartDatum[]) {
+function bounds(data: readonly ChartDatum[], maxValue = 0) {
 	let min = 0;
-	let max = 0;
+	let max = Number.isFinite(maxValue) ? Math.max(maxValue, 0) : 0;
 	for (const { value } of data) {
 		min = Math.min(min, value);
 		max = Math.max(max, value);
@@ -107,10 +107,11 @@ function finite(data: readonly ChartDatum[]) {
 
 export function BarChart({
 	highlightLast = false,
+	maxValue,
 	...props
-}: ChartProps & { highlightLast?: boolean }) {
+}: ChartProps & { highlightLast?: boolean; maxValue?: number }) {
 	const data = finite(props.data);
-	const scale = bounds(data);
+	const scale = bounds(data, maxValue);
 	const origin = 24;
 	const width = 272;
 	const zero = origin + width * scale(0);
