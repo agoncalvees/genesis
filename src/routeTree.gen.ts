@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as SmokeRouteImport } from './routes/smoke'
+import { Route as LayoutsNameRouteImport } from './routes/layouts.$name'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const SmokeRoute = SmokeRouteImport.update({
   path: '/smoke',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LayoutsNameRoute = LayoutsNameRouteImport.update({
+  id: '/layouts/$name',
+  path: '/layouts/$name',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
+  '/layouts/$name': typeof LayoutsNameRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
+  '/layouts/$name': typeof LayoutsNameRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/catalog': typeof CatalogRoute
   '/smoke': typeof SmokeRoute
+  '/layouts/$name': typeof LayoutsNameRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catalog' | '/smoke'
+  fullPaths: '/' | '/catalog' | '/smoke' | '/layouts/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catalog' | '/smoke'
-  id: '__root__' | '/' | '/catalog' | '/smoke'
+  to: '/' | '/catalog' | '/smoke' | '/layouts/$name'
+  id: '__root__' | '/' | '/catalog' | '/smoke' | '/layouts/$name'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CatalogRoute: typeof CatalogRoute
   SmokeRoute: typeof SmokeRoute
+  LayoutsNameRoute: typeof LayoutsNameRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SmokeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/layouts/$name': {
+      id: '/layouts/$name'
+      path: '/layouts/$name'
+      fullPath: '/layouts/$name'
+      preLoaderRoute: typeof LayoutsNameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CatalogRoute: CatalogRoute,
   SmokeRoute: SmokeRoute,
+  LayoutsNameRoute: LayoutsNameRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
