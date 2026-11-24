@@ -12,7 +12,8 @@ Guia prático e **verificado contra o código desta árvore**. Todo comando abai
 
 | Item | Comando / fonte | Estado esperado |
 |---|---|---|
-| Bun 1.4.5 e Node 24 (`>=24` em `package.json:5-7`) | `bun --version`, `node --version` | Ambiente local: bun 1.4.5, node v24.22.3, npm 11.19.1 (`docs/STATUS.md:6`) |
+| Identidade Git (bloqueia deploy na Vercel se errada) | `git config user.email` | e-mail associado à conta GitHub (ex.: `<id>+<login>@users.noreply.github.com`); com e-mail `*.local` a Vercel bloqueia o deploy ("commit author email is not valid") |
+| Bun 1.4.5 e Node 24 (`24.x` em `package.json`) | `bun --version`, `node --version` | Ambiente local: bun 1.4.5, node v24.22.3, npm 11.19.1 (`docs/STATUS.md:6`) |
 | Instalação reproduzível | `bun install --frozen-lockfile` (`README.md:17`) | `bun.lock` versionado; não alterar lockfile sem ADR/coordenador |
 | Qualidade | `bun run check` (Biome), `bun run typecheck` (TS 7 strict) | exit 0 (`docs/STATUS.md:16-19`) |
 | Testes | `bun run test` (Vitest: `unit` + `component`), `bun run test:e2e` (Playwright/Chromium) | exit 0; `test:e2e` sobe `bun run dev` em `http://127.0.0.1:3000` (`playwright.config.ts:3-11`) |
