@@ -11,20 +11,25 @@
 		"check": "biome check .",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
-		"test:e2e": "playwright test"
+		"test:e2e": "playwright test",
+		"bench": "bun benchmarks/run.ts"
 	},
 	"dependencies": {
 		"@base-ui/react": "1.9.0",
+		"@openrouter/ai-sdk-provider": "3.1.0",
 		"@phosphor-icons/react": "2.1.10",
 		"@tanstack/react-router": "1.170.46",
 		"@tanstack/react-start": "1.169.7",
+		"ai": "7.0.181",
 		"class-variance-authority": "0.7.1",
 		"clsx": "2.1.1",
+		"motion": "14.14.0",
 		"nitro": "3.0.260610-beta",
 		"react": "19.3.1",
 		"react-dom": "19.3.1",
 		"tailwind-merge": "3.7.1",
-		"tailwindcss": "4.3.5"
+		"tailwindcss": "4.3.5",
+		"zod": "4.6.7"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "4.14.1",
