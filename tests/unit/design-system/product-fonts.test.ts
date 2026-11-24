@@ -9,8 +9,8 @@ const fontsFor = (path: string) =>
 	renderProductFonts(loadDesign(readFileSync(path, "utf8")).identity);
 
 describe("product font loading follows the active DESIGN.md", () => {
-	test("Genesis Neutral uses system fonts only and loads no font package", () => {
-		const output = fontsFor("design/DESIGN.md");
+	test("a system-font identity (neutral fixture) loads no font package", () => {
+		const output = fontsFor("tests/fixtures/design-neutral.md");
 		expect(output).not.toContain("@fontsource");
 		expect(output).toContain("export {};");
 	});
@@ -21,6 +21,15 @@ describe("product font loading follows the active DESIGN.md", () => {
 		expect(output).toContain('import "@fontsource/ibm-plex-mono/400.css";');
 		expect(output).not.toContain("bricolage");
 		expect(output).not.toContain("export {};");
+	});
+
+	test("the generated module matches the active design/DESIGN.md", () => {
+		expect(
+			readFileSync(
+				"src/design-system/themes/generated/product-fonts.ts",
+				"utf8",
+			),
+		).toBe(fontsFor("design/DESIGN.md"));
 	});
 
 	test("every world's fonts resolve to registered packages", () => {
