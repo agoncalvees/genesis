@@ -1,6 +1,6 @@
 import { DotsThreeIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useState } from "react";
 import {
 	AnimatedNumber,
 	AnimatedTabsIndicator,
@@ -63,8 +63,12 @@ function Catalog() {
 }
 
 function CatalogContent() {
+	const [theme, setTheme] = useState<"light" | "dark">("light");
 	return (
-		<main className="isolate min-h-screen bg-background py-8 sm:py-12">
+		<main
+			data-theme={theme}
+			className="isolate min-h-screen bg-background py-8 sm:py-12"
+		>
 			<ToastProvider dismissLabel="Dismiss notification">
 				<TooltipProvider>
 					<Container>
@@ -76,7 +80,12 @@ function CatalogContent() {
 										Design system primitives and interaction states.
 									</Text>
 								</Stack>
-								<ThemeToggle />
+								<ThemeToggle
+									theme={theme}
+									onToggle={() =>
+										setTheme(theme === "light" ? "dark" : "light")
+									}
+								/>
 							</header>
 							<CatalogSection title="Buttons and typography">
 								<div className="flex flex-wrap items-center gap-2">
@@ -236,24 +245,19 @@ function CatalogSection({
 	);
 }
 
-function ThemeToggle() {
-	const [theme, setTheme] = useState<"light" | "dark">();
-	useEffect(() => {
-		setTheme(
-			document.documentElement.dataset.theme === "dark" ? "dark" : "light",
-		);
-	}, []);
+function ThemeToggle({
+	theme,
+	onToggle,
+}: {
+	theme: "light" | "dark";
+	onToggle: () => void;
+}) {
 	return (
 		<Button
 			variant="secondary"
-			disabled={theme === undefined}
+			requireHydration
 			aria-pressed={theme === "dark"}
-			onClick={() => {
-				const next =
-					document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-				document.documentElement.dataset.theme = next;
-				setTheme(next);
-			}}
+			onClick={onToggle}
 		>
 			{theme === "dark" ? (
 				<SunIcon size={16} aria-hidden="true" />

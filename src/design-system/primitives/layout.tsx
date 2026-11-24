@@ -36,7 +36,7 @@ export function Card({ className, ...props }: ComponentProps<"div">) {
 		<div
 			{...props}
 			className={cn(
-				"min-w-0 rounded-lg border border-border bg-surface-raised p-4 text-foreground shadow-sm",
+				"min-w-0 rounded-ds-lg panel bg-panel-raised p-4 text-foreground shadow-panel-sm",
 				className,
 			)}
 		/>

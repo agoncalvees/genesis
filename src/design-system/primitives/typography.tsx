@@ -2,12 +2,12 @@ import type { ComponentProps } from "react";
 import { cn } from "../lib/cn";
 
 const headingStyles = {
-	1: "text-3xl sm:text-4xl",
-	2: "text-xl sm:text-2xl",
-	3: "text-lg",
-	4: "text-base",
-	5: "text-sm",
-	6: "text-sm",
+	1: "text-ds-3xl sm:text-ds-4xl",
+	2: "text-ds-xl sm:text-ds-2xl",
+	3: "text-ds-lg",
+	4: "text-ds-base",
+	5: "text-ds-sm",
+	6: "text-ds-sm",
 };
 
 export function Heading({
@@ -20,7 +20,8 @@ export function Heading({
 		<Tag
 			{...props}
 			className={cn(
-				"font-display font-semibold tracking-tight text-foreground",
+				"font-display tracking-display text-foreground",
+				level === 1 ? "font-ds-display" : "font-ds-heading",
 				headingStyles[level],
 				className,
 			)}
@@ -37,7 +38,7 @@ export function Text({
 		<p
 			{...props}
 			className={cn(
-				"font-body text-sm leading-relaxed",
+				"font-body text-ds-sm leading-relaxed",
 				muted ? "text-muted" : "text-foreground",
 				className,
 			)}
@@ -50,7 +51,7 @@ export function Code({ className, ...props }: ComponentProps<"code">) {
 		<code
 			{...props}
 			className={cn(
-				"rounded-sm bg-surface px-1.5 py-0.5 font-mono text-sm wrap-break-word text-foreground",
+				"rounded-ds-sm bg-surface px-1.5 py-0.5 font-mono text-ds-sm wrap-break-word text-foreground",
 				className,
 			)}
 		/>

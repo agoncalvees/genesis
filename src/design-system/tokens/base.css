@@ -1,41 +1,35 @@
-/*
- * Neutral base tokens (ADR 0005). Brand-independent scales only.
- * Colors and fonts live in ../themes/product.css, filled after the challenge.
- */
+/* Escalas compartilhadas. Cada identidade define a unidade e a densidade. */
 :root {
-	/* Layout */
 	--content-max: 72rem;
-	--control-height: 2.5rem;
 	--focus-ring-width: 2px;
 	--focus-ring-offset: 2px;
-
-	/* Motion presets (docs/design/MOTION.md) */
-	--duration-instant: 100ms;
-	--duration-fast: 150ms;
-	--duration-normal: 250ms;
-	--duration-slow: 400ms;
-	--duration-showcase: 600ms;
+	--target-min: 24px;
+	--radius-pill: 9999px;
 }
 
-/* Scales exposed as Tailwind theme values (rounded-md, shadow-md, ease-standard). */
-@theme {
-	--radius-sm: 0.25rem;
-	--radius-md: 0.5rem;
-	--radius-lg: 0.75rem;
-	--shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
-	--shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
-	--shadow-lg: 0 12px 32px rgb(0 0 0 / 0.12);
-	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
-	--ease-enter: cubic-bezier(0, 0, 0, 1);
-	--ease-exit: cubic-bezier(0.3, 0, 1, 1);
+:root,
+[data-theme],
+[data-world] {
+	--spacing: calc(var(--space-unit) * var(--density));
+}
+
+[data-theme="light"] {
+	color-scheme: light;
+}
+
+[data-theme="dark"] {
+	color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	:root {
+	:root,
+	[data-world],
+	[data-theme] {
 		--duration-instant: 0ms;
 		--duration-fast: 0ms;
 		--duration-normal: 0ms;
 		--duration-slow: 0ms;
 		--duration-showcase: 0ms;
+		--motion-intensity: 0;
 	}
 }

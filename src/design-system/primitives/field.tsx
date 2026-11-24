@@ -11,7 +11,7 @@ import {
 import { cn } from "../lib/cn";
 
 export const controlStyles =
-	"min-h-(--control-height) w-full rounded-md border border-muted bg-surface-raised px-3 py-2 font-body text-sm text-foreground placeholder:text-muted aria-invalid:border-danger disabled:cursor-not-allowed disabled:opacity-60";
+	"min-h-control w-full rounded-control border-(length:--border-width) border-control-border bg-surface-raised px-3 py-2 font-body text-ds-sm text-foreground placeholder:text-muted aria-invalid:border-danger disabled:cursor-not-allowed disabled:opacity-60";
 
 const FieldAccessibility = createContext<{
 	labelId: string;
@@ -57,7 +57,7 @@ export function Field({
 			invalid={error ? true : props.invalid}
 			className={cn("grid gap-1.5", className)}
 		>
-			<BaseField.Label id={labelId} className="w-fit text-sm font-medium">
+			<BaseField.Label id={labelId} className="w-fit text-ds-sm font-medium">
 				{label}
 			</BaseField.Label>
 			<FieldAccessibility.Provider
@@ -72,7 +72,7 @@ export function Field({
 			{description && (
 				<BaseField.Description
 					id={descriptionId}
-					className="text-sm text-muted"
+					className="text-ds-sm text-muted"
 				>
 					{description}
 				</BaseField.Description>
@@ -82,7 +82,7 @@ export function Field({
 					id={errorId}
 					match
 					role="alert"
-					className="text-sm font-medium"
+					className="text-ds-sm font-medium"
 				>
 					{error}
 				</BaseField.Error>

@@ -18,13 +18,13 @@ export function Metric({
 	const delta = baseline === undefined ? undefined : value - baseline;
 	return (
 		<dl className="grid min-w-0 gap-1 wrap-anywhere">
-			<dt className="text-sm font-medium text-muted">{metric}</dt>
-			<dd className="font-display text-2xl font-semibold tabular-nums">
+			<dt className="text-ds-sm font-medium text-muted">{metric}</dt>
+			<dd className="font-metric text-ds-2xl font-ds-heading tabular-nums">
 				{formatter.format(value)}
-				{unit && <span className="ms-1 text-sm font-medium">{unit}</span>}
+				{unit && <span className="ms-1 text-ds-sm font-medium">{unit}</span>}
 			</dd>
 			{delta !== undefined && (
-				<div className="flex flex-wrap gap-x-2 text-sm text-muted">
+				<div className="flex flex-wrap gap-x-2 text-ds-sm text-muted">
 					<dt>Change from baseline</dt>
 					<dd className="tabular-nums">
 						{deltaFormatter.format(delta)}
@@ -33,7 +33,7 @@ export function Metric({
 				</div>
 			)}
 			{sampleSize !== undefined && (
-				<div className="flex flex-wrap gap-x-2 text-sm text-muted">
+				<div className="flex flex-wrap gap-x-2 text-ds-sm text-muted">
 					<dt>Sample size</dt>
 					<dd className="tabular-nums">
 						{new Intl.NumberFormat(locale).format(sampleSize)}

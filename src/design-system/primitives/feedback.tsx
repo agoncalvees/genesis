@@ -20,7 +20,7 @@ export function Badge({
 		<span
 			{...props}
 			className={cn(
-				"inline-flex w-fit items-center rounded-sm px-2 py-0.5 font-body text-xs font-medium",
+				"inline-flex w-fit items-center rounded-ds-sm px-2 py-0.5 font-body text-ds-xs font-medium",
 				badgeStyles[tone],
 				className,
 			)}
@@ -32,7 +32,7 @@ export function SpinnerMark() {
 	return (
 		<span
 			aria-hidden="true"
-			className="size-4 shrink-0 rounded-full border-2 border-current border-e-transparent motion-safe:animate-spin motion-safe:[animation-duration:var(--duration-showcase)]"
+			className="size-4 shrink-0 rounded-pill border-2 border-current border-e-transparent motion-safe:animate-spin motion-safe:[animation-duration:var(--duration-showcase)]"
 		/>
 	);
 }
@@ -62,7 +62,7 @@ export function Skeleton({
 		<div
 			{...props}
 			aria-hidden="true"
-			className={cn("h-4 rounded-sm bg-border", className)}
+			className={cn("h-4 rounded-ds-sm bg-border", className)}
 		/>
 	);
 }
@@ -86,7 +86,7 @@ export function Progress({
 			aria-labelledby={props["aria-label"] ? undefined : labelId}
 			{...props}
 			value={value}
-			className={cn("grid gap-2 text-sm", className)}
+			className={cn("grid gap-2 text-ds-sm", className)}
 		>
 			<div className="flex justify-between gap-3">
 				<BaseProgress.Label id={labelId} className="font-medium">
@@ -96,10 +96,10 @@ export function Progress({
 					<BaseProgress.Value className="text-muted tabular-nums" />
 				)}
 			</div>
-			<BaseProgress.Track className="h-2 overflow-hidden rounded-full bg-surface ring-1 ring-muted">
+			<BaseProgress.Track className="h-2 overflow-hidden rounded-pill bg-surface ring-1 ring-muted">
 				<BaseProgress.Indicator
 					className={cn(
-						"h-full rounded-full bg-primary",
+						"h-full rounded-pill bg-primary",
 						value === null && "ds-progress-indeterminate",
 					)}
 				/>

@@ -18,7 +18,7 @@ export function EmptyState({
 	action?: ReactNode;
 }) {
 	return (
-		<div className="grid justify-items-start gap-2 rounded-lg border border-dashed border-muted bg-surface p-4">
+		<div className="grid justify-items-start gap-2 rounded-ds-lg panel border-dashed border-muted bg-panel-surface shadow-panel-flat p-4">
 			<Heading level={headingLevel}>{title}</Heading>
 			{description && <Text muted>{description}</Text>}
 			{action}
@@ -38,7 +38,7 @@ export function ErrorState({
 	retryLabel,
 }: StateProps & RetryProps & { error: AppError }) {
 	return (
-		<div className="grid justify-items-start gap-3 rounded-lg border border-danger bg-surface p-4">
+		<div className="grid justify-items-start gap-3 rounded-ds-lg panel border-danger bg-panel-surface shadow-panel-flat p-4">
 			<div role="alert" className="grid gap-1">
 				<Heading level={headingLevel}>{title}</Heading>
 				<Text>{error.message}</Text>

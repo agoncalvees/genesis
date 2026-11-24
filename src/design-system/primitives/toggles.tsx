@@ -4,6 +4,7 @@ import { CheckIcon, MinusIcon } from "@phosphor-icons/react";
 import type { ComponentProps } from "react";
 import { cn } from "../lib/cn";
 import { useFieldAccessibility } from "./field";
+import { ThemedIcon } from "./themed-icon";
 
 export function Checkbox({
 	className,
@@ -19,15 +20,15 @@ export function Checkbox({
 			{...accessibility}
 			indeterminate={indeterminate}
 			className={cn(
-				"inline-grid size-6 place-items-center rounded-sm border border-muted bg-surface-raised text-foreground data-checked:border-primary data-checked:bg-primary data-checked:text-on-primary data-indeterminate:border-primary data-indeterminate:bg-primary data-indeterminate:text-on-primary data-disabled:cursor-not-allowed data-disabled:opacity-60",
+				"inline-grid size-(--target-min) place-items-center rounded-ds-sm border-(length:--border-width) border-control-border bg-surface-raised text-foreground data-checked:border-primary data-checked:bg-primary data-checked:text-on-primary data-indeterminate:border-primary data-indeterminate:bg-primary data-indeterminate:text-on-primary data-disabled:cursor-not-allowed data-disabled:opacity-60",
 				className,
 			)}
 		>
 			<BaseCheckbox.Indicator>
 				{indeterminate ? (
-					<MinusIcon size={16} aria-hidden="true" />
+					<ThemedIcon icon={MinusIcon} size={16} />
 				) : (
-					<CheckIcon size={16} aria-hidden="true" />
+					<ThemedIcon icon={CheckIcon} size={16} />
 				)}
 			</BaseCheckbox.Indicator>
 		</BaseCheckbox.Root>
@@ -46,11 +47,11 @@ export function Switch({
 			{...props}
 			{...accessibility}
 			className={cn(
-				"group inline-flex h-6 w-11 items-center rounded-full border border-muted bg-surface-raised p-0.5 data-checked:border-primary data-checked:bg-primary data-disabled:cursor-not-allowed data-disabled:opacity-60",
+				"group inline-flex h-(--target-min) w-11 items-center rounded-pill border-(length:--border-width) border-control-border bg-surface-raised p-0.5 data-checked:border-primary data-checked:bg-primary data-disabled:cursor-not-allowed data-disabled:opacity-60",
 				className,
 			)}
 		>
-			<BaseSwitch.Thumb className="size-[18px] rounded-full bg-foreground transition-transform duration-(--duration-fast) ease-standard group-data-checked:translate-x-5 group-data-checked:bg-on-primary rtl:group-data-checked:-translate-x-5" />
+			<BaseSwitch.Thumb className="size-[calc(var(--spacing)*4.5)] rounded-pill bg-foreground transition-transform duration-(--duration-fast) ease-standard group-data-checked:translate-x-5 group-data-checked:bg-on-primary rtl:group-data-checked:-translate-x-5" />
 		</BaseSwitch.Root>
 	);
 }

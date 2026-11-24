@@ -5,23 +5,23 @@ import { cn } from "../lib/cn";
 import { SpinnerMark } from "./feedback";
 
 const buttonStyles = cva(
-	"inline-flex min-w-6 shrink-0 select-none items-center justify-center gap-2 rounded-md border font-body text-sm font-medium transition-[opacity,transform] duration-(--duration-instant) ease-standard active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100",
+	"inline-flex min-w-(--target-min) shrink-0 select-none items-center justify-center gap-2 rounded-control border-(length:--border-width) font-body text-ds-sm font-medium transition-[opacity,transform] duration-(--duration-instant) ease-standard active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100",
 	{
 		variants: {
 			variant: {
 				primary:
 					"border-transparent bg-primary text-on-primary enabled:hover:opacity-85",
 				secondary:
-					"border-muted bg-surface-raised text-foreground enabled:hover:bg-surface",
+					"border-control-border bg-surface-raised text-foreground enabled:hover:bg-surface",
 				ghost:
 					"border-transparent bg-transparent text-foreground enabled:hover:bg-surface",
 				danger:
 					"border-transparent bg-danger text-on-danger enabled:hover:opacity-85",
 			},
 			size: {
-				sm: "min-h-8 px-3",
-				md: "min-h-(--control-height) px-4",
-				lg: "min-h-12 px-5",
+				sm: "min-h-control-sm px-3",
+				md: "min-h-control px-4",
+				lg: "min-h-control-lg px-5",
 			},
 		},
 		defaultVariants: { variant: "primary", size: "md" },
@@ -63,9 +63,9 @@ export function Button({
 }
 
 const iconSizes = {
-	sm: "size-8",
-	md: "size-(--control-height)",
-	lg: "size-12",
+	sm: "size-control-sm",
+	md: "size-control",
+	lg: "size-control-lg",
 };
 
 export function IconButton({

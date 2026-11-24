@@ -6,7 +6,7 @@ export function PresentationLayout({ header, children, footer }: LayoutProps) {
 		<div className="flex min-h-svh min-w-0 flex-col bg-background wrap-anywhere">
 			<SkipLink target={mainId} />
 			{header && (
-				<header className="border-b border-border px-5 py-4 sm:px-10">
+				<header className="border-b-(length:--panel-border-width) border-panel-divider bg-panel-slot shadow-panel-flat px-5 py-4 sm:px-10">
 					{header}
 				</header>
 			)}
@@ -18,7 +18,7 @@ export function PresentationLayout({ header, children, footer }: LayoutProps) {
 				{children}
 			</main>
 			{footer && (
-				<footer className="border-t border-border px-5 py-4 sm:px-10">
+				<footer className="border-t-(length:--panel-border-width) border-panel-divider bg-panel-slot shadow-panel-flat px-5 py-4 sm:px-10">
 					{footer}
 				</footer>
 			)}

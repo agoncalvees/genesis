@@ -17,3 +17,6 @@ __pycache__/
 .worktrees/
 benchmarks/results/
 .tanstack/
+
+/design/imports/*
+!/design/imports/README.md

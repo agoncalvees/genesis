@@ -16,12 +16,14 @@ src/design-system/themes/generated/
 ```
 Scripts: `design:lint`, `design:build`, `design:check` (drift, CI), `design:diff <a> <b>`, `design:import <arquivo|url>`, `design:apply <id|import>`.
 
+`design/DESIGN.md` mostra a estrutura completa aceita pela versão 0.4.0 do motor. `design:import <arquivo|url> [nome]` guarda a referência em quarentena mesmo quando a validação encontra erros. Para promover uma importação válida, use `design:apply import/<nome>`. O comando atualiza a identidade ativa e o CSS gerado.
+
 ## Contrato semântico (saída do normalizador)
 Toda identidade precisa produzir **todas** estas variáveis, para claro e, se declarado, escuro:
 
 | Grupo | Variáveis CSS |
 |---|---|
-| Superfícies | `--background --surface --surface-raised --border` |
+| Superfícies | `--background --surface --surface-raised --border --control-border` |
 | Texto | `--foreground --muted` |
 | Ação | `--primary --on-primary --accent --on-accent --focus` |
 | Estado | `--success/--on-success --warning/--on-warning --danger/--on-danger --info/--on-info` |
@@ -29,13 +31,17 @@ Toda identidade precisa produzir **todas** estas variáveis, para claro e, se de
 | Tipografia | `--typeface-display --typeface-body --typeface-mono`, `--display-weight`, `--display-tracking`, `--heading-weight`, `--type-scale` (razão), `--text-base` |
 | Geometria | `--radius-sm --radius-md --radius-lg --radius-control` (forma de botão/input), `--border-width` |
 | Densidade | `--density` (0.75 compacto · 1 padrão · 1.25 amplo), `--control-height`, `--space-unit` |
-| Superfície | `--surface-style` (`border` · `elevation` · `tint`), `--shadow-sm/md/lg` |
+| Superfície | `--surface-style` (`border` · `elevation` · `tint`), `--shadow-sm/md/lg`, `--dialog-scrim` |
 | Motion | `--duration-*` (escalados pelo perfil), `--ease-standard/enter/exit`, `--motion-intensity` (0–1), spring (`--spring-stiffness`, `--spring-damping`) |
 | Ícones | `--icon-weight` (Phosphor: thin/light/regular/bold) |
 
 Mapeamento a partir da spec do Google: `colors.*` → superfícies/texto/ação/estado por nome canônico (`primary`, `on-primary`, `surface`, …; nomes ausentes → erro, não autogeração); `typography.display|headline|body|label|mono` → tipografia; `rounded` → geometria; `spacing` → escala; `motion` → durações/easing. Chave de extensão **`genesis:`** carrega: `density`, `surfaceStyle`, `iconWeight`, `typeScale`, `displayWeight`, `displayTracking`, `motionProfile` (`still|calm|crisp|lively` + spring), `data` (paleta categórica), `composition`, `darkColors` (variante escura).
 
-Validação (falha = não gera): todos os pares de `VISUAL-ENGINEERING.md` com contraste mínimo; paleta `data-*` com contraste ≥ 3:1 contra `--surface` e distinguível (ΔE mínimo documentado); fontes declaradas precisam existir no registro de fontes licenciadas (`tools/design-engine/fonts.ts` com pacote + licença).
+Use `rounded.sm|md|lg|control` e `spacing.unit|control` em px ou rem. `genesis.darkColors` exige todas as cores semânticas quando declarado. `genesis.darkData` permite uma paleta de dados escura independente. `genesis.metricTypeface: mono` escolhe a família monoespaçada para métricas.
+
+A validação rejeita identidades que falham nos pares de `VISUAL-ENGINEERING.md` ou usam fontes fora do registro licenciado em `tools/design-engine/fonts.ts`. As seis séries precisam de contraste ≥ 3:1 contra `--surface` e distância ΔE OK ≥ 0,07 entre si, calculada em OKLab na escala 0–1. `--control-border` passa pelo contraste de controles e `--border` fica disponível para divisores decorativos.
+
+Aplique `data-world="<id>"` a um elemento para escopar a identidade. `data-theme="light|dark"` pode ficar no escopo ou em um descendente. Dialog, Popover, Select, Tooltip e Toast buscam o contêiner temático ancestral para manter os tokens nos portais.
 
 ## Mundos — direção de arte (primeira entrega: 4)
 Mesmos componentes e mesmos dados sintéticos; mudam composição, densidade, geometria, superfície, tipo e motion.

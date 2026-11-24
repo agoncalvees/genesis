@@ -25,5 +25,6 @@ export { Badge, Progress, Skeleton, Spinner } from "./primitives/feedback";
 export { Field, Input, Textarea } from "./primitives/field";
 export { Card, Container, Grid, Stack } from "./primitives/layout";
 export { Select } from "./primitives/select";
+export { ThemedIcon } from "./primitives/themed-icon";
 export { Checkbox, Switch } from "./primitives/toggles";
 export { Code, Heading, Text } from "./primitives/typography";

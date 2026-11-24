@@ -14,10 +14,14 @@ export const easings = {
 
 export type MotionDuration = keyof typeof durations;
 
-export function readMotionTiming(element: Element, duration: MotionDuration) {
+export function readMotionTiming(
+	element: Element,
+	duration: MotionDuration,
+	easing: keyof typeof easings = "standard",
+) {
 	const styles = getComputedStyle(element);
 	const time = styles.getPropertyValue(durations[duration]).trim();
-	const curve = styles.getPropertyValue(easings.standard);
+	const curve = styles.getPropertyValue(easings[easing]);
 	const points = curve
 		.match(/cubic-bezier\(([^)]+)\)/)?.[1]
 		?.split(",")

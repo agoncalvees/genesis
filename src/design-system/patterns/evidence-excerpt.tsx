@@ -27,12 +27,12 @@ export function EvidenceExcerpt({
 	const to = validRange ? Math.min(text.length, end + window) : text.length;
 
 	return (
-		<p className="text-sm whitespace-pre-wrap wrap-anywhere">
+		<p className="text-ds-sm whitespace-pre-wrap wrap-anywhere">
 			{from > 0 && "…"}
 			{validRange ? (
 				<>
 					{text.slice(from, start)}
-					<mark className="rounded-sm bg-warning text-on-warning underline decoration-2">
+					<mark className="rounded-ds-sm bg-warning text-on-warning underline decoration-2">
 						<span className="sr-only">{label}: </span>
 						{text.slice(start, end)}
 					</mark>

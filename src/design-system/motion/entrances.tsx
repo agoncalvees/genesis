@@ -36,7 +36,7 @@ export function StaggerGroup({
 						className="ds-fade-in"
 						style={
 							{
-								"--enter-delay": `calc(var(--duration-instant) * ${Math.min(index, 4) / 2})`,
+								"--enter-delay": `calc(var(--duration-instant) * var(--motion-intensity, 1) * ${Math.min(index, 4) / 2})`,
 							} as CSSProperties
 						}
 					>

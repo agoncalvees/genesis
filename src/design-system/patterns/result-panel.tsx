@@ -86,7 +86,7 @@ export function ResultPanel<T>(props: ResultPanelProps<T>) {
 		<section
 			aria-labelledby={titleId}
 			data-state={state}
-			className="grid min-w-0 gap-4 rounded-lg border border-border bg-surface-raised p-4 sm:p-5"
+			className="grid min-w-0 gap-4 rounded-ds-lg panel bg-panel-raised p-4 shadow-panel-flat sm:p-5"
 		>
 			<div className="flex flex-wrap items-center justify-between gap-2">
 				<Heading id={titleId} level={headingLevel}>

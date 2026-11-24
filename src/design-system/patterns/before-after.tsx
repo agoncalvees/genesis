@@ -40,8 +40,8 @@ export function BeforeAfter({
 
 	return (
 		<figure className="grid min-w-0 gap-3">
-			<figcaption className="text-sm font-medium">{label}</figcaption>
-			<div className="relative isolate aspect-video overflow-hidden rounded-md bg-surface ring-1 ring-border">
+			<figcaption className="text-ds-sm font-medium">{label}</figcaption>
+			<div className="relative isolate aspect-video overflow-hidden rounded-ds-md bg-surface ring-1 ring-border">
 				<div className="absolute inset-0">{renderContent(before)}</div>
 				<div
 					className="absolute inset-0 bg-surface"
@@ -58,7 +58,7 @@ export function BeforeAfter({
 				)}
 			</div>
 			<div className="grid gap-1">
-				<label htmlFor={id} className="text-sm font-medium">
+				<label htmlFor={id} className="text-ds-sm font-medium">
 					{isImage(after) ? "After image revealed" : "After content revealed"}
 				</label>
 				<input
@@ -74,7 +74,7 @@ export function BeforeAfter({
 				/>
 				<div
 					aria-hidden="true"
-					className="flex justify-between text-xs text-muted"
+					className="flex justify-between text-ds-xs text-muted"
 				>
 					<span>Before</span>
 					<span>After</span>

@@ -2,67 +2,37 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "vitest";
 
-/*
- * Gate 02 (docs/ROADMAP.md:9, doc-audit.md:68): one central file owns color
- * and typography; primitives/components may only consume semantic tokens.
- */
-const THEME_PATH = "src/design-system/themes/product.css";
+import {
+	loadDesign,
+	productPath,
+	worldPaths,
+} from "../../../tools/design-engine/generate";
+import { readGeneratedThemes } from "./generated-themes";
+
 const CONSUMER_DIRS = [
 	"src/design-system/primitives",
 	"src/design-system/components",
+	"src/design-system/patterns",
+	"src/design-system/motion",
 ] as const;
 
-type ThemeName = "light" | "dark";
-type Tokens = Record<string, string>;
+const scopes = readGeneratedThemes();
+const keys = Object.keys(
+	loadDesign(readFileSync(productPath, "utf8")).identity.light,
+);
 
-/** Declarations typed once on `:root` and inherited by `[data-theme="dark"]`. */
-const CASCADE_ONLY = /^typeface-/;
+test("generated CSS covers both modes of every world and the product", () => {
+	const ids = ["product", ...worldPaths().map(({ name }) => name)];
+	expect(new Set(scopes.keys())).toEqual(
+		new Set(ids.flatMap((id) => [`${id}/light`, `${id}/dark`])),
+	);
+});
 
-function parseThemeBlocks(source: string): Record<ThemeName, Tokens> {
-	const blocks: Record<ThemeName, Tokens> = { light: {}, dark: {} };
-	for (const rule of source.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-		const selector = rule[1];
-		const theme: ThemeName | null = selector.includes('data-theme="dark"')
-			? "dark"
-			: selector.includes(":root") || selector.includes('data-theme="light"')
-				? "light"
-				: null;
-		if (theme === null) continue;
-		for (const declaration of rule[2].matchAll(
-			/--([a-z0-9-]+)\s*:\s*([^;]+);/gi,
-		)) {
-			blocks[theme][declaration[1]] = declaration[2].trim();
-		}
-	}
-	return blocks;
+for (const [scope, tokens] of scopes) {
+	test(`${scope} defines the complete visual contract`, () => {
+		for (const key of keys) expect(tokens[key], `--${key}`).toBeTruthy();
+	});
 }
-
-const BLOCKS = parseThemeBlocks(readFileSync(THEME_PATH, "utf8"));
-
-test("every theme-dependent semantic token in the light block exists in dark", () => {
-	const lightTokens = Object.keys(BLOCKS.light).filter(
-		(token) => !CASCADE_ONLY.test(token),
-	);
-
-	expect(lightTokens.length).toBeGreaterThan(0);
-	for (const token of lightTokens) {
-		expect(
-			BLOCKS.dark[token],
-			`--${token} is declared in the light block but missing in [data-theme="dark"]`,
-		).toBeDefined();
-	}
-});
-
-test("typography tokens are declared once on :root and inherited by dark", () => {
-	const typography = Object.keys(BLOCKS.light).filter((token) =>
-		CASCADE_ONLY.test(token),
-	);
-
-	expect(typography.length).toBeGreaterThan(0);
-	for (const token of typography) {
-		expect(BLOCKS.light[token]).toBeDefined();
-	}
-});
 
 const SOURCE_FILE = /\.(ts|tsx|js|jsx|css)$/;
 const COLOR_LITERAL =

@@ -13,7 +13,7 @@ export function ApplicationLayout({
 		<div className="flex min-h-dvh min-w-0 flex-col bg-background wrap-anywhere">
 			<SkipLink target={mainId} />
 			{header && (
-				<header className="border-b border-border bg-surface px-4 py-3 sm:px-6">
+				<header className="border-b-(length:--panel-border-width) border-panel-divider bg-panel-surface shadow-panel-flat px-4 py-3 sm:px-6">
 					{header}
 				</header>
 			)}
@@ -26,7 +26,7 @@ export function ApplicationLayout({
 				{navigation && (
 					<nav
 						aria-label="Application"
-						className="min-w-0 border-b border-border bg-surface px-4 py-3 md:border-e md:border-b-0"
+						className="min-w-0 border-b-(length:--panel-border-width) border-panel-divider bg-panel-surface shadow-panel-flat px-4 py-3 md:border-e-(length:--panel-border-width) md:border-b-0"
 					>
 						{navigation}
 					</nav>
@@ -36,7 +36,7 @@ export function ApplicationLayout({
 				</main>
 			</div>
 			{footer && (
-				<footer className="border-t border-border px-4 py-3 sm:px-6">
+				<footer className="border-t-(length:--panel-border-width) border-panel-divider bg-panel-slot shadow-panel-flat px-4 py-3 sm:px-6">
 					{footer}
 				</footer>
 			)}
