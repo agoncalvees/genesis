@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { appConfig } from "../core/app-config";
 import { Container } from "../design-system";
 
 export const Route = createFileRoute("/demos")({ component: DemosLayout });
@@ -13,7 +14,7 @@ function DemosLayout() {
 			>
 				<Container className="flex min-h-14 max-w-5xl items-center gap-5">
 					<Link className="underline underline-offset-4" to="/">
-						Genesis
+						{appConfig.name}
 					</Link>
 					<Link
 						className="underline underline-offset-4"

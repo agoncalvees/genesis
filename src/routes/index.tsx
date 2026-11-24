@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { appConfig } from "../core/app-config";
 import { useHydrated } from "../core/hydration";
 import { Container, Heading, Text } from "../design-system";
 
 export const Route = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Genesis" }] }),
+	head: () => ({ meta: [{ title: appConfig.name }] }),
 	component: Home,
 });
 
@@ -21,7 +22,7 @@ function Home() {
 			<Container className="max-w-3xl">
 				<header className="grid gap-3 pb-8">
 					<Heading level={1} className="text-4xl sm:text-5xl">
-						Genesis
+						{appConfig.name}
 					</Heading>
 					<Text className="text-base" muted>
 						Uma fundação modular para desenvolver e validar soluções para novos
@@ -29,7 +30,7 @@ function Home() {
 					</Text>
 				</header>
 				<nav
-					aria-label="Páginas do Genesis"
+					aria-label={`Páginas de ${appConfig.name}`}
 					className="flex flex-wrap gap-2 border-t border-border pt-4"
 				>
 					<Link className={linkStyle} to="/demos">
