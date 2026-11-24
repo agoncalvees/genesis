@@ -11,7 +11,7 @@ Onde procurar antes de escrever do zero. Organizado por **mecanismo a comunicar*
 | Mapa geográfico real | `maplibre-gl` 6 (BSD-3) com estilo próprio | `d3-geo` 3 (ISC) para cartogramas/projeções em SVG | — |
 | Território/diagrama ilustrado e selecionável | SVG autoral com regiões focáveis + legenda por faixas | Imagem gerada como base + máscara/grade de dados | — |
 | Série temporal, distribuição, comparação de barras | Dataviz do Genesis (tabela acessível, `maxValue`, locale) | `d3-shape`/`@visx/shape` 4 (MIT) para formas sob medida; ECharts 6 (Apache-2.0) para volume | `src/design-system/dataviz` |
-| Antes/depois, contrafactual | Máscara `clip-path` arrastável sobre o mesmo quadro | Lado a lado sincronizado | `BeforeAfter` (conteúdo React) |
+| Antes/depois, contrafactual | Máscara `clip-path` arrastável sobre o mesmo quadro | Lado a lado sincronizado | `CompareMask` (headless, teclado, `--compare`); `BeforeAfter` (estilizado, rótulos próprios) |
 | Número que muda | `AnimatedNumber` (pt-BR, reduced motion) | `@number-flow/react` 0.6 (MIT) para rolagem por dígito | `src/design-system/motion` |
 | Traço desenhado à mão, anotação | `perfect-freehand` 1.2 (MIT) | `roughjs` 4.6 (MIT) para estilo esboço | — |
 | Transições de layout, elemento compartilhado, springs, gestos | Motion 14 (MIT, já instalado): `layout`, `layoutId`, `AnimatePresence`, `useSpring`, `drag` | View Transitions API nativa | presets/perfis em `motion/presets.ts` |
@@ -36,7 +36,7 @@ Use-as como ponto de partida de **comportamento** (física, timing, máscara), r
 ## Primitivas Genesis que valem a pena
 
 Comportamento confiável e testado — use quando o caso couber, estilize livremente:
-`Button` (hidratação), `Field`, `Dialog`/`Popover`/`Tooltip`/`Select` (portais com tema), `Tabs`, `Toast`, `AnimatedNumber`, dataviz com tabela acessível, `useHydrated`, `ResizablePanels`.
+`Button` (hidratação), `CompareMask`, `Field`, `Dialog`/`Popover`/`Tooltip`/`Select` (portais com tema), `Tabs`, `Toast`, `AnimatedNumber`, dataviz com tabela acessível, `useHydrated`, `ResizablePanels`.
 
 Opcionais, com formato mais rígido — consulte antes, não force: `ResultPanel`, `Metric`, `BeforeAfter`, `ProcessingFeedback`, padrões editoriais, layouts (`presentation`, `application`, `workspace`, `focused`). Os layouts e mundos são **exemplos de composição**, não pontos de partida.
 
