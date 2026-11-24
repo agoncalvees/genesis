@@ -1,5 +1,7 @@
 # Creative Sprint e Figma → DESIGN.md
 
+> P10: o processo de direção artística foi substituído pelo protocolo de [CREATIVE-DIRECTION](CREATIVE-DIRECTION.md). Este documento permanece como referência detalhada do mapeamento Figma → tokens.
+
 Créditos informados pelo responsável: aproximadamente 3.000; saldo e custo por operação não verificados. Não gastar créditos ou criar arquivos externamente sem autorização. Guardar a maior parte para o tema real.
 
 ## Creative Sprint (pré-tema — manter)

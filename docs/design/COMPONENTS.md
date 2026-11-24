@@ -1,5 +1,7 @@
 # Escolher componentes
 
+A direção artística escolhe os componentes. Estas peças garantem **comportamento** (teclado, foco, portais com tema, hidratação, tabelas acessíveis); a aparência e a composição são do produto. Para visualizações, simulações, redes, mapas e motion avançado, consulte primeiro o [Experience Registry](EXPERIENCES.md).
+
 Consulte as assinaturas e os exemplos no código abaixo. Os produtos iniciados com `genesis:new` preservam a biblioteca. Importe pelo caminho do componente quando precisar manter a dependência explícita.
 
 | Necessidade | Candidatos | Uso |

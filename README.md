@@ -6,7 +6,7 @@ Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é
 ## Comece aqui
 1. Abra esta pasta no Codex ou no Claude Code e peça para continuar a partir de [AGENTS.md](AGENTS.md).
 2. Consulte [Blueprint](docs/BLUEPRINT.md), [Roadmap](docs/ROADMAP.md) e [Status](docs/STATUS.md) para o estado atual e os gates.
-3. Use o [índice de componentes](docs/design/COMPONENTS.md), o [protocolo visual](docs/design/VISUAL-ENGINEERING.md) e o [guia para iniciar um produto](docs/engineering/PORTABILITY.md) conforme a tarefa.
+3. Para um tema novo, siga o [protocolo de direção artística](docs/design/CREATIVE-DIRECTION.md), o [guia para iniciar um produto](docs/engineering/PORTABILITY.md) e o [Experience Registry](docs/design/EXPERIENCES.md). Valide com `bun run design:verify <url>` ([fidelidade](docs/design/FIDELITY.md)).
 
 ## Preparação e submissão
 Mantenha este repositório privado e separado da submissão até confirmar o regulamento. Não copie código, arquivos, assets ou documentação prévia para a entrega se isso não for permitido. Não manipule datas de commits nem esconda autoria.
