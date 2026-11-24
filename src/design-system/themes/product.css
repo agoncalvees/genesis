@@ -1,0 +1,56 @@
+/*
+ * Product theme — THE single file to change for brand (ADR 0005, FIGMA-WORKFLOW).
+ * Current values are a NEUTRAL DEVELOPMENT PLACEHOLDER, not a visual identity.
+ * Every on-* / foreground pair must keep WCAG 2.2 AA (checked by
+ * tests/unit/design-system/contrast.test.ts).
+ */
+:root,
+[data-theme="light"] {
+	color-scheme: light;
+	--background: #ffffff;
+	--surface: #f7f7f8;
+	--surface-raised: #ffffff;
+	--foreground: #18181b;
+	--muted: #52525b;
+	--border: #d4d4d8;
+	--primary: #27272a;
+	--on-primary: #ffffff;
+	--accent: #3f3f46;
+	--on-accent: #ffffff;
+	--focus: #1d4ed8;
+	--success: #15803d;
+	--on-success: #ffffff;
+	--warning: #a16207;
+	--on-warning: #ffffff;
+	--danger: #b91c1c;
+	--on-danger: #ffffff;
+	--info: #1d4ed8;
+	--on-info: #ffffff;
+
+	--typeface-display: system-ui, -apple-system, "Segoe UI", sans-serif;
+	--typeface-body: system-ui, -apple-system, "Segoe UI", sans-serif;
+	--typeface-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+[data-theme="dark"] {
+	color-scheme: dark;
+	--background: #0b0b0c;
+	--surface: #18181b;
+	--surface-raised: #222225;
+	--foreground: #fafafa;
+	--muted: #a1a1aa;
+	--border: #3f3f46;
+	--primary: #fafafa;
+	--on-primary: #18181b;
+	--accent: #d4d4d8;
+	--on-accent: #18181b;
+	--focus: #60a5fa;
+	--success: #4ade80;
+	--on-success: #0b0b0c;
+	--warning: #facc15;
+	--on-warning: #0b0b0c;
+	--danger: #f87171;
+	--on-danger: #0b0b0c;
+	--info: #60a5fa;
+	--on-info: #0b0b0c;
+}
