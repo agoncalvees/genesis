@@ -23,4 +23,6 @@
 
 P09-CDX-01 concluído na máquina local. `check`, `typecheck`, `test` (210 passaram, 1 opt-in ignorado), `build`, `test:e2e` (30), `test:e2e:prod` (10) e `design:check` retornaram 0. Revisão do coordenador pendente. [Checkpoint P09-CDX-01](engineering/phase-09/checkpoints/P09-CDX-01.md).
 
+P09-CDX-02: `genesis:new` validado localmente antes da integração com o design engine. Instalação congelada, check, typecheck, test, build e E2E retornaram 0 no clone descartável. [Comandos, resultados e verificação pendente](engineering/phase-09/checkpoints/P09-CDX-02.md).
+
 Estados: pendente / em andamento / bloqueado / validado. Não marcar validado sem evidência.

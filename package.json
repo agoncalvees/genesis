@@ -19,7 +19,8 @@
 		"design:check": "bun tools/design-engine/cli.ts check",
 		"design:diff": "bun tools/design-engine/cli.ts diff",
 		"design:import": "bun tools/design-engine/cli.ts import",
-		"design:apply": "bun tools/design-engine/cli.ts apply"
+		"design:apply": "bun tools/design-engine/cli.ts apply",
+		"genesis:new": "bun scripts/genesis-new/index.ts"
 	},
 	"dependencies": {
 		"@base-ui/react": "1.9.0",

@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { appConfig } from "../core/app-config";
 import { useHydrated } from "../core/hydration";
 import { Container, Grid, Heading, Text } from "../design-system";
 
 export const Route = createFileRoute("/demos/")({
-	head: () => ({ meta: [{ title: "Demos · Genesis" }] }),
+	head: () => ({ meta: [{ title: `Demos · ${appConfig.name}` }] }),
 	component: Demos,
 });
 
@@ -36,7 +37,7 @@ function Demos() {
 				<header className="grid gap-2">
 					<Heading level={1}>Demos</Heading>
 					<Text muted>
-						Dois ensaios locais realizados na fase 07 do Genesis.
+						Dois ensaios locais realizados na fase 07 de {appConfig.name}.
 					</Text>
 				</header>
 				<Grid>

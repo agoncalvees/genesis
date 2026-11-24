@@ -1,4 +1,5 @@
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { appConfig } from "../core/app-config";
 
 import appCss from "../styles/base.css?url";
 
@@ -13,7 +14,7 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "Application",
+				title: appConfig.name,
 			},
 		],
 		links: [
