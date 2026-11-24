@@ -21,3 +21,9 @@ A validação instala dependências com o lockfile congelado, gera a árvore de 
 Specs E2E que navegam para `/studio` ou `/demos` são detectados pelo conteúdo e removidos do produto (inclusive os de acessibilidade do Genesis); o produto precisa escrever os seus. As fontes licenciadas do mundo aplicado são carregadas pelo módulo gerado `src/design-system/themes/generated/product-fonts.ts`, importado pela rota raiz.
 
 Após a revelação, preencha `CHALLENGE.md` e `PRODUCT-BRIEF.md` antes de implementar o produto.
+
+Para ensaiar a entrega compilada localmente, execute `bun run build:local` e
+`NITRO_HOST=127.0.0.1 NITRO_PORT=3000 bun run serve`. O build local usa a
+saída Node existente do Nitro. Os comandos funcionam pelo terminal em
+Codex e Claude Code. O [índice de componentes](../design/COMPONENTS.md)
+continua disponível no produto mesmo após a remoção do Studio.

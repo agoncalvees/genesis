@@ -36,3 +36,11 @@ Estados: pendente / em andamento / bloqueado / validado. Não marcar validado se
 | Experimento | Estado | Comandos e evidências | Bloqueios | Próximo passo |
 |---|---|---|---|---|
 | EXP ISOTERMA | Evidência automatizada concluída; **avaliação humana cega pendente** | Experimento controlado A (stack) × B (stack + DESIGN.md) × C (Genesis via `genesis:new`), Codex `gpt-6.2-sol` nas três, run `run_d7aa59e1e455`. Totais medidos: A 7 min 16 s, B 10 min 17 s, C 8 min 40 s; preparação 43–48 s nas três. Harness pré-registrado (SHA-256 `2896a991…`): 12/12 nas três (axe 0, overflow 0, teclado, estados, reduced motion, console 0). C reutilizou 3 peças de UI; B ≈ C visualmente. Auditoria OpenCode: 0 alto; médios B1, C1, C2, A1. Fundação **não alterada**. Detalhes: `docs/experiments/ISOTERMA-VALIDATION.md`. | n=1; mesmo modelo; tarefa usou <10 % do orçamento | Avaliação humana cega com `evaluation/blind/`; decidir recomendações §11 |
+
+## Evolução após ISOTERMA · 24/11/2026
+
+Escopo e responsabilidade do agente desta sessão: protocolo em AGENTS/CLAUDE e guias, títulos e rótulos no design system, execução local do build e simulação em repositório irmão. Aceite: tema aplicado no navegador, componentes preservando consumidores existentes e produto independente validado de ponta a ponta.
+
+- ISOTERMA encontrou desvios em tamanho de títulos e numerais apesar dos tokens gerados, além de textos fixos e dificuldade de descobrir componentes. `Heading variant="section"` usa os tokens de seção; dataviz e etapas aceitam rótulos da aplicação. O índice de componentes acompanha o clone. Progresso e legendas preservam os valores padrão de consumidores existentes.
+- `bun run check`, `typecheck`, `design:check` e `test` passaram na fundação (277 testes passaram, um opt-in de IA ignorado). Os testes novos de título e gráfico acusaram a ausência das respectivas capacidades antes das mudanças.
+- `bun run build:local` produziu a saída Node do Nitro. Rolldown emitiu o aviso conhecido de diretiva de módulo do Router. Sem mudanças em dependências, tema neutro ou lockfile. A revisão desta rodada foi feita pelo próprio agente.

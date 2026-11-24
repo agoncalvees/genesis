@@ -1,4 +1,4 @@
-# Genesis — Master Prompt para Orca
+# Genesis — Prompt para a fase 00
 
 Atue como coordenador de engenharia do Genesis. O diretório atual contém o pacote inicial de planejamento. Leia README.md, AGENTS.md, docs/BLUEPRINT.md, docs/ROADMAP.md e docs/STATUS.md. Consulte os guias específicos para cada tarefa. Não recrie os documentos nem faça um produto.
 
@@ -15,6 +15,6 @@ Entregue:
 4. Estratégia de ambiente local sem credenciais, testes reais quando autorizados, modelo alternativo, deploy e segurança.
 5. Atualize STATUS com evidências e bloqueios. Não marque fase 00 validada antes da aprovação humana.
 
-Não instalar dependências na árvore final, gerar scaffold final, criar produto, publicar, gastar créditos ou iniciar fase 01 nesta execução. Pare após entregar plano para revisão. Não invente resultados. Se não houver acesso à web, diga e registre links que precisam ser verificados. Use agentes em paralelo apenas para pesquisa independente quando disponíveis; não suponha que Orca possui uma função de orquestração específica sem verificar. Siga AGENTS.md.
+Não instalar dependências na árvore final, gerar scaffold final, criar produto, publicar, gastar créditos ou iniciar fase 01 nesta execução. Pare após entregar plano para revisão. Não invente resultados. Se não houver acesso à web, diga e registre links que precisam ser verificados. Use agentes em paralelo apenas para pesquisa independente quando disponíveis; use o terminal e verifique as ferramentas disponíveis na sessão. Siga AGENTS.md.
 
 Depois da aprovação, o responsável enviará `prompts/01-execute-phase.md` com a fase aprovada. O ROADMAP é a referência de execução e o STATUS é a fonte de verdade do progresso.

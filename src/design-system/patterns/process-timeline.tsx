@@ -32,10 +32,14 @@ export function ProcessTimeline({
 	steps,
 	label = "Execution steps",
 	locale = "en",
+	statusLabels,
+	durationLabel = "Duration:",
 }: {
 	steps: readonly ProcessStep[];
 	label?: string;
 	locale?: string;
+	statusLabels?: Partial<Record<ExecutionStatus, string>>;
+	durationLabel?: string;
 }) {
 	return (
 		<ol
@@ -48,10 +52,10 @@ export function ProcessTimeline({
 					<li key={step.id} className="min-w-0 ps-1 text-ds-sm wrap-anywhere">
 						<div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
 							<span className="font-medium">{step.label}</span>
-							<Badge tone={tone}>{label}</Badge>
+							<Badge tone={tone}>{statusLabels?.[step.status] ?? label}</Badge>
 							{step.durationMs != null && Number.isFinite(step.durationMs) && (
 								<span className="text-muted tabular-nums">
-									<span className="sr-only">Duration: </span>
+									<span className="sr-only">{durationLabel} </span>
 									{formatDuration(step.durationMs, locale)}
 								</span>
 							)}

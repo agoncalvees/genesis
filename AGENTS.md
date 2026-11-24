@@ -1,25 +1,18 @@
-# Genesis — Agent instructions
+# Genesis — instruções para agentes
 
-Leia primeiro README, BLUEPRINT, ROADMAP e STATUS. Para cada tarefa, leia apenas os guias aplicáveis. Documentação em português; código e identificadores em inglês; nomes de arquivo kebab-case, exceto documentos convencionais.
+Leia [README](README.md), [Blueprint](docs/BLUEPRINT.md), [Roadmap](docs/ROADMAP.md) e [Status](docs/STATUS.md) ao retomar o projeto. Consulte apenas os guias aplicáveis à tarefa. Use português na documentação, inglês em código e identificadores e kebab-case em arquivos, salvo nomes convencionais.
 
-## Invariantes
-- O tema é desconhecido. Não invente domínio, usuário, branding, CRUD, chatbot, billing, equipes, dashboard ou funcionalidades de produto.
-- O núcleo não importa `features/`. Capacidades opcionais não devem ser requisitos para iniciar a aplicação.
-- Siga as escolhas da arquitetura. Mudanças exigem ADR com evidência, alternativa, impacto e decisão humana quando alterarem o escopo/stack/custo.
-- Não invente resultados, testes, medições, fontes, APIs ou progresso. Fixtures claramente rotuladas; jamais simular execução real em produção.
-- Nenhum segredo no cliente, logs ou Git. Não execute ações externas pagas, publique, conecte contas ou faça deploy sem autorização do responsável. Nunca faça scraping agressivo ou acesse dados sem permissão.
-- Não copie código ou assets do Robin: referência de qualidade, não de identidade ou implementação. Registre licenças e origem de assets e bibliotecas.
-- Não instale dependências opcionais em massa. Verifique docs oficiais, peer dependencies, runtime e compatibilidade antes de escolher versões. Preserve lockfile.
-- A interface usa tokens semânticos. Não fixa paleta ou tipografia de marca. Não impõe layout SaaS.
-- Priorize acessibilidade, teclado, foco, estados de erro e reduced motion.
+## Execução
 
-## Protocolo de execução
-1. Ler contexto; registrar plano curto, arquivos sob responsabilidade e critérios de aceitação.
-2. Um responsável por arquivo/contrato durante a tarefa. Tarefas independentes podem usar worktrees; coordenador integra e revisa. Nenhum push, merge remoto ou deploy não autorizado.
-3. Implementar menor solução funcional. Testar; registrar comandos, resultados e bloqueios reais em STATUS. Sem marcar testes não rodados como sucesso.
-4. Revisão independente quando disponível; caso contrário, declarar a limitação e fazer autorrevisão.
-5. Commits pequenos, sem credenciais, com aprovação para operações destrutivas. Não altere histórico.
-6. Se faltar serviço externo, continue trabalhos independentes, marque integração como bloqueada e descreva o passo manual. Não peça chaves no chat; use ambiente local.
+1. Registre em poucas linhas o objetivo, os arquivos sob sua responsabilidade e os critérios de aceitação. Siga os gates do Roadmap. A fase 00 é de análise e exige aprovação humana para avançar. Registre e obtenha aprovação de exceções.
+2. Mantenha a fundação agnóstica ao domínio e à marca. O núcleo não importa `features/`. Serviços e capacidades opcionais ficam fora do caminho crítico de inicialização. Mudanças de escopo, stack ou custo exigem ADR com evidência, alternativa, impacto e decisão humana. Confira documentação oficial, runtime e peers antes de alterar dependências. Preserve o lockfile.
+3. Após a revelação e confirmação das regras, preencha `CHALLENGE.md` e `PRODUCT-BRIEF.md` antes de implementar. Isole o produto com `genesis:new`; mantenha as funcionalidades de domínio no produto. Trabalhe na experiência central. Só promova melhorias à fundação com outro uso plausível e evidência de necessidade.
+4. Implemente a menor solução funcional. Um responsável por arquivo ou contrato; o coordenador revisa e integra. Continue o trabalho local quando faltar serviço externo e registre o bloqueio. Identifique fixtures e mocks, diferencie medições de estimativas e registre apenas testes executados.
+5. Rode as verificações pertinentes e faça revisão independente quando disponível. Na falta dela, faça autorrevisão e registre a limitação. Atualize o STATUS com comandos, resultados, bloqueios e ponto de retomada. Receitas, comandos e checkpoints devem funcionar em Codex e Claude Code pelo terminal, sem exigir um orquestrador ou modelo.
+6. Preserve o histórico com commits locais pequenos. Operações destrutivas exigem aprovação. Push, merges remotos, publicação, deploy, conexão de contas e ações externas pagas exigem autorização. Mantenha segredos fora do cliente, dos logs e do Git. Use ambiente local para credenciais. Respeite permissões de acesso e limites de coleta.
 
-## Fases
-Siga ROADMAP. Só avance após o gate anterior ou exceção registrada e aprovada. A fase 00 é análise, não implementação. Não implemente o produto até preencher CHALLENGE e PRODUCT-BRIEF após a revelação do tema e confirmação das regras.
+## Design e validação
+
+- Defina direção artística antes da implementação, a partir do problema, público e contexto cultural. Selecione até três referências úteis e anote o que pretende aprender de cada uma. Use o Robin como referência de acabamento. Preserve identidades, licenças e autoria.
+- Cada produto tem seu próprio `design/DESIGN.md`. Mapear cores, tipografia, geometria, densidade e motion a tokens semânticos permite que a composição varie com o problema. Consulte o [índice de componentes](docs/design/COMPONENTS.md) e reutilize seletivamente.
+- Siga o [protocolo visual](docs/design/VISUAL-ENGINEERING.md) para escolher ferramentas, gerar assets e validar a aparência. Inspecione a aplicação no navegador e compare estilos computados de elementos centrais com o DESIGN.md. Verifique teclado, foco, contraste, erros, responsividade e movimento reduzido. Capture estados relevantes após o refinamento.

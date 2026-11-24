@@ -5,12 +5,21 @@ import "./charts.css";
 export type DataColor = 1 | 2 | 3 | 4 | 5 | 6;
 /** A series uses one unique label per datum. */
 export type ChartDatum = { label: string; value: number };
+const defaultChartMessages = {
+	description: "Values in the adjacent data table.",
+	emptyDescription: "No data.",
+	label: "Label",
+	value: "Value",
+};
+
 type ChartProps = {
 	title: string;
 	description?: string;
 	data: readonly ChartDatum[];
 	unit?: string;
 	color?: DataColor;
+	locale?: string;
+	messages?: typeof defaultChartMessages;
 };
 
 function ChartFrame({
@@ -18,6 +27,8 @@ function ChartFrame({
 	description,
 	data,
 	unit,
+	locale,
+	messages = defaultChartMessages,
 	viewBox,
 	labels,
 	stretch = false,
@@ -43,7 +54,7 @@ function ChartFrame({
 				<title id={`${id}-title`}>{title}</title>
 				<desc id={`${id}-description`}>
 					{description ??
-						(data.length ? "Values in the adjacent data table." : "No data.")}
+						(data.length ? messages.description : messages.emptyDescription)}
 				</desc>
 				{children}
 			</svg>
@@ -52,21 +63,29 @@ function ChartFrame({
 				<caption>{title}</caption>
 				<thead>
 					<tr>
-						<th scope="col">Label</th>
-						<th scope="col">{unit ? `Value (${unit})` : "Value"}</th>
+						<th scope="col">{messages.label}</th>
+						<th scope="col">
+							{unit ? `${messages.value} (${unit})` : messages.value}
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{data.map(({ label, value }) => (
 						<tr key={label}>
 							<th scope="row">{label}</th>
-							<td>{value}</td>
+							<td>{formatValue(value, locale)}</td>
 						</tr>
 					))}
 				</tbody>
 			</table>
 		</figure>
 	);
+}
+
+function formatValue(value: number, locale?: string) {
+	return locale
+		? value.toLocaleString(locale, { maximumSignificantDigits: 21 })
+		: String(value);
 }
 
 function bounds(data: readonly ChartDatum[]) {
@@ -109,7 +128,7 @@ export function BarChart({
 							<div key={label}>
 								<span data-chart-label="axis">{label}</span>
 								<span data-chart-label="value">
-									{value}
+									{formatValue(value, props.locale)}
 									{props.unit ? ` ${props.unit}` : ""}
 								</span>
 							</div>
@@ -184,7 +203,7 @@ function Trend({
 					? [
 							{
 								key: `value-${data[index].label}`,
-								text: String(data[index].value),
+								text: formatValue(data[index].value, props.locale),
 								kind: "value" as const,
 								x,
 								y,
@@ -249,11 +268,13 @@ export function Sparkline(props: ChartProps) {
 
 export function Legend({
 	items,
+	label = "Chart legend",
 }: {
 	items: readonly { label: string; color: DataColor }[];
+	label?: string;
 }) {
 	return (
-		<ul aria-label="Chart legend" className="ds-chart-legend">
+		<ul aria-label={label} className="ds-chart-legend">
 			{items.map(({ label, color }) => (
 				<li key={label}>
 					<span

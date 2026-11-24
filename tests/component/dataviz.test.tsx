@@ -78,3 +78,31 @@ test("legend displays labels alongside semantic swatches", () => {
 		),
 	).toBeTruthy();
 });
+
+test("chart exposes localized labels, description and values", () => {
+	render(
+		<BarChart
+			title="Respostas"
+			data={[{ label: "Equivalência", value: 1.5 }]}
+			unit="pontos"
+			locale="pt-BR"
+			messages={{
+				description: "Valores na tabela seguinte.",
+				emptyDescription: "Sem dados.",
+				label: "Habilidade",
+				value: "Total",
+			}}
+		/>,
+	);
+	expect(screen.getByRole("img").getAttribute("aria-describedby")).toBe(
+		screen.getByText("Valores na tabela seguinte.").id,
+	);
+	const table = screen.getByRole("table");
+	expect(
+		within(table).getByRole("columnheader", { name: "Habilidade" }),
+	).toBeTruthy();
+	expect(
+		within(table).getByRole("columnheader", { name: "Total (pontos)" }),
+	).toBeTruthy();
+	expect(within(table).getByRole("cell", { name: "1,5" })).toBeTruthy();
+});

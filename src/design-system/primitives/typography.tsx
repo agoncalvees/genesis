@@ -12,17 +12,26 @@ const headingStyles = {
 
 export function Heading({
 	level = 2,
+	variant = "default",
 	className,
 	...props
-}: ComponentProps<"h2"> & { level?: keyof typeof headingStyles }) {
+}: ComponentProps<"h2"> & {
+	level?: keyof typeof headingStyles;
+	variant?: "default" | "section";
+}) {
 	const Tag = `h${level}` as const;
 	return (
 		<Tag
 			{...props}
 			className={cn(
-				"font-display tracking-display text-foreground",
-				level === 1 ? "font-ds-display" : "font-ds-heading",
-				headingStyles[level],
+				"font-display text-foreground",
+				variant === "section"
+					? "[font-size:clamp(var(--section-heading-size),var(--section-heading-fluid),var(--section-heading-max))] [font-weight:var(--section-heading-weight)] [letter-spacing:var(--section-heading-tracking)] leading-tight"
+					: [
+							"tracking-display",
+							level === 1 ? "font-ds-display" : "font-ds-heading",
+							headingStyles[level],
+						],
 				className,
 			)}
 		/>

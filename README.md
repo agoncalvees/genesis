@@ -4,10 +4,9 @@ Built for the unknown.
 Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é um produto, SaaS ou solução inscrita. A aplicação local reúne a fundação, o catálogo de componentes e os ensaios.
 
 ## Comece aqui
-1. Leia `docs/BLUEPRINT.md` e `docs/strategy/COMPETITION.md`.
-2. Abra esta pasta no Orca. Cole `prompts/00-master.md` em uma sessão que tenha acesso ao repositório.
-3. A fase 00 valida stack, ambiente, versões e plano. Só depois do gate ela pode iniciar a fase 01, conforme instruções do prompt.
-4. Consulte `docs/ROADMAP.md` e `docs/STATUS.md` a cada fase.
+1. Abra esta pasta no Codex ou no Claude Code e peça para continuar a partir de [AGENTS.md](AGENTS.md).
+2. Consulte [Blueprint](docs/BLUEPRINT.md), [Roadmap](docs/ROADMAP.md) e [Status](docs/STATUS.md) para o estado atual e os gates.
+3. Use o [índice de componentes](docs/design/COMPONENTS.md), o [protocolo visual](docs/design/VISUAL-ENGINEERING.md) e o [guia para iniciar um produto](docs/engineering/PORTABILITY.md) conforme a tarefa.
 
 ## Preparação e submissão
 Mantenha este repositório privado e separado da submissão até confirmar o regulamento. Não copie código, arquivos, assets ou documentação prévia para a entrega se isso não for permitido. Não manipule datas de commits nem esconda autoria.
@@ -17,6 +16,7 @@ Requer Bun 1.4.5 e Node 24.
 - `bun install --frozen-lockfile`
 - `bun run dev` — http://127.0.0.1:3000 (`/smoke` para verificação rápida)
 - `bun run build` — saída Vercel em `.vercel/output/`
+- `bun run build:local` e `NITRO_HOST=127.0.0.1 NITRO_PORT=3000 bun run serve` — saída Node em `.output/` e execução local.
 - `bun run check` (Biome), `bun run typecheck` (TS 7 strict)
 - `bun run test` (Vitest: projetos `unit` e `component`), `bun run test:e2e` (Playwright, Chromium)
 - `PORT=3100 bun run test:e2e` — usa outra porta para o Playwright e o servidor. `dev` e `test:e2e:prod` também aceitam `PORT`. O padrão é 3000.
@@ -36,4 +36,4 @@ O Studio é público por padrão. Acesse o catálogo em `/studio/catalog` e as p
 - `docs/engineering/`: contratos, IA, evidências e operação.
 - `docs/strategy/`: avaliação competitiva e dia do evento.
 - `docs/product/`: campos em branco até conhecer o desafio.
-- `prompts/`: instruções de entrada para Orca.
+- `prompts/`: prompts opcionais de entrada e execução por fase.
