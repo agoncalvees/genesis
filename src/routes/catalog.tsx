@@ -1,8 +1,11 @@
 import { DotsThreeIcon, MoonIcon, SunIcon } from "@phosphor-icons/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import {
+	AnimatedNumber,
+	AnimatedTabsIndicator,
 	Badge,
+	BeforeAfter,
 	Button,
 	Card,
 	Checkbox,
@@ -11,17 +14,25 @@ import {
 	Dialog,
 	EmptyState,
 	ErrorState,
+	Expandable,
+	FadeIn,
 	Field,
 	Grid,
 	Heading,
 	IconButton,
 	Input,
+	Metric,
+	MotionProvider,
 	Popover,
+	ProcessingFeedback,
+	type ProcessStep,
 	Progress,
+	ResultPanel,
 	Select,
 	Skeleton,
 	Spinner,
 	Stack,
+	StaggerGroup,
 	Switch,
 	Tabs,
 	Text,
@@ -44,6 +55,14 @@ const options = [
 ];
 
 function Catalog() {
+	return (
+		<MotionProvider>
+			<CatalogContent />
+		</MotionProvider>
+	);
+}
+
+function CatalogContent() {
 	return (
 		<main className="isolate min-h-screen bg-background py-8 sm:py-12">
 			<ToastProvider dismissLabel="Dismiss notification">
@@ -191,6 +210,9 @@ function Catalog() {
 									<ErrorExample />
 								</Grid>
 							</CatalogSection>
+							<MotionExamples />
+							<ResultExamples />
+							<LayoutLinks />
 						</Stack>
 					</Container>
 				</TooltipProvider>
@@ -279,5 +301,227 @@ function ErrorExample() {
 			/>
 			{retried && <Text role="status">Retry requested in this example.</Text>}
 		</Stack>
+	);
+}
+
+const sampleSteps: readonly ProcessStep[] = [
+	{ id: "load", label: "Load fixture", status: "completed" },
+	{ id: "compare", label: "Compare output", status: "running" },
+	{ id: "save", label: "Save report", status: "idle" },
+];
+
+function MotionExamples() {
+	const [run, setRun] = useState(0);
+	const [count, setCount] = useState(0);
+
+	return (
+		<CatalogSection title="Motion">
+			<Grid>
+				<Card className="grid content-start gap-4">
+					<Heading level={3}>Entrances and values</Heading>
+					<div className="flex flex-wrap gap-2">
+						<Button variant="secondary" onClick={() => setRun(run + 1)}>
+							Replay entrance
+						</Button>
+						<Button variant="secondary" onClick={() => setCount(count + 12)}>
+							Add 12 samples
+						</Button>
+					</div>
+					<p className="text-sm">
+						Samples <AnimatedNumber value={count} locale="en" />
+					</p>
+					<FadeIn key={run}>
+						<StaggerGroup>
+							<span>Source loaded</span>
+							<span>Output validated</span>
+							<span>Report available</span>
+						</StaggerGroup>
+					</FadeIn>
+				</Card>
+				<Card className="grid content-start gap-4">
+					<Heading level={3}>Selection and disclosure</Heading>
+					<AnimatedTabsIndicator
+						label="Motion example views"
+						items={[
+							{
+								value: "summary",
+								label: "Summary",
+								content: <Text muted>Three steps are available.</Text>,
+							},
+							{
+								value: "details",
+								label: "Details",
+								content: <Text muted>The steps run in order.</Text>,
+							},
+						]}
+					/>
+					<Expandable label="Show timing details">
+						<Text muted>Entrances use the fast duration token.</Text>
+					</Expandable>
+				</Card>
+			</Grid>
+		</CatalogSection>
+	);
+}
+
+const resultStates = [
+	{ value: "idle", label: "Idle" },
+	{ value: "loading", label: "Loading" },
+	{ value: "empty", label: "Empty" },
+	{ value: "error", label: "Error" },
+	{ value: "success", label: "Success" },
+	{ value: "cancelled", label: "Cancelled" },
+] as const;
+
+type CatalogResultState = (typeof resultStates)[number]["value"];
+
+const fixtures = {
+	idle: { status: "idle" },
+	loading: {
+		status: "running",
+		feedback: (
+			<ProcessingFeedback steps={sampleSteps} label="Fixture execution" />
+		),
+	},
+	empty: { status: "completed", data: null },
+	error: {
+		status: "failed",
+		error: {
+			code: "FIXTURE_READ",
+			message: "The fixture could not be read.",
+			retryable: true,
+		},
+	},
+	success: {
+		status: "completed",
+		data: {
+			metric: "Validated records",
+			value: 24,
+			unit: "records",
+			baseline: 20,
+			sampleSize: 30,
+		},
+	},
+	cancelled: { status: "cancelled" },
+} as const;
+
+function comparisonImage(organized: boolean) {
+	const positions = organized
+		? [
+				[42, 24],
+				[112, 24],
+				[182, 24],
+				[252, 24],
+			]
+		: [
+				[38, 38],
+				[110, 90],
+				[193, 55],
+				[255, 105],
+			];
+	const tiles = positions
+		.map(
+			([x, y]) =>
+				`<rect x="${x}" y="${y}" width="30" height="30" rx="4" fill="CanvasText"/>`,
+		)
+		.join("");
+	return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="Canvas"/>${tiles}</svg>`)}`;
+}
+
+function ResultExamples() {
+	const [state, setState] = useState<CatalogResultState>("idle");
+	const fixture =
+		state === "error"
+			? { ...fixtures.error, onRetry: () => setState("loading") }
+			: fixtures[state];
+	return (
+		<CatalogSection title="Result patterns">
+			<Grid>
+				<div className="grid min-w-0 content-start gap-4">
+					<fieldset className="min-w-0 space-y-2">
+						<legend className="text-sm font-medium">
+							Fixture result state
+						</legend>
+						<div className="flex flex-wrap gap-2">
+							{resultStates.map(({ value, label }) => (
+								<Button
+									key={value}
+									size="sm"
+									variant={state === value ? "primary" : "secondary"}
+									aria-pressed={state === value}
+									onClick={() => setState(value)}
+								>
+									{label}
+								</Button>
+							))}
+						</div>
+					</fieldset>
+					<ResultPanel
+						{...fixture}
+						title="Fixture result"
+						headingLevel={3}
+						renderResult={(result) => <Metric result={result} locale="en" />}
+					/>
+				</div>
+				<Card className="grid content-start gap-4">
+					<Heading level={3}>Before and after</Heading>
+					<BeforeAfter
+						label="Fixture comparison"
+						before={{
+							src: comparisonImage(false),
+							alt: "Before: four blocks scattered across the canvas.",
+						}}
+						after={{
+							src: comparisonImage(true),
+							alt: "After: four blocks aligned in a row.",
+						}}
+					/>
+				</Card>
+			</Grid>
+		</CatalogSection>
+	);
+}
+
+const layoutLinks = [
+	{
+		name: "presentation",
+		title: "Presentation",
+		description: "Wide reading surface",
+	},
+	{
+		name: "application",
+		title: "Application",
+		description: "Navigation and content",
+	},
+	{
+		name: "workspace",
+		title: "Workspace",
+		description: "Work surface and tools",
+	},
+	{ name: "focused", title: "Focused", description: "Single-column flow" },
+] as const;
+
+function LayoutLinks() {
+	return (
+		<div id="layouts">
+			<CatalogSection title="Layout previews">
+				<ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+					{layoutLinks.map(({ name, title, description }) => (
+						<li key={name} className="min-w-0">
+							<Link
+								to="/layouts/$name"
+								params={{ name }}
+								className="grid gap-1 rounded-lg border border-border bg-surface-raised p-4 hover:border-muted"
+							>
+								<span className="font-medium underline underline-offset-4">
+									{title}
+								</span>
+								<span className="text-sm text-muted">{description}</span>
+							</Link>
+						</li>
+					))}
+				</ul>
+			</CatalogSection>
+		</div>
 	);
 }

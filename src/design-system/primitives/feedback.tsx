@@ -1,6 +1,7 @@
 import { Progress as BaseProgress } from "@base-ui/react/progress";
 import { type ComponentProps, type ReactNode, useId } from "react";
 import { cn } from "../lib/cn";
+import "../motion/motion.css";
 
 const badgeStyles = {
 	neutral: "bg-surface text-foreground",
@@ -96,7 +97,12 @@ export function Progress({
 				)}
 			</div>
 			<BaseProgress.Track className="h-2 overflow-hidden rounded-full bg-surface ring-1 ring-muted">
-				<BaseProgress.Indicator className="h-full rounded-full bg-primary data-indeterminate:mx-auto data-indeterminate:w-1/3 data-indeterminate:border-x-4 data-indeterminate:border-dotted data-indeterminate:border-on-primary" />
+				<BaseProgress.Indicator
+					className={cn(
+						"h-full rounded-full bg-primary",
+						value === null && "ds-progress-indeterminate",
+					)}
+				/>
 			</BaseProgress.Track>
 		</BaseProgress.Root>
 	);
