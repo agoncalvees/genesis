@@ -35,6 +35,15 @@ const summarySchema = z.strictObject({
 
 type RunOptions = { signal?: AbortSignal; timeoutMs?: number };
 
+const MAX_TIMEOUT_MS = 120_000;
+
+/** Default timeout, overridable via AI_TIMEOUT_MS (free models are slower). */
+export function defaultTimeoutMs(env = process.env): number {
+	const value = Number(env.AI_TIMEOUT_MS);
+	if (!Number.isFinite(value) || value <= 0) return AI_LIMITS.timeoutMs;
+	return Math.min(Math.trunc(value), MAX_TIMEOUT_MS);
+}
+
 export type AiResult<T> =
 	| Unavailable
 	| ({ status: "completed"; correlationId: string } & Pick<
@@ -129,9 +138,7 @@ async function run<T>(
 
 	const correlationId = withCorrelationId();
 	const startedAt = performance.now();
-	const deadline = AbortSignal.timeout(
-		options.timeoutMs ?? AI_LIMITS.timeoutMs,
-	);
+	const deadline = AbortSignal.timeout(options.timeoutMs ?? defaultTimeoutMs());
 	const signal = options.signal
 		? AbortSignal.any([options.signal, deadline])
 		: deadline;
