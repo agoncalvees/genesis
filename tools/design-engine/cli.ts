@@ -4,6 +4,7 @@ import {
 	readFileSync,
 	renameSync,
 	rmSync,
+	statSync,
 	writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
@@ -16,6 +17,34 @@ import {
 	safeId,
 	worldPaths,
 } from "./generate";
+
+/** DESIGN.md files are small text; anything larger is rejected (REVIEW-P09 OC03-01). */
+export const MAX_IMPORT_BYTES = 1024 * 1024;
+
+/** Reads a response body as a stream, aborting once it exceeds `limit` bytes. */
+export async function readCapped(
+	response: Response,
+	limit: number,
+): Promise<string> {
+	const declared = Number(response.headers.get("content-length"));
+	if (Number.isFinite(declared) && declared > limit)
+		throw new Error(`Importação excede ${limit} bytes.`);
+	if (!response.body) return "";
+	const reader = response.body.getReader();
+	const chunks: Uint8Array[] = [];
+	let total = 0;
+	for (;;) {
+		const { done, value } = await reader.read();
+		if (done) break;
+		total += value.byteLength;
+		if (total > limit) {
+			await reader.cancel();
+			throw new Error(`Importação excede ${limit} bytes.`);
+		}
+		chunks.push(value);
+	}
+	return new TextDecoder().decode(Buffer.concat(chunks));
+}
 
 function needed(value: string | undefined, usage: string) {
 	if (!value) throw new Error(usage);
@@ -66,8 +95,10 @@ async function importDesign(input: string, name?: string) {
 		const response = await fetch(url, { signal: AbortSignal.timeout(15_000) });
 		if (!response.ok)
 			throw new Error(`Importação HTTP falhou: ${response.status}`);
-		source = await response.text();
+		source = await readCapped(response, MAX_IMPORT_BYTES);
 	} else {
+		if (statSync(input).size > MAX_IMPORT_BYTES)
+			throw new Error(`Importação excede ${MAX_IMPORT_BYTES} bytes.`);
 		source = readFileSync(input, "utf8");
 	}
 	mkdirSync(folder, { recursive: true });
@@ -143,9 +174,11 @@ async function run([command, first, second]: string[]) {
 	}
 }
 
-try {
-	await run(process.argv.slice(2));
-} catch (error) {
-	console.error(error instanceof Error ? error.message : error);
-	process.exitCode = 1;
+if (import.meta.main) {
+	try {
+		await run(process.argv.slice(2));
+	} catch (error) {
+		console.error(error instanceof Error ? error.message : error);
+		process.exitCode = 1;
+	}
 }

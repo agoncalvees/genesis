@@ -66,3 +66,10 @@ A ordem é reavaliada no início de cada sessão por probe (comando acima) e aju
 **Nível 3 — graceful degradation.** Todos indisponíveis: preservar repositório, registrar bloqueio no checkpoint e em `docs/STATUS.md`, informar o usuário, não declarar conclusão.
 
 Regras: sem loops infinitos; não alternar entre modelos de cota compartilhada esgotada; cooldown registrado; nunca substituir silenciosamente por modelo pago; nunca aceitar `worker_done` de um dispatch substituído como conclusão do novo.
+
+## Registro de eventos de fallback
+
+| Data | Tarefa | De | Para | Causa | Ação |
+|---|---|---|---|---|---|
+| 2026-11-24 | P00–P09 (OpenCode) | `deepseek-v4.1-flash-free`, `mimo-v2.6-flash-free`, `nemotron-3.5-super-vl-free` | `hy4-flash-free` | "Free usage limit reached" (re-probe no início do P09 confirmou) | Nível 1; hy4 usado em todas as tarefas OpenCode |
+| 2026-11-24 17:32 | P09-CDX-04 (`task_31392a3a5ed7`) | Codex (`ctx_57f4aa204b38`) | Claude (`ctx_6b8ed3f6d46a`) | Codex `usageLimitReached`, reset informado 19:04 | Nível 2: `worker-stop` do dispatch antigo, `worker-start --task … --retry-of …`; nenhum arquivo havia sido alterado |
