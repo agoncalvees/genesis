@@ -31,6 +31,8 @@ Toda spec define: Task ID (`P<fase>-<AGT>-<nn>`, ex. `P01-CDX-02`), objetivo, re
 - Um responsável por arquivo. Paralelismo só entre tarefas com conjuntos de arquivos disjuntos.
 - `--worktree current` quando os arquivos são disjuntos e não há build concorrente; `--worktree new-child --name <task-id>` para implementações paralelas que rodam install/build.
 - Conclusão só é aceita do dispatch vigente (comparar Dispatch ID).
+- **`--worktree new-child` cria a branch a partir do branch default (`main`), não do HEAD do coordenador** (observado em Orca 1.4.272, fases 03/04). Sempre passar `--base-branch <branch-da-fase>` e conferir com `git worktree list` logo após o start.
+- Workers em worktrees irmãs que rodam `test:e2e` disputam a porta 3000 (`--strictPort`); serializar E2E ou instruir retry.
 
 ## Checkpoints
 
