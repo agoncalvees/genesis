@@ -10,8 +10,11 @@ test("serves the neutral home page", async ({ page }) => {
 });
 
 test("hydrates the smoke route without page errors", async ({ page }) => {
-	const pageErrors: Error[] = [];
-	page.on("pageerror", (error) => pageErrors.push(error));
+	const pageErrors: string[] = [];
+	page.on("pageerror", (error) => pageErrors.push(error.message));
+	page.on("console", (message) => {
+		if (message.type() === "error") pageErrors.push(message.text());
+	});
 
 	const response = await page.goto("/smoke");
 

@@ -12,9 +12,14 @@ Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é
 ## Preparação e submissão
 Mantenha este repositório privado e separado da submissão até confirmar o regulamento. Não copie código, arquivos, assets ou documentação prévia para a entrega se isso não for permitido. Não manipule datas de commits nem esconda autoria.
 
-## Scripts previstos (ainda inexistentes)
-`bun run dev`, `bun run build`, `bun run check`, `bun run typecheck`, `bun run test`, `bun run test:e2e`, `bun run bench`.
-O agente deve implementar e documentar os comandos reais na fase correspondente, sem afirmar que já funcionam.
+## Scripts
+Requer Bun 1.4.5 e Node 24.
+- `bun install --frozen-lockfile`
+- `bun run dev` — http://127.0.0.1:3000 (`/smoke` para verificação rápida)
+- `bun run build` — saída Vercel em `.vercel/output/`
+- `bun run check` (Biome), `bun run typecheck` (TS 7 strict)
+- `bun run test` (Vitest: projetos `unit` e `component`), `bun run test:e2e` (Playwright, Chromium)
+- `bun run bench` — previsto para a fase 05, ainda inexistente.
 
 ## Mapa
 - `AGENTS.md`: regras canônicas de trabalho.
