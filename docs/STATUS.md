@@ -29,4 +29,6 @@ P09-CDX-03: quatro Genesis Worlds, gráficos SVG, perfis de movimento e fontes e
 
 P09-CDX-04: padrões de experiência (editorial, IA apresentacional com mock rotulado, upload, processamento com tempos e sparkline, AppNav/BottomNav com Drawer, ResizablePanels) integrados ao catálogo e aos quatro mundos. Check, typecheck, test (269 passaram, 1 opt-in), build, E2E (57), E2E de produção nas duas variantes (12 cada) e design:check retornaram 0. Revisão independente pendente. [Checkpoint](engineering/phase-09/checkpoints/P09-CDX-04.md).
 
+| P09 | Validado (coordenador) | Motor DESIGN.md (ADR 0006), 4 Genesis Worlds, dataviz, motion, padrões de experiência, fluxo Figma, portabilidade. Auditoria 37 achados (8 altos corrigidos), revisão independente 0 crítico/alto (médio OC03-01 corrigido). Coordenador: revisão visual por screenshot com 6 correções; portabilidade real `--world precision --e2e` = 0 após corrigir fontes do produto e specs dependentes do Studio. Fallback Codex→Claude registrado. Detalhes: `docs/DESIGN-READINESS.md`. | Revisão em dispositivo real; achados baixos OC03-02…07 | — |
+
 Estados: pendente / em andamento / bloqueado / validado. Não marcar validado sem evidência.

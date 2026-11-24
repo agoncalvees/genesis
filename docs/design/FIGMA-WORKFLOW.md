@@ -60,50 +60,47 @@ Cada campo tem uma origem. Não preencher "de cabeça" o que vem do problema, ne
 
 **Estrutura:** front matter YAML + seções na ordem canônica da spec do Google + chave de extensão `genesis:`. A spec aceita chaves de extensão silenciosamente (`ADR 0006`); `version: alpha`, fixada em `@google/design.md@0.4.0`. **Conferir `docs/spec.md` do pacote para chaves e ordem exatas — não inventar chaves fora da spec + `genesis:`.**
 
-Esqueleto ilustrativo (validar contra a spec antes de usar):
+Estrutura validada (P09): **todos os tokens ficam no front matter YAML**, inclusive a extensão `genesis:`; o corpo Markdown traz só o racional, em seções na ordem canônica da spec. **Partir de um exemplo real que passa no linter:** `design/worlds/precision/DESIGN.md` (ou outro mundo), nunca de um arquivo em branco.
 
-```yaml
+```md
 ---
+version: alpha
 name: <identidade aprovada>
 description: <intenção em 1–2 linhas, do BRAND-BRIEF>
-version: alpha
+colors:            # nomes canônicos do contrato (primary, on-primary, surface, ...)
+  primary: "#..."
+typography:        # display, headline, body, label, mono (+ section)
+  display: { fontFamily: "<família registrada>", fontWeight: 600 }
+rounded:           # sm, md, lg, control
+  control: 8px
+spacing:           # unit, control
+  unit: 4px
+motion:            # formato da spec: { duration, timingFunction, delay }
+  normal: { duration: 250ms, timingFunction: cubic-bezier(0.2, 0, 0, 1) }
+components:        # entradas por estado: button-primary, button-primary-hover, card, ...
+  button-primary: { backgroundColor: "{colors.primary}", textColor: "{colors.on-primary}" }
+genesis:           # extensão Genesis (ver DESIGN-ENGINE.md)
+  density: 1
+  surfaceStyle: border
+  motionProfile: { name: crisp, intensity: 0.4 }
+  data: ["#...", "#..."]
+  composition: <preset>
+  darkColors: { ... }
 ---
 
-# Visão geral
-<racional: público, problema, atributos/antiatributos — prosa para agentes>
-
+## Overview
 ## Colors
-  primary / on-primary / surface / surface-raised / background /
-  border / foreground / muted / accent / on-accent / focus /
-  success,on-success / warning,on-warning / danger,on-danger / info,on-info
-
 ## Typography
-  display / headline / body / label / mono
-
-## Rounded
-  sm / md / lg / control
-
-## Spacing
-  <escala base>
-
-## Motion
-  <durações / easing>
-
+## Layout
+## Elevation & Depth
+## Shapes
+## Motion & Micro-interaction
+## Voice & Content Strategy
 ## Components
-  button / button-primary / button-primary-hover / ...   # entradas nomeadas de estado
-
-genesis:
-  density: 0.75 | 1 | 1.25
-  surfaceStyle: border | elevation | tint
-  iconWeight: thin | light | regular | bold
-  typeScale: <razão>
-  displayWeight: <peso>
-  displayTracking: <tracking>
-  motionProfile: still | calm | crisp | lively   # + spring
-  data: [<paleta categórica>]
-  composition: <preset de layout>
-  darkColors: { ... }
+## Do's and Don'ts
 ```
+
+Seções podem ser omitidas, mas as presentes seguem essa ordem (spec 0.4.0). `rounded`/`spacing` são **chaves de token**, não seções; o racional delas vai em **Shapes** e **Layout**. Validar sempre com `bun run design:lint` e `bunx @google/design.md@0.4.0 lint <arquivo>` (avisos esperados e aceitos: chave `genesis` e `motion`, ver `REVIEW-P09.md`).
 
 #### 2.1 Como ler o Figma e mapear para o contrato semântico
 
@@ -164,10 +161,10 @@ genesis:
 
 | Comando | O que faz | Status |
 |---|---|---|
-| `bun run design:lint` | Valida sintaxe/estrutura do DESIGN.md contra a spec Google e as chaves `genesis:`; aponta seções ou chaves inválidas. | **disponível após P09-CDX-01** |
-| `bun run design:build` | Normaliza o DESIGN.md para o contrato semântico e escreve o CSS em `src/design-system/themes/generated/` (`product.css`, `worlds.css`). | **disponível após P09-CDX-01** |
-| `bun run design:check` | Regera em memória e falha se o CSS commitado divergir do DESIGN.md (drift); roda no CI. | **disponível após P09-CDX-01** |
-| `bun run design:diff old new` | Mostra as diferenças semânticas entre duas identidades (`old` vs `new`). | **disponível após P09-CDX-01** |
+| `bun run design:lint` | Valida sintaxe/estrutura do DESIGN.md contra a spec Google e as chaves `genesis:`; aponta seções ou chaves inválidas. | **disponível (P09-CDX-01)** |
+| `bun run design:build` | Normaliza o DESIGN.md para o contrato semântico e escreve o CSS em `src/design-system/themes/generated/` (`product.css`, `worlds.css`). | **disponível (P09-CDX-01)** |
+| `bun run design:check` | Regera em memória e falha se o CSS commitado divergir do DESIGN.md (drift); roda no CI. | **disponível (P09-CDX-01)** |
+| `bun run design:diff old new` | Mostra as diferenças semânticas entre duas identidades (`old` vs `new`). | **disponível (P09-CDX-01)** |
 
 - [ ] Antes de P09-CDX-01: conferir manualmente os `--*` calculados contra o `colors.*` do DESIGN.md e registrar que a automação ainda não existe.
 - [ ] Depois de P09-CDX-01: `lint` → `build` → `check` (CI) em sequência; `diff` para revisar mudanças entre versões.

@@ -18,4 +18,6 @@ A validação instala dependências com o lockfile congelado, gera a árvore de 
 
 `PROVENANCE.md` registra a origem, o SHA, a versão quando declarada, o comando, os caminhos excluídos e as saídas numéricas dos comandos executados. O commit de inicialização é local. Se a instalação, a aplicação de um mundo ou alguma validação falhar, o clone fica disponível para diagnóstico. A inicialização exige um destino vazio em cada tentativa.
 
+Specs E2E que navegam para `/studio` ou `/demos` são detectados pelo conteúdo e removidos do produto (inclusive os de acessibilidade do Genesis); o produto precisa escrever os seus. As fontes licenciadas do mundo aplicado são carregadas pelo módulo gerado `src/design-system/themes/generated/product-fonts.ts`, importado pela rota raiz.
+
 Após a revelação, preencha `CHALLENGE.md` e `PRODUCT-BRIEF.md` antes de implementar o produto.
