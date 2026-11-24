@@ -3,7 +3,13 @@ import { join } from "node:path";
 import { expect, test } from "vitest";
 
 const root = ".vercel/output/static";
-const forbidden = ["OPENROUTER", "AI_MODEL_", "openrouter.ai"];
+const forbidden = [
+	"OPENROUTER",
+	"AI_MODEL_",
+	"openrouter.ai",
+	"AI_ENDPOINTS_ENABLED",
+	"AI_ACCESS_TOKEN",
+];
 
 function scan(dir: string): string[] {
 	return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
