@@ -86,6 +86,10 @@ const definition = defineBenchmark({
 	// No numeric reference was measured beforehand: declare the baseline
 	// implementation and leave the baseline value explicitly null.
 	baseline: null,
+	// Evidence must not carry raw error messages by default. Opt in only for
+	// local debugging via `includeErrorMessages: true`; the runner redacts
+	// credentials and PII even then.
+	includeErrorMessages: false,
 	config: {
 		seed: DEFAULT_SEED,
 		arrayCount: ARRAY_COUNT,

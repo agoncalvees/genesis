@@ -23,6 +23,7 @@ function fixtureRecord(
 		datasetSource: "fixture sintética — rotulada",
 		datasetVersion: "1.0.0",
 		codeVersion: "abc1234",
+		codeDirty: true,
 		modelVersion: "n/a",
 		config: { zeta: 1, alpha: { y: 2, x: 3 } },
 		baselineJustification: "baseline declarado",
@@ -63,10 +64,27 @@ describe("evidence export", () => {
 		]);
 	});
 
+	test("codeDirty sits next to codeVersion and round-trips as a boolean", () => {
+		const fields = [...RECORD_FIELDS];
+		expect(fields[fields.indexOf("codeVersion") + 1]).toBe("codeDirty");
+
+		for (const codeDirty of [true, false]) {
+			const record = fixtureRecord({ codeDirty });
+			expect(toCanonicalRecord(record).codeDirty).toBe(codeDirty);
+			const json = JSON.parse(toJson([record])) as Record<string, unknown>[];
+			expect(json[0].codeDirty).toBe(codeDirty);
+			expect(parseCsv(toCsv([record]))[0].codeDirty).toBe(codeDirty);
+		}
+	});
+
 	test("JSON and CSV expose the same fields with the same values", () => {
 		const records = [
 			fixtureRecord(),
-			fixtureRecord({ caseName: "second", baseline: undefined }),
+			fixtureRecord({
+				caseName: "second",
+				baseline: undefined,
+				codeDirty: false,
+			}),
 		];
 		const json = JSON.parse(toJson(records)) as Record<string, unknown>[];
 		const csv = toCsv(records);

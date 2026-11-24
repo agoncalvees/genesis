@@ -9,6 +9,7 @@ import {
 	Output,
 	streamText,
 	tool,
+	wrapLanguageModel,
 } from "ai";
 import { z } from "zod";
 import type { AppError, ExecutionResult } from "../core/contracts";
@@ -174,13 +175,39 @@ async function run<T>(
 	}
 }
 
+// Observe the provider response before SDK processing or output parsing can fail.
+function trackGeneration(
+	settings: ReturnType<typeof callSettings>,
+	markProgress: () => void,
+) {
+	return wrapLanguageModel({
+		model: settings.model,
+		middleware: {
+			specificationVersion: "v4",
+			async wrapGenerate({ doGenerate }) {
+				const result = await doGenerate();
+				if (
+					result.content.length > 0 ||
+					(result.usage.outputTokens.total ?? 0) > 0
+				) {
+					markProgress();
+				}
+				return result;
+			},
+		},
+	});
+}
+
 export function runText(
 	client: AiClient,
 	prompt: string,
 	options: RunOptions = {},
 ) {
-	return run(client, prompt, options, async (settings) => {
-		const result = await generateText(settings);
+	return run(client, prompt, options, async (settings, markProgress) => {
+		const result = await generateText({
+			...settings,
+			model: trackGeneration(settings, markProgress),
+		});
 		checkFinish(result.finishReason, result.usage.outputTokens);
 		return result.text;
 	});
@@ -232,9 +259,10 @@ export function runStructured(
 	prompt: string,
 	options: RunOptions = {},
 ) {
-	return run(client, prompt, options, async (settings) => {
+	return run(client, prompt, options, async (settings, markProgress) => {
 		const result = await generateText({
 			...settings,
+			model: trackGeneration(settings, markProgress),
 			output: Output.object({ schema: summarySchema }),
 		});
 		checkFinish(result.finishReason, result.usage.outputTokens);

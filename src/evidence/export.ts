@@ -18,6 +18,7 @@ export const RECORD_FIELDS = [
 	"datasetSource",
 	"datasetVersion",
 	"codeVersion",
+	"codeDirty",
 	"modelVersion",
 	"config",
 	"baseline",
@@ -62,6 +63,7 @@ const NUMERIC_FIELDS = new Set<ExportField>([
 	"sampleSize",
 	"durationMs",
 ]);
+const BOOLEAN_FIELDS = new Set<ExportField>(["codeDirty"]);
 
 function finiteOrNull(value: number): number | null {
 	return Number.isFinite(value) ? value : null;
@@ -105,6 +107,7 @@ export function toCanonicalRecord(record: BenchmarkRecord): CanonicalRecord {
 		datasetSource: record.datasetSource,
 		datasetVersion: record.datasetVersion,
 		codeVersion: record.codeVersion,
+		codeDirty: record.codeDirty,
 		modelVersion: record.modelVersion,
 		config: sortDeep(record.config),
 		baseline:
@@ -153,6 +156,9 @@ export function toCsv(records: readonly BenchmarkRecord[]): string {
 
 function decodeCell(raw: string, field: ExportField): CanonicalValue {
 	if (raw === "") return null;
+	if (BOOLEAN_FIELDS.has(field)) {
+		return raw === "true" ? true : raw === "false" ? false : null;
+	}
 	if (NESTED_FIELDS.has(field)) return sortDeep(JSON.parse(raw));
 	if (NUMERIC_FIELDS.has(field)) {
 		const number = Number(raw);

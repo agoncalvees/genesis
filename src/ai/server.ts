@@ -3,8 +3,8 @@ import "@tanstack/react-start/server-only";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
-import { checkAiAccess } from "./access";
-import { createAiClient } from "./client";
+import { consumeAiQuota, getAiIdentity } from "./access";
+import { type AiClient, createAiClient } from "./client";
 import {
 	AI_LIMITS,
 	runStream,
@@ -17,43 +17,50 @@ const input = z.strictObject({
 	prompt: z.string().min(1).max(AI_LIMITS.inputCharacters),
 });
 
-function withAiAccess<T>(run: (request: Request) => T) {
+function withAiAccess<T>(run: (request: Request, client: AiClient) => T) {
 	const request = getRequest();
-	return checkAiAccess(request) ?? run(request);
+	const identity = getAiIdentity(request);
+	if (identity.status === "failed") return identity;
+
+	const client = createAiClient();
+	if (client.status === "available") {
+		const failure = consumeAiQuota(request, identity.tokenHash);
+		if (failure) return failure;
+	}
+	return run(request, client);
 }
 
 export const generateAiText = createServerFn({ method: "POST" })
 	.validator(input)
 	.handler(({ data }) =>
-		withAiAccess(({ signal }) =>
-			runText(createAiClient(), data.prompt, { signal }),
+		withAiAccess(({ signal }, client) =>
+			runText(client, data.prompt, { signal }),
 		),
 	);
 
 export const generateAiObject = createServerFn({ method: "POST" })
 	.validator(input)
 	.handler(({ data }) =>
-		withAiAccess(({ signal }) =>
-			runStructured(createAiClient(), data.prompt, { signal }),
+		withAiAccess(({ signal }, client) =>
+			runStructured(client, data.prompt, { signal }),
 		),
 	);
 
 export const callAiTool = createServerFn({ method: "POST" })
 	.validator(input)
 	.handler(({ data }) =>
-		withAiAccess(({ signal }) =>
-			runTool(createAiClient(), data.prompt, { signal }),
+		withAiAccess(({ signal }, client) =>
+			runTool(client, data.prompt, { signal }),
 		),
 	);
 
 export const streamAiText = createServerFn({ method: "POST" })
 	.validator(input)
 	.handler(({ data }) =>
-		withAiAccess((request) => {
+		withAiAccess((request, client) => {
 			const disconnect = new AbortController();
 			const signal = AbortSignal.any([request.signal, disconnect.signal]);
 			const encoder = new TextEncoder();
-			const client = createAiClient();
 			const body = new ReadableStream<Uint8Array>({
 				async start(controller) {
 					const write = (event: unknown) => {

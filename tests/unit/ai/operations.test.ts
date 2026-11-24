@@ -286,6 +286,50 @@ describe("P04 AI adapter • MOCK — not a real execution", () => {
 		},
 	);
 
+	describe.each([runText, runStructured])("%s progress", (operation) => {
+		test.each([
+			{ text: "", outputTokens: 4, attempts: 1 },
+			{ text: "Mock partial", outputTokens: 0, attempts: 1 },
+			{ text: "", outputTokens: 0, attempts: 2 },
+		])(
+			"allows $attempts attempt(s) with $outputTokens output tokens and '$text'",
+			async ({ text, outputTokens, attempts }) => {
+				const generation = response(text ? [{ type: "text", text }] : []);
+				generation.usage = {
+					...usage,
+					outputTokens: {
+						total: outputTokens,
+						text: outputTokens,
+						reasoning: 0,
+					},
+				};
+				// Simulate a retryable error during SDK handling of a received response.
+				const primary = new MockLanguageModelV4({
+					doGenerate: {
+						...generation,
+						get warnings(): never {
+							throw providerError(true);
+						},
+					},
+				});
+				const fallback = new MockLanguageModelV4({
+					doGenerate: textResponse('{"summary":"Mock fallback"}'),
+				});
+				const result = await operation(client(primary, fallback), "Hello");
+				expect(result).toMatchObject(
+					attempts === 1
+						? {
+								status: "failed",
+								error: { code: "provider_error", retryable: true },
+							}
+						: { status: "completed" },
+				);
+				expect(primary.doGenerateCalls).toHaveLength(1);
+				expect(fallback.doGenerateCalls).toHaveLength(attempts - 1);
+			},
+		);
+	});
+
 	test("limits transient retries and redacts provider and AppError-shaped payloads", async () => {
 		const model = new MockLanguageModelV4({
 			doGenerate: async () => {

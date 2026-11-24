@@ -36,6 +36,12 @@ export type BenchmarkDefinition = {
 	limitations?: readonly string[];
 	/** "n/a" for deterministic benchmarks; provider/model version when applicable. */
 	modelVersion?: string;
+	/**
+	 * Opt-in for error messages in exported evidence. Off by default: messages
+	 * may contain prompts, keys or PII. When enabled they are redacted, but the
+	 * raw text is still never written to the artifact.
+	 */
+	includeErrorMessages?: boolean;
 };
 
 export type BenchmarkStats = {
@@ -61,12 +67,17 @@ export type RawMeasurement = {
 	ok: boolean;
 };
 
+/**
+ * Only the error class and a correlation handle are exported by default. A
+ * redacted `message` exists only when the definition opts in explicitly.
+ */
 export type MeasurementError = {
-	case: string;
+	caseName: string;
 	phase: MeasurementPhase;
-	iteration: number;
+	repetition: number;
 	name: string;
-	message: string;
+	correlationId: string;
+	message?: string;
 };
 
 /**
@@ -81,6 +92,8 @@ export type BenchmarkRecord = EvaluationResult & {
 	datasetSource: string;
 	datasetVersion: string;
 	codeVersion: string;
+	/** True when git reported uncommitted changes at measurement time. */
+	codeDirty: boolean;
 	modelVersion: string;
 	config: Record<string, unknown>;
 	baselineJustification: string;
@@ -106,37 +119,62 @@ const DEFAULT_LIMITATIONS: readonly string[] = [
 	"Resultados dependem da fixture e da configuração declaradas; não comparar tarefas diferentes sob a mesma métrica.",
 ];
 
+export type GitResult = {
+	exitCode?: number | null;
+	status?: number | null;
+	stdout?: unknown;
+};
+
+/** Injectable git runner: tests pass a fake instead of spawning a process. */
+export type GitRunner = (args: readonly string[]) => GitResult;
+
 type BunLike = {
 	version?: string;
-	spawnSync?: (...args: readonly unknown[]) => {
-		exitCode?: number | null;
-		status?: number | null;
-		stdout?: unknown;
-	};
+	spawnSync?: (...args: readonly unknown[]) => GitResult;
 };
 
 function getBun(): BunLike | undefined {
 	return (globalThis as { Bun?: BunLike }).Bun;
 }
 
-/** Short git commit when available through Bun; otherwise an explicit unknown. */
-export function detectCodeVersion(): string {
+function defaultGitRunner(args: readonly string[]): GitResult {
 	const bun = getBun();
-	if (!bun?.spawnSync) return "unknown";
+	if (!bun?.spawnSync) throw new Error("Bun.spawnSync unavailable");
+	return bun.spawnSync(args);
+}
+
+/** Decode stdout only for successful (exit code 0) git commands. */
+function gitOutput(result: GitResult): string {
+	if ((result.exitCode ?? result.status) !== 0) return "";
+	const stdout = result.stdout;
+	if (typeof stdout === "string") return stdout.trim();
+	if (stdout instanceof Uint8Array)
+		return new TextDecoder().decode(stdout).trim();
+	return "";
+}
+
+/** Short git commit when available through Bun; otherwise an explicit unknown. */
+export function detectCodeVersion(
+	runner: GitRunner = defaultGitRunner,
+): string {
 	try {
-		const result = bun.spawnSync(["git", "rev-parse", "--short", "HEAD"]);
-		const exitCode = result.exitCode ?? result.status;
-		if (exitCode !== 0) return "unknown";
-		const stdout = result.stdout;
-		const sha =
-			typeof stdout === "string"
-				? stdout.trim()
-				: stdout instanceof Uint8Array
-					? new TextDecoder().decode(stdout).trim()
-					: "";
-		return sha || "unknown";
+		return (
+			gitOutput(runner(["git", "rev-parse", "--short", "HEAD"])) || "unknown"
+		);
 	} catch {
 		return "unknown";
+	}
+}
+
+/**
+ * Whether git reported uncommitted changes at measurement time. A failed
+ * command is not evidence of dirtiness and resolves to false (unknown).
+ */
+export function detectCodeDirty(runner: GitRunner = defaultGitRunner): boolean {
+	try {
+		return gitOutput(runner(["git", "status", "--porcelain"])).length > 0;
+	} catch {
+		return false;
 	}
 }
 
@@ -153,15 +191,77 @@ export function detectRuntime(): Record<string, string> {
 	};
 }
 
-function errorInfo(error: unknown): { name: string; message: string } {
+const REDACTED = "[REDACTED]";
+
+/**
+ * Conservative patterns for credentials and PII. Redaction is destructive by
+ * design: a false positive hides harmless text, a false negative leaks a
+ * secret. Order matters so structured credentials are handled before the
+ * generic long-token patterns.
+ */
+const SECRET_PATTERNS: readonly RegExp[] = [
+	/\bsk-[A-Za-z0-9_-]{8,}/g,
+	/\b[Bb]earer\s+[A-Za-z0-9._~+/=-]{8,}/g,
+	/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
+	/\b[0-9a-fA-F]{32,}\b/g,
+	/\b[A-Za-z0-9+/]{24,}={0,2}/g,
+];
+
+/** Replace every known secret shape in a message with an explicit marker. */
+export function redactSecrets(message: string): string {
+	return SECRET_PATTERNS.reduce(
+		(text, pattern) => text.replace(pattern, REDACTED),
+		message,
+	);
+}
+
+function randomCorrelationId(): string {
+	const crypto = (globalThis as { crypto?: { randomUUID?: () => string } })
+		.crypto;
+	try {
+		return crypto?.randomUUID?.() ?? "unknown";
+	} catch {
+		return "unknown";
+	}
+}
+
+/** Build the minimal, non-sensitive error record written to evidence. */
+function errorInfo(
+	error: unknown,
+	context: {
+		caseName: string;
+		phase: MeasurementPhase;
+		repetition: number;
+		includeMessage: boolean;
+	},
+): MeasurementError {
+	let name = "UnknownError";
+	let rawMessage = "unserializable thrown value";
 	try {
 		if (error instanceof Error) {
-			return { name: error.name || "Error", message: error.message };
+			const className = error.name;
+			name =
+				typeof className === "string" &&
+				/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(className)
+					? className
+					: "Error";
+			rawMessage = error.message;
+		} else {
+			name = "NonError";
+			rawMessage = String(error);
 		}
-		return { name: "NonError", message: String(error) };
 	} catch {
-		return { name: "UnknownError", message: "unserializable thrown value" };
+		// Keep the safe defaults above.
 	}
+	const info: MeasurementError = {
+		caseName: context.caseName,
+		phase: context.phase,
+		repetition: context.repetition,
+		name,
+		correlationId: randomCorrelationId(),
+	};
+	if (context.includeMessage) info.message = redactSecrets(rawMessage);
+	return info;
 }
 
 /**
@@ -257,6 +357,14 @@ export function defineBenchmark(
 		}
 	}
 	if (
+		definition.includeErrorMessages !== undefined &&
+		typeof definition.includeErrorMessages !== "boolean"
+	) {
+		throw new BenchmarkDefinitionError(
+			"includeErrorMessages must be a boolean",
+		);
+	}
+	if (
 		definition.baseline !== undefined &&
 		definition.baseline !== null &&
 		!Number.isFinite(definition.baseline)
@@ -286,6 +394,7 @@ function buildProcedure(definition: BenchmarkDefinition): string {
  */
 export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 	const codeVersion = detectCodeVersion();
+	const codeDirty = detectCodeDirty();
 	const runtime = detectRuntime();
 	const date = new Date().toISOString();
 	const config: Record<string, unknown> = {
@@ -316,12 +425,14 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 			try {
 				benchmarkCase.run();
 			} catch (error) {
-				errors.push({
-					case: benchmarkCase.name,
-					phase: "warmup",
-					iteration,
-					...errorInfo(error),
-				});
+				errors.push(
+					errorInfo(error, {
+						caseName: benchmarkCase.name,
+						phase: "warmup",
+						repetition: iteration,
+						includeMessage: definition.includeErrorMessages === true,
+					}),
+				);
 			}
 		}
 
@@ -332,12 +443,14 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 				benchmarkCase.run();
 			} catch (error) {
 				ok = false;
-				errors.push({
-					case: benchmarkCase.name,
-					phase: "measured",
-					iteration,
-					...errorInfo(error),
-				});
+				errors.push(
+					errorInfo(error, {
+						caseName: benchmarkCase.name,
+						phase: "measured",
+						repetition: iteration,
+						includeMessage: definition.includeErrorMessages === true,
+					}),
+				);
 			}
 			const duration = performance.now() - startedAt;
 			rawResults.push({
@@ -366,6 +479,7 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 			datasetSource: definition.datasetSource,
 			datasetVersion: definition.datasetVersion,
 			codeVersion,
+			codeDirty,
 			modelVersion: definition.modelVersion ?? "n/a",
 			config,
 			baselineJustification,

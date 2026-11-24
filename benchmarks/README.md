@@ -35,15 +35,27 @@ anteriormente, `baseline` é `null` com justificativa em `baselineJustification`
 ## Esquema do registro
 
 Campos, na ordem estável usada em JSON e CSV: `benchmark`, `caseName`,
-`dataset`, `datasetSource`, `datasetVersion`, `codeVersion`, `modelVersion`,
-`config`, `baseline`, `baselineJustification`, `metric`, `value`, `unit`,
-`sampleSize`, `stats`, `rawResults`, `errors`, `durationMs`, `procedure`,
-`limitations`, `runtime`, `date`.
+`dataset`, `datasetSource`, `datasetVersion`, `codeVersion`, `codeDirty`,
+`modelVersion`, `config`, `baseline`, `baselineJustification`, `metric`,
+`value`, `unit`, `sampleSize`, `stats`, `rawResults`, `errors`, `durationMs`,
+`procedure`, `limitations`, `runtime`, `date`.
+
+`codeVersion` é o SHA curto do `git rev-parse --short HEAD` e `codeDirty`
+indica se `git status --porcelain` estava não vazio no momento da medição
+(`true` = código medido diverge do commit registrado). Ambos são `unknown`/
+`false` quando o git não está disponível.
 
 `stats` contém `n`, `mean`, `median`, `p95`, `min`, `max` e `stddev`, calculados
 apenas das medições bem-sucedidas. Um valor temporizado que lançou erro
 permanece em `rawResults` com `ok: false` e também em `errors`; nunca é
 removido silenciosamente. `value` é a mediana e `sampleSize` é `stats.n`.
+
+Cada entrada de `errors` traz `name` (classe do erro), `correlationId`
+(UUID), `caseName`, `phase`, `repetition` e — somente com
+`includeErrorMessages: true` na definição — uma `message` redigida. Por padrão
+a mensagem bruta não é exportada. A redação remove padrões de chaves (`sk-...`),
+`Bearer ...`, emails e tokens longos em base64/hex; é conservadora e pode
+remover texto inofensivo. O benchmark neutro mantém a opção desligada.
 
 ## Serialização
 
