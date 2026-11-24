@@ -1,0 +1,341 @@
+/**
+ * Harness uniforme do experimento ISOTERMA. O MESMO arquivo avalia A, B e C,
+ * usando apenas o contrato de nomes acessíveis do BRIEF.md.
+ * Variáveis: EVAL_URL, EVAL_OUT.
+ */
+import { appendFileSync, mkdirSync } from "node:fs";
+import AxeBuilder from "@axe-core/playwright";
+import { type Locator, type Page, expect, test } from "@playwright/test";
+
+const OUT = process.env.EVAL_OUT ?? "out/unknown";
+mkdirSync(`${OUT}/shots`, { recursive: true });
+const WIDTHS = [360, 768, 1440] as const;
+const HEIGHT: Record<number, number> = { 360: 780, 768: 1024, 1440: 900 };
+
+function record(entry: Record<string, unknown>) {
+	appendFileSync(`${OUT}/metrics.jsonl`, `${JSON.stringify(entry)}\n`);
+}
+
+function watchErrors(page: Page) {
+	const errors: string[] = [];
+	page.on("console", (m) => {
+		if (m.type() === "error") errors.push(`console: ${m.text()}`);
+	});
+	page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
+	return errors;
+}
+
+const REGION_ROLES = ["button", "radio", "option", "checkbox", "link", "tab", "menuitemradio", "gridcell"] as const;
+
+async function region(page: Page, name: string): Promise<Locator> {
+	const re = new RegExp(name, "i");
+	for (const role of REGION_ROLES) {
+		const l = page.getByRole(role, { name: re });
+		const n = await l.count();
+		for (let i = 0; i < n; i++) if (await l.nth(i).isVisible()) return l.nth(i);
+	}
+	const l = page.getByLabel(re);
+	const n = await l.count();
+	for (let i = 0; i < n; i++) if (await l.nth(i).isVisible()) return l.nth(i);
+	throw new Error(`região "${name}" sem elemento acessível visível`);
+}
+
+async function control(page: Page, label: string): Promise<Locator> {
+	const re = new RegExp(label, "i");
+	for (const role of ["slider", "spinbutton", "textbox"] as const) {
+		const l = page.getByRole(role, { name: re });
+		if ((await l.count()) > 0) return l.first();
+	}
+	const l = page.getByLabel(re);
+	if ((await l.count()) > 0) return l.first();
+	throw new Error(`controle "${label}" não encontrado`);
+}
+
+/** Define o valor por teclado (slider) ou digitação (spinbutton/textbox). */
+async function setValue(page: Page, label: string, value: number) {
+	const c = await control(page, label);
+	await c.scrollIntoViewIfNeeded();
+	const role = await c.evaluate((el) => el.getAttribute("role") ?? (el as HTMLInputElement).type ?? "");
+	if (role === "slider" || role === "range") {
+		await c.focus();
+		await page.keyboard.press("Home");
+		for (let i = 0; i < 150; i++) {
+			const now = Number(
+				(await c.getAttribute("aria-valuenow")) ?? (await c.evaluate((el) => (el as HTMLInputElement).value)),
+			);
+			if (now >= value) break;
+			await page.keyboard.press("ArrowRight");
+		}
+	} else {
+		await c.fill(String(value));
+		await c.press("Tab");
+	}
+}
+
+async function bodyText(page: Page) {
+	return (await page.locator("body").innerText()).replace(/−/g, "-");
+}
+
+async function simulate(page: Page, keyboard: boolean) {
+	const b = page.getByRole("button", { name: /Simular/i }).first();
+	await b.scrollIntoViewIfNeeded();
+	if (keyboard) {
+		await b.focus();
+		await page.keyboard.press("Enter");
+	} else await b.click();
+}
+
+async function waitText(page: Page, re: RegExp, timeout = 8000) {
+	await expect.poll(async () => re.test(await bodyText(page)), { timeout }).toBe(true);
+}
+
+async function overflow(page: Page) {
+	return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+}
+
+async function axe(page: Page) {
+	const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+	return r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length }));
+}
+
+async function gotoReady(page: Page) {
+	const t0 = Date.now();
+	await page.goto("/", { waitUntil: "domcontentloaded" });
+	const dcl = Date.now() - t0;
+	await region(page, "Centro Antigo").then((l) => expect(l).toBeVisible({ timeout: 15000 }));
+	// aguarda hidratação: um clique precisa produzir efeito; espera estabilidade de rede
+	await page.waitForLoadState("networkidle");
+	return { domContentLoadedMs: dcl, regionVisibleMs: Date.now() - t0 };
+}
+
+async function selectRegion(page: Page, name: string) {
+	const r = await region(page, name);
+	await r.scrollIntoViewIfNeeded();
+	await r.click();
+}
+
+async function fullFlowClicks(page: Page) {
+	await selectRegion(page, "Centro Antigo");
+	await setValue(page, "Arboriza", 20);
+	await setValue(page, "Coberturas", 50);
+	await setValue(page, "Pavimentos", 20);
+	await simulate(page, false);
+	await waitText(page, /38,3/);
+}
+
+for (const w of WIDTHS) {
+	test(`inicial ${w}px: carga, overflow, axe, screenshot`, async ({ page }) => {
+		const errors = watchErrors(page);
+		await page.setViewportSize({ width: w, height: HEIGHT[w] });
+		const timing = await gotoReady(page);
+		await page.screenshot({ path: `${OUT}/shots/${w}-01-inicial.png`, fullPage: true });
+		await page.screenshot({ path: `${OUT}/shots/${w}-01-inicial-viewport.png` });
+		const ov = await overflow(page);
+		const violations = await axe(page);
+		record({ test: "inicial", width: w, ...timing, overflowPx: ov, axe: violations, errors });
+		expect(ov, "overflow horizontal").toBeLessThanOrEqual(0);
+		expect(violations, "axe").toEqual([]);
+		expect(errors).toEqual([]);
+	});
+
+	test(`fluxo por clique/toque ${w}px: seleção, resultado, limitações, screenshots`, async ({ page }) => {
+		const errors = watchErrors(page);
+		await page.setViewportSize({ width: w, height: HEIGHT[w] });
+		await gotoReady(page);
+		await selectRegion(page, "Centro Antigo");
+		await page.screenshot({ path: `${OUT}/shots/${w}-02-selecionada.png`, fullPage: true });
+		await setValue(page, "Arboriza", 20);
+		await setValue(page, "Coberturas", 50);
+		await setValue(page, "Pavimentos", 20);
+		await simulate(page, false);
+		await page.waitForTimeout(400);
+		await page.screenshot({ path: `${OUT}/shots/${w}-03-processando.png` });
+		await waitText(page, /38,3/);
+		await page.waitForTimeout(900);
+		await page.screenshot({ path: `${OUT}/shots/${w}-04-resultado.png`, fullPage: true });
+		await page.screenshot({ path: `${OUT}/shots/${w}-04-resultado-viewport.png` });
+		const text = await bodyText(page);
+		const delta = /-\s?3,0\s?°?C?/.test(text);
+		const lim = page.getByRole("heading", { name: /Limitaç/i }).first();
+		await lim.scrollIntoViewIfNeeded();
+		await expect(lim).toBeVisible();
+		await page.screenshot({ path: `${OUT}/shots/${w}-05-limitacoes-viewport.png` });
+		const ov = await overflow(page);
+		const violations = await axe(page);
+		record({ test: "fluxo-clique", width: w, deltaMinus30: delta, overflowPx: ov, axe: violations, errors });
+		expect(delta, "diferença −3,0 °C exibida").toBe(true);
+		expect(ov).toBeLessThanOrEqual(0);
+		expect(violations, "axe no resultado").toEqual([]);
+		expect(errors).toEqual([]);
+	});
+}
+
+test("teclado 1440px: Tab até região, Enter, controles, Simular, Redefinir", async ({ page }) => {
+	const errors = watchErrors(page);
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await gotoReady(page);
+	let tabs = 0;
+	let found = false;
+	const focusLog: string[] = [];
+	for (; tabs < 120; tabs++) {
+		await page.keyboard.press("Tab");
+		const name = await page.evaluate(() => {
+			const el = document.activeElement as HTMLElement | null;
+			if (!el) return "";
+			return `${el.getAttribute("aria-label") ?? ""} ${el.textContent ?? ""}`.slice(0, 120);
+		});
+		focusLog.push(name.trim());
+		if (/Centro Antigo/i.test(name)) {
+			found = true;
+			break;
+		}
+	}
+	const focusVisible = await page.evaluate(() => {
+		const el = document.activeElement as HTMLElement | null;
+		if (!el) return false;
+		const s = getComputedStyle(el);
+		return (s.outlineStyle !== "none" && Number.parseFloat(s.outlineWidth) > 0) || s.boxShadow !== "none";
+	});
+	let selected = false;
+	if (found) {
+		await page.keyboard.press("Enter");
+		await page.waitForTimeout(500);
+		let t = await bodyText(page);
+		selected = /Centro Antigo[\s\S]*41,3|41,3[\s\S]*Centro Antigo/.test(t) && /(91|impermea)/i.test(t);
+		if (!selected) {
+			await page.keyboard.press("Space");
+			await page.waitForTimeout(500);
+			t = await bodyText(page);
+			selected = /(91|impermea)/i.test(t);
+		}
+	}
+	let resultOk = false;
+	let resetOk = false;
+	if (selected) {
+		await setValue(page, "Arboriza", 20);
+		await setValue(page, "Coberturas", 50);
+		await setValue(page, "Pavimentos", 20);
+		await simulate(page, true);
+		try {
+			await waitText(page, /38,3/);
+			resultOk = true;
+		} catch {}
+		const r = page.getByRole("button", { name: /Redefinir/i }).first();
+		if ((await r.count()) > 0) {
+			await r.focus();
+			await page.keyboard.press("Enter");
+			await page.waitForTimeout(800);
+			resetOk = !/38,3/.test(await bodyText(page));
+		}
+	}
+	record({ test: "teclado", tabsToRegion: found ? tabs + 1 : null, focusVisible, selected, resultOk, resetOk, errors, focusLogHead: focusLog.slice(0, 15) });
+	expect(found, "região alcançável por Tab").toBe(true);
+	expect(selected, "seleção por teclado").toBe(true);
+	expect(resultOk, "resultado por teclado").toBe(true);
+	expect(resetOk, "reset por teclado").toBe(true);
+	expect(errors).toEqual([]);
+});
+
+test("erro: simular sem intervenção", async ({ page }) => {
+	const errors = watchErrors(page);
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await gotoReady(page);
+	await selectRegion(page, "Centro Antigo");
+	const b = page.getByRole("button", { name: /Simular/i }).first();
+	const disabled = await b.isDisabled();
+	let shown = false;
+	if (!disabled) {
+		await b.click();
+		try {
+			await waitText(page, /ao menos uma/i, 5000);
+			shown = true;
+		} catch {}
+	}
+	await page.screenshot({ path: `${OUT}/shots/1440-06-erro-zero.png` });
+	record({ test: "erro-zero", simulateDisabled: disabled, messageShown: shown, errors });
+	expect(shown || disabled, "erro de validação ou botão desabilitado com explicação").toBe(true);
+	expect(errors).toEqual([]);
+});
+
+test("erro: região com dados insuficientes (Novo Loteamento)", async ({ page }) => {
+	const errors = watchErrors(page);
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await gotoReady(page);
+	await selectRegion(page, "Novo Loteamento");
+	let shown = false;
+	try {
+		await waitText(page, /insuficiente/i, 3000);
+		shown = true;
+	} catch {}
+	let afterSim = false;
+	try {
+		await setValue(page, "Arboriza", 10);
+		const b = page.getByRole("button", { name: /Simular/i }).first();
+		if (!(await b.isDisabled())) {
+			await b.click();
+			await waitText(page, /dados insuficientes/i, 6000);
+			afterSim = true;
+		}
+	} catch {}
+	await page.screenshot({ path: `${OUT}/shots/1440-07-erro-dados.png` });
+	record({ test: "erro-dados", warnedOnSelect: shown, errorAfterSimulate: afterSim, errors });
+	expect(shown || afterSim).toBe(true);
+	expect(errors).toEqual([]);
+});
+
+test("estado desatualizado: alterar parâmetro após resultado", async ({ page }) => {
+	const errors = watchErrors(page);
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await gotoReady(page);
+	await fullFlowClicks(page);
+	await setValue(page, "Arboriza", 25);
+	await page.waitForTimeout(400);
+	const stale = /desatualizad/i.test(await bodyText(page));
+	record({ test: "desatualizado", staleLabel: stale, errors });
+	expect(stale, "resultado marcado como desatualizado").toBe(true);
+	expect(errors).toEqual([]);
+});
+
+test("reduced motion: sem animações em execução após o resultado", async ({ page }) => {
+	const errors = watchErrors(page);
+	await page.emulateMedia({ reducedMotion: "reduce" });
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await gotoReady(page);
+	await fullFlowClicks(page);
+	await page.waitForTimeout(150);
+	const running = await page.evaluate(
+		() =>
+			document.getAnimations().filter((a) => {
+				const t = a.effect?.getTiming();
+				return a.playState === "running" && Number(t?.duration ?? 0) > 1;
+			}).length,
+	);
+	record({ test: "reduced-motion", runningAnimations: running, errors });
+	expect(running).toBe(0);
+	expect(errors).toEqual([]);
+});
+
+test("demonstração gravada 1440px", async ({ browser }) => {
+	const context = await browser.newContext({
+		viewport: { width: 1440, height: 900 },
+		recordVideo: { dir: `${OUT}/video`, size: { width: 1440, height: 900 } },
+	});
+	const page = await context.newPage();
+	await gotoReady(page);
+	await page.waitForTimeout(1200);
+	await selectRegion(page, "Centro Antigo");
+	await page.waitForTimeout(1000);
+	await setValue(page, "Arboriza", 20);
+	await setValue(page, "Coberturas", 50);
+	await setValue(page, "Pavimentos", 20);
+	await page.waitForTimeout(600);
+	await simulate(page, false);
+	await waitText(page, /38,3/);
+	await page.waitForTimeout(2000);
+	const lim = page.getByRole("heading", { name: /Limitaç/i }).first();
+	await lim.scrollIntoViewIfNeeded();
+	await page.waitForTimeout(1500);
+	await page.getByRole("button", { name: /Redefinir/i }).first().click();
+	await page.waitForTimeout(1500);
+	await context.close();
+});

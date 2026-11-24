@@ -1,0 +1,23 @@
+#!/bin/zsh
+# Uso: ./run-eval.sh <a|b|c> <porta-producao>
+# Build + serve de produção do app da versão e execução do harness uniforme.
+set -u
+V=$1; PORT=$2
+ROOT=/Users/arthurgoncalves/orca/experiments/isoterma
+APP=$ROOT/version-$V/app
+OUT=$ROOT/evaluation/out/$V
+rm -rf $OUT; mkdir -p $OUT
+cd $APP || exit 2
+s=$(date +%s)
+bun run build > $OUT/build.log 2>&1; echo "build_exit=$? build_s=$(( $(date +%s) - s ))" | tee $OUT/build.txt
+s=$(date +%s)
+bun run typecheck > $OUT/typecheck.log 2>&1; echo "typecheck_exit=$? typecheck_s=$(( $(date +%s) - s ))" | tee -a $OUT/build.txt
+PORT=$PORT bun run serve > $OUT/serve.log 2>&1 &
+SERVER=$!
+for i in {1..60}; do curl -sf -o /dev/null http://localhost:$PORT/ && break; sleep 0.5; done
+curl -s -o /dev/null -w "http_root=%{http_code} ttfb_s=%{time_starttransfer}\n" http://localhost:$PORT/ | tee -a $OUT/build.txt
+cd $ROOT/evaluation
+EVAL_URL=http://localhost:$PORT EVAL_OUT=$OUT bunx playwright test > $OUT/harness.log 2>&1; echo "harness_exit=$?" | tee -a $OUT/build.txt
+kill $SERVER 2>/dev/null; pkill -P $SERVER 2>/dev/null
+lsof -ti tcp:$PORT | xargs kill 2>/dev/null
+tail -20 $OUT/harness.log
