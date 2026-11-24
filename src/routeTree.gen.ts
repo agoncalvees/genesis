@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemosRouteImport } from './routes/demos'
+import { Route as ProjetosRouteImport } from './routes/projetos'
 import { Route as SmokeRouteImport } from './routes/smoke'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as DemosIndexRouteImport } from './routes/demos.index'
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
 const DemosRoute = DemosRouteImport.update({
   id: '/demos',
   path: '/demos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjetosRoute = ProjetosRouteImport.update({
+  id: '/projetos',
+  path: '/projetos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SmokeRoute = SmokeRouteImport.update({
@@ -86,6 +92,7 @@ const StudioWorldsIdRoute = StudioWorldsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demos': typeof DemosRouteWithChildren
+  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
   '/studio': typeof StudioRouteWithChildren
   '/demos/doc-evidence': typeof DemosDocEvidenceRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
   '/demos/doc-evidence': typeof DemosDocEvidenceRoute
   '/demos/route-opt': typeof DemosRouteOptRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demos': typeof DemosRouteWithChildren
+  '/projetos': typeof ProjetosRoute
   '/smoke': typeof SmokeRoute
   '/studio': typeof StudioRouteWithChildren
   '/demos/doc-evidence': typeof DemosDocEvidenceRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/demos'
+    | '/projetos'
     | '/smoke'
     | '/studio'
     | '/demos/doc-evidence'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/projetos'
     | '/smoke'
     | '/demos/doc-evidence'
     | '/demos/route-opt'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/demos'
+    | '/projetos'
     | '/smoke'
     | '/studio'
     | '/demos/doc-evidence'
@@ -170,6 +182,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemosRoute: typeof DemosRouteWithChildren
+  ProjetosRoute: typeof ProjetosRoute
   SmokeRoute: typeof SmokeRoute
   StudioRoute: typeof StudioRouteWithChildren
 }
@@ -188,6 +201,13 @@ declare module '@tanstack/react-router' {
       path: '/demos'
       fullPath: '/demos'
       preLoaderRoute: typeof DemosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projetos': {
+      id: '/projetos'
+      path: '/projetos'
+      fullPath: '/projetos'
+      preLoaderRoute: typeof ProjetosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/smoke': {
@@ -299,6 +319,7 @@ const StudioRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemosRoute: DemosRouteWithChildren,
+  ProjetosRoute: ProjetosRoute,
   SmokeRoute: SmokeRoute,
   StudioRoute: StudioRouteWithChildren,
 }

@@ -1,0 +1,225 @@
+.project-selector {
+	min-height: 100dvh;
+	background: var(--background);
+	padding-inline: clamp(1rem, 4vw, 4rem);
+	padding-bottom: clamp(2rem, 5vw, 5rem);
+}
+
+.project-shell {
+	max-width: 83rem;
+	margin-inline: auto;
+}
+
+.project-top {
+	display: flex;
+	border-bottom: 1px solid var(--border);
+}
+
+.project-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.625rem;
+	min-height: 3.75rem;
+	padding-inline: 0.25rem;
+	font-weight: 650;
+}
+
+.project-heading {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.75rem;
+	align-items: baseline;
+	justify-content: space-between;
+	padding-block: clamp(1.75rem, 5vw, 4rem) 1.375rem;
+}
+
+.project-heading h1 {
+	font:
+		var(--display-weight) clamp(2.75rem, 7vw, 6rem) / 1 var(--typeface-display);
+	letter-spacing: var(--display-tracking);
+}
+
+.project-heading p,
+.phase-description {
+	color: var(--muted);
+}
+
+.phase-picker {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: clamp(0.5rem, 1.25vw, 1rem);
+	min-inline-size: 0;
+	margin-bottom: 0.875rem;
+}
+
+[data-project="isoterma"] {
+	--phase-accent: var(--data-2);
+}
+
+[data-project="entrelacos"] {
+	--phase-accent: var(--data-5);
+}
+
+.phase-choice {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: clamp(0.35rem, 1.3vw, 0.875rem);
+	min-height: 3.75rem;
+	padding: 0.625rem clamp(0.45rem, 1.6vw, 1.125rem);
+	border: 1px solid var(--border);
+	background: var(--surface);
+	cursor: pointer;
+}
+
+.phase-choice:has(input:checked) {
+	border-color: var(--phase-accent);
+	background: var(--surface-raised);
+}
+
+.phase-choice:has(input:focus-visible) {
+	outline: var(--focus-ring-width) solid var(--focus);
+	outline-offset: var(--focus-ring-offset);
+	z-index: 1;
+}
+
+.phase-index {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: clamp(1.6rem, 4vw, 2.5rem);
+	aspect-ratio: 1;
+	border: 1px solid var(--border);
+	color: var(--muted);
+	font: 0.78rem var(--typeface-mono);
+}
+
+.phase-choice:has(input:checked) .phase-index {
+	border-color: var(--phase-accent);
+	color: var(--foreground);
+}
+
+.phase-name {
+	font: 650 clamp(0.82rem, 1.6vw, 1.1rem) var(--typeface-display);
+}
+
+.phase-check {
+	margin-inline-start: auto;
+	flex: none;
+}
+
+.phase-stage {
+	display: grid;
+	border: 1px solid var(--border);
+	border-inline-start: 3px solid var(--phase-accent);
+	background: var(--surface);
+}
+
+.phase-story {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	min-width: 0;
+	padding: clamp(1.125rem, 3.5vw, 3.5rem);
+}
+
+.phase-category {
+	color: var(--muted);
+	font: 600 0.75rem var(--typeface-mono);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.phase-story h2 {
+	margin-block: 0.625rem 0.75rem;
+	font:
+		var(--display-weight) clamp(2.125rem, 4.1vw, 4.55rem) / 1
+		var(--typeface-display);
+	letter-spacing: var(--display-tracking);
+	overflow-wrap: anywhere;
+}
+
+.phase-description {
+	max-width: 34ch;
+	line-height: 1.55;
+}
+
+.phase-launch,
+.phase-command {
+	margin-top: clamp(1rem, 3vw, 2rem);
+}
+
+.phase-launch {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.875rem;
+	min-height: 2.875rem;
+	border-radius: var(--radius-control);
+	padding: 0.625rem 1rem;
+	background: var(--primary);
+	color: var(--on-primary);
+	font-weight: 700;
+}
+
+.phase-command {
+	color: var(--muted);
+	font-size: 0.875rem;
+}
+
+.phase-command code {
+	color: var(--foreground);
+	font-family: var(--typeface-mono);
+}
+
+.phase-preview {
+	min-width: 0;
+	padding: 0.5rem;
+	background: var(--surface-raised);
+}
+
+.phase-preview img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 8 / 5;
+	object-fit: cover;
+}
+
+@media (min-width: 780px) {
+	.phase-stage {
+		grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+		grid-template-areas: "story preview";
+		align-items: stretch;
+	}
+
+	.phase-story {
+		grid-area: story;
+	}
+	.phase-preview {
+		grid-area: preview;
+		align-content: center;
+	}
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.phase-choice:not(:has(input:checked)):hover {
+		background: var(--surface-raised);
+	}
+	.project-back:hover {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+	.phase-launch:hover {
+		opacity: 0.88;
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (
+		pointer: fine
+	) {
+	.phase-launch {
+		transition: opacity var(--duration-instant) var(--ease-standard);
+	}
+}

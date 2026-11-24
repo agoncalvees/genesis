@@ -33,6 +33,9 @@ function Home() {
 					aria-label={`Páginas de ${appConfig.name}`}
 					className="flex flex-wrap gap-2 border-t border-border pt-4"
 				>
+					<Link className={linkStyle} to="/projetos">
+						Projetos
+					</Link>
 					<Link className={linkStyle} to="/demos">
 						Demos
 					</Link>

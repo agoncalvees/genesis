@@ -79,3 +79,17 @@ integração remota de IA.
   cores forçadas, movimento reduzido e estilos computados a 360/768/1440 px.
 - Avisos de build: diretivas de módulo de dependências e configuração
   de cor do console. Git preservado; nenhum push, merge remoto ou deploy.
+
+## Seletor de projetos · 24/11/2026
+
+Escopo desta sessão: página `/projetos`, link na home, inicializador local,
+capturas de prévia e exclusão da vitrine no `genesis:new`. Direção visual:
+uma tela de seleção de fases, em moldura escura, com arte das próprias
+experiências e indicação textual da seleção. Referência: a tela inicial do
+Entrelaços e o resultado cartográfico da versão C do ISOTERMA. Aceite:
+prévia navegável por teclado, abertura das duas aplicações independentes,
+vitrine disponível sem elas e validação de build e responsividade.
+
+- `bun run dev:projects` aguardou os dois apps antes de anunciar a URL. No Chromium, a partir da vitrine, a versão C do ISOTERMA produziu um resultado de simulação e o Entrelaços apresentou uma atividade após analisar as respostas. Foram inspecionadas capturas desktop e mobile. Uma variável pública sintética do processo pai não chegou a nenhum dos três servidores. O encerramento por sinal liberou as três portas.
+- Revisão independente levou à espera pela prontidão dos apps, ao isolamento do ambiente e ao idioma `pt-BR` do documento. A vitrine está nas prévias do build. A abertura das aplicações usa o inicializador local.
+- `bun run check`, `typecheck`, `design:check`, `build` e Vitest passaram (279 passaram, um opt-in de IA ignorado). Playwright: 59 em desenvolvimento na reexecução isolada, 13 no build Node. A primeira execução de desenvolvimento teve duas falhas de carregamento de módulos ao iniciar Vite simultaneamente no mesmo checkout. A cobertura da vitrine inclui seleção por setas, troca de prévia, idioma, 360 px sem overflow e zero violações nas regras axe avaliadas.

@@ -142,6 +142,7 @@ function run() {
 			removed.push(path);
 		}
 		sourcePackage.name = options.slug;
+		if (sourcePackage.scripts) delete sourcePackage.scripts["dev:projects"];
 		write("package.json", `${JSON.stringify(sourcePackage, null, "\t")}\n`);
 
 		const heading = options.name.replace(

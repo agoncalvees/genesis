@@ -13,6 +13,7 @@ const studioPaths = [
 for (const path of [
 	"/",
 	"/demos",
+	"/projetos",
 	"/demos/route-opt",
 	"/demos/doc-evidence",
 	...studioPaths,

@@ -23,9 +23,21 @@ Requer Bun 1.4.5 e Node 24.
 - `bun run test:e2e:prod` — compila com o preset Nitro `node-server`, serve `.output/` com Node e executa o projeto Playwright de produção.
 - `bun run bench` — executa o benchmark local.
 
+## Projetos
+
+Abra [`/projetos`](http://127.0.0.1:3000/projetos) para navegar pelas prévias do ISOTERMA e do Entrelaços. Para executar os dois projetos a partir do seletor:
+
+```sh
+bun run dev:projects
+```
+
+O comando inicia Genesis na porta 3000, ISOTERMA (versão C) na 3213 e Entrelaços na 3214. Quando o terminal mostrar a URL do seletor, escolha uma fase e use **Abrir projeto**. Pressione Ctrl+C para encerrar os três servidores. Com `bun run dev` ou no build do Genesis, a página apresenta as prévias.
+
+O inicializador procura os projetos em `../../experiments/isoterma/version-c/app` e `../../experiments/entrelacos`, a partir da raiz do Genesis. Em outra estrutura de pastas, defina `GENESIS_ISOTERMA_DIR` e `GENESIS_ENTRELACOS_DIR` com os diretórios das aplicações. Instale as dependências em cada repositório com `bun install --frozen-lockfile`. Use `PORT` para mudar a porta do Genesis.
+
 ## Demos e Studio
 
-A página inicial leva a `/demos`, `/studio` e `/smoke`. Em `/demos`, a comparação de rotas e a extração de evidências de documentos rodam no navegador, com exemplos sintéticos identificados e sem chamadas de IA. Os tempos de construção vêm dos [relatórios dos ensaios](docs/engineering/phase-07/).
+A página inicial também leva a `/demos`, `/studio` e `/smoke`. Em `/demos`, a comparação de rotas e a extração de evidências de documentos rodam no navegador, com exemplos sintéticos identificados e sem chamadas de IA. Os tempos de construção vêm dos [relatórios dos ensaios](docs/engineering/phase-07/).
 
 O Studio é público por padrão. Acesse o catálogo em `/studio/catalog` e as prévias em `/studio/layouts/$name`. Defina `VITE_STUDIO_DISABLED=1` antes de compilar para remover o link da página inicial e responder HTTP 404 nas rotas do Studio. O CI verifica as duas configurações com `bun run test:e2e:prod` e `VITE_STUDIO_DISABLED=1 bun run test:e2e:prod`.
 

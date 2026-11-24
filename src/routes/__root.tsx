@@ -1,9 +1,20 @@
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+	createRootRoute,
+	HeadContent,
+	Scripts,
+	useRouterState,
+} from "@tanstack/react-router";
 import { appConfig } from "../core/app-config";
 // Licensed fonts required by the active design/DESIGN.md (empty for system fonts).
 import "../design-system/themes/generated/product-fonts";
 
 import appCss from "../styles/base.css?url";
+
+declare module "@tanstack/react-router" {
+	interface StaticDataRouteOption {
+		language?: string;
+	}
+}
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -30,8 +41,11 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+	const language = useRouterState({
+		select: (state) => state.matches.at(-1)?.staticData.language ?? "en",
+	});
 	return (
-		<html lang="en">
+		<html lang={language}>
 			<head>
 				<HeadContent />
 			</head>

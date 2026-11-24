@@ -60,6 +60,8 @@ export function isLocalArtifact(path: string) {
 }
 
 const removedPrefixes = [
+	"public/projects/",
+	"src/projects/",
 	"src/features/route-opt/",
 	"src/features/doc-evidence/",
 	"src/studio/",
@@ -68,6 +70,9 @@ const removedPrefixes = [
 ];
 
 const removedFiles = new Set([
+	"scripts/dev-projects.ts",
+	"src/routes/projetos.tsx",
+	"tests/e2e/projects.spec.ts",
 	"tests/e2e/a11y.spec.ts",
 	"tests/e2e/demos.spec.ts",
 	"tests/e2e/doc-evidence.spec.ts",

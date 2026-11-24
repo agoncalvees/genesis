@@ -99,6 +99,22 @@ describe("genesis:new", () => {
 		);
 	});
 
+	test("excludes the project selector and local launcher from new products", () => {
+		const paths = [
+			"src/routes/projetos.tsx",
+			"src/projects/catalog.ts",
+			"public/projects/isoterma.jpg",
+			"scripts/dev-projects.ts",
+			"tests/e2e/projects.spec.ts",
+		];
+		expect(
+			createPlan({
+				...input,
+				tracked: [...paths, "src/design-system/index.ts"],
+			}).remove,
+		).toEqual(paths);
+	});
+
 	test("retains the existing design for neutral, missing worlds and missing engine", () => {
 		for (const overrides of [
 			{ world: "neutral" },

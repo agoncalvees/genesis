@@ -10,7 +10,7 @@ O destino deve estar ausente ou vazio e fora das árvores de trabalho registrada
 
 O comando clona o repositório local com o histórico e sem compartilhamento de objetos, remove o remoto `origin` e cria o branch no SHA registrado. Arquivos locais ignorados pelo Git ficam na origem. Se o commit de origem contiver artefatos como `.env`, `.vercel`, `node_modules`, `benchmarks/results` ou `test-results` versionados, o comando recusa a inicialização antes de clonar. A instalação e o build podem gerar seus próprios artefatos no destino.
 
-O nome da aplicação vem de `src/core/app-config.ts`. A página inicial recebe um texto provisório. Demos, Studio e testes exclusivos dessas páginas saem do clone. O smoke, o design system, as decisões de arquitetura e a documentação de engenharia e design continuam disponíveis. Os cinco documentos em `docs/product/` começam em branco, e `docs/STATUS.md` começa na fase 0 do produto.
+O nome da aplicação vem de `src/core/app-config.ts`. A página inicial recebe um texto provisório. Demos, Studio, a página Projetos, seus assets e seus testes exclusivos saem do clone. O inicializador local `dev:projects` também sai. O smoke, o design system, as decisões de arquitetura e a documentação de engenharia e design continuam disponíveis. Os cinco documentos em `docs/product/` começam em branco, e `docs/STATUS.md` começa na fase 0 do produto.
 
 Informe `--world neutral` para manter o design da origem. Para outro identificador, o comando executa `bun run design:apply <id>` quando tanto o script quanto `design/worlds/<id>/DESIGN.md` estiverem disponíveis no commit. Se algum deles faltar, ele preserva o design de origem e registra o motivo em `PROVENANCE.md`.
 
