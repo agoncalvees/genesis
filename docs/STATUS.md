@@ -4,7 +4,7 @@
 - Código de aplicação: scaffold TanStack Start, `src/core`, tokens neutros (branch `phase-01-scaffold`, sem push).
 - Versões/lockfile: pins da ADR 0001 instalados; `bun.lock` versionado.
 - Ambiente: instalação aprovada pelo responsável em 2026-11-24. `brew install node@24 oven-sh/bun/bun` + `brew link --force node@24` → node v24.22.3, npm 11.19.1, bun 1.4.5 em /opt/homebrew/bin.
-- Deploy: Vercel aprovado; será feito **manualmente pelo responsável** via import do repositório privado `agoncalvees/genesis` (decisão de 2026-11-24). Build local gera `.vercel/output` (nodejs24.x). `main` só terá o código após merge do PR #1. Credenciais Convex/OpenRouter não configuradas.
+- Deploy: **em produção** em https://genesis-alpha-two.vercel.app (deploy manual do responsável a partir de `main`, 2026-11-24). Verificado pelo coordenador: `/` e `/smoke` = 200, `/smoke` hidrata no Chromium sem erros de console; `/studio`, `/studio/catalog`, `/studio/layouts/workspace` = 404; assets JS públicos sem OPENROUTER/chave/token/código do Studio. Funções executam em `iad1` (edge `gru1`). Convex não configurado.
 - Regulamento e código prévio: reutilização **permitida**, confirmada pelo responsável em 2026-11-24 (fonte: declaração do responsável; texto oficial não anexado).
 - Revisão do frontend interno do Robin: não realizada (código não fornecido).
 
