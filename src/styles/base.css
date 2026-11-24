@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "../design-system/tokens/base.css";
+@import "../design-system/themes/product.css";
+
+/* Expose semantic tokens to Tailwind utilities (bg-surface, text-muted, ...). */
+@theme inline {
+	--color-background: var(--background);
+	--color-surface: var(--surface);
+	--color-surface-raised: var(--surface-raised);
+	--color-foreground: var(--foreground);
+	--color-muted: var(--muted);
+	--color-border: var(--border);
+	--color-primary: var(--primary);
+	--color-on-primary: var(--on-primary);
+	--color-accent: var(--accent);
+	--color-on-accent: var(--on-accent);
+	--color-focus: var(--focus);
+	--color-success: var(--success);
+	--color-on-success: var(--on-success);
+	--color-warning: var(--warning);
+	--color-on-warning: var(--on-warning);
+	--color-danger: var(--danger);
+	--color-on-danger: var(--on-danger);
+	--color-info: var(--info);
+	--color-on-info: var(--on-info);
+	--font-display: var(--typeface-display);
+	--font-body: var(--typeface-body);
+	--font-mono: var(--typeface-mono);
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--typeface-body);
+}
+
+:focus-visible {
+	outline: var(--focus-ring-width) solid var(--focus);
+	outline-offset: var(--focus-ring-offset);
+}
