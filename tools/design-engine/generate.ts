@@ -1,8 +1,22 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { exportTailwind, parseDesign } from "./adapter";
+import { fonts } from "./fonts";
 import { type Identity, normalize, type Tokens } from "./normalize";
 import { validate } from "./validate";
+
+/** Side-effect imports for the licensed fonts the active identity uses (deduplicated, stable order). */
+export function renderProductFonts(identity: Identity): string {
+	const imports = new Set<string>();
+	for (const stack of Object.values(identity.families)) {
+		for (const entry of stack.split(",")) {
+			const family = entry.trim().replace(/^(['"])(.+)\1$/, "$2");
+			for (const path of fonts[family]?.imports ?? []) imports.add(path);
+		}
+	}
+	const lines = [...imports].map((path) => `import "${path}";\n`).join("");
+	return `// Gerado por bun run design:build. Edite o DESIGN.md de origem.\n${lines || "export {};\n"}`;
+}
 
 export const generatedDirectory = "src/design-system/themes/generated";
 export const productPath = "design/DESIGN.md";
@@ -131,6 +145,7 @@ export function renderFiles(product = readFileSync(productPath, "utf8")) {
 
 	return {
 		[join(generatedDirectory, "product.css")]: renderProduct(active),
+		[join(generatedDirectory, "product-fonts.ts")]: renderProductFonts(active),
 		[join(generatedDirectory, "worlds.css")]:
 			header +
 			worlds

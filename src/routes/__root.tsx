@@ -1,5 +1,7 @@
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { appConfig } from "../core/app-config";
+// Licensed fonts required by the active design/DESIGN.md (empty for system fonts).
+import "../design-system/themes/generated/product-fonts";
 
 import appCss from "../styles/base.css?url";
 
