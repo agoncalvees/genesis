@@ -62,7 +62,13 @@ test("the comparison and layout skip links are keyboard operable", async ({
 	page,
 }) => {
 	await openCatalog(page);
-	const slider = page.getByRole("slider", { name: "After image revealed" });
+	await expect(
+		page.getByRole("img", { name: "Before: four scattered blocks" }),
+	).toBeVisible();
+	await expect(
+		page.getByRole("img", { name: "After: four blocks aligned in a row" }),
+	).toBeVisible();
+	const slider = page.getByRole("slider", { name: "After content revealed" });
 	await slider.focus();
 	await slider.press("End");
 	await expect(slider).toHaveAttribute(

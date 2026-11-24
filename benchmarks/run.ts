@@ -30,6 +30,26 @@ function builtinSort(values: readonly number[]): number[] {
 	return [...values].sort((a, b) => a - b);
 }
 
+/**
+ * Quality metric (not latency): adjacent pairs still out of order in the
+ * returned array. Both implementations must report 0 on every repetition;
+ * the runner records the raw value and derives n/mean/median/p95/min/max/
+ * stddev for it alongside the timing statistics.
+ */
+function unsortedAdjacentPairs(values: readonly number[]): number {
+	let count = 0;
+	for (let index = 1; index < values.length; index++) {
+		if (values[index - 1] > values[index]) count++;
+	}
+	return count;
+}
+
+function withQuality(sorted: readonly number[]): {
+	metrics: Record<string, number>;
+} {
+	return { metrics: { unsortedAdjacentPairs: unsortedAdjacentPairs(sorted) } };
+}
+
 /** Comparison implementation: insertion sort on a copy, for small arrays only. */
 function insertionSort(values: readonly number[]): number[] {
 	const sorted = [...values];
@@ -69,13 +89,17 @@ const definition = defineBenchmark({
 		{
 			name: BASELINE_IMPLEMENTATION,
 			run: () => {
-				for (const values of fixture) builtinSort(values);
+				let sample: readonly number[] = [];
+				for (const values of fixture) sample = builtinSort(values);
+				return withQuality(sample);
 			},
 		},
 		{
 			name: "insertion-sort",
 			run: () => {
-				for (const values of fixture) insertionSort(values);
+				let sample: readonly number[] = [];
+				for (const values of fixture) sample = insertionSort(values);
+				return withQuality(sample);
 			},
 		},
 	],

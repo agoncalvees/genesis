@@ -1,14 +1,38 @@
-import { useId, useState } from "react";
+import { type ReactNode, useId, useState } from "react";
 
 type ComparisonImage = { src: string; alt: string };
+type ComparisonContent = ComparisonImage | ReactNode;
+
+function isImage(content: ComparisonContent): content is ComparisonImage {
+	return (
+		typeof content === "object" &&
+		content !== null &&
+		"src" in content &&
+		typeof content.src === "string" &&
+		"alt" in content &&
+		typeof content.alt === "string"
+	);
+}
+
+function renderContent(content: ComparisonContent) {
+	return isImage(content) ? (
+		<img
+			src={content.src}
+			alt={content.alt}
+			className="size-full object-contain"
+		/>
+	) : (
+		content
+	);
+}
 
 export function BeforeAfter({
 	before,
 	after,
 	label = "Before and after comparison",
 }: {
-	before: ComparisonImage;
-	after: ComparisonImage;
+	before: ComparisonContent;
+	after: ComparisonContent;
 	label?: string;
 }) {
 	const id = useId();
@@ -18,20 +42,12 @@ export function BeforeAfter({
 		<figure className="grid min-w-0 gap-3">
 			<figcaption className="text-sm font-medium">{label}</figcaption>
 			<div className="relative isolate aspect-video overflow-hidden rounded-md bg-surface ring-1 ring-border">
-				<img
-					src={before.src}
-					alt={before.alt}
-					className="absolute inset-0 size-full object-contain"
-				/>
+				<div className="absolute inset-0">{renderContent(before)}</div>
 				<div
 					className="absolute inset-0 bg-surface"
 					style={{ clipPath: `inset(0 0 0 ${100 - reveal}%)` }}
 				>
-					<img
-						src={after.src}
-						alt={after.alt}
-						className="size-full object-contain"
-					/>
+					{renderContent(after)}
 				</div>
 				{reveal > 0 && reveal < 100 && (
 					<div
@@ -43,7 +59,7 @@ export function BeforeAfter({
 			</div>
 			<div className="grid gap-1">
 				<label htmlFor={id} className="text-sm font-medium">
-					After image revealed
+					{isImage(after) ? "After image revealed" : "After content revealed"}
 				</label>
 				<input
 					className="h-11 w-full cursor-pointer accent-primary"

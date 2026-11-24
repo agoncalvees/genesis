@@ -7,17 +7,23 @@ import { Heading, Text } from "../primitives/typography";
 
 type ResultPanelProps<T> = {
 	title: string;
-	renderResult: (data: T) => ReactNode;
 	headingLevel?: 2 | 3 | 4 | 5 | 6;
+	// Shared fields let callers pass a status variable and its possible payloads together.
+	data?: T | null;
+	error?: AppError;
+	feedback?: ReactNode;
+	onRetry?: () => void;
+	renderResult?: (data: T) => ReactNode;
+	isEmpty?: (data: T) => boolean;
 } & (
-	| { status: "idle" | "cancelled" }
-	| { status: "running"; feedback?: ReactNode }
+	| { status: "idle" | "running" | "cancelled" }
 	| {
 			status: "completed";
 			data: T | null | undefined;
-			isEmpty?: (data: T) => boolean;
+			renderResult: (data: T) => ReactNode;
 	  }
-	| { status: "failed"; error: AppError; onRetry?: () => void }
+	| { status: "completed"; data: null | undefined }
+	| { status: "failed"; error: AppError }
 );
 
 const states = {
@@ -33,8 +39,7 @@ export function ResultPanel<T>(props: ResultPanelProps<T>) {
 	const { title, headingLevel = 2, status } = props;
 	const titleId = useId();
 	const data = status === "completed" ? props.data : undefined;
-	const hasData =
-		data != null && !(status === "completed" && props.isEmpty?.(data));
+	const hasData = data != null && !props.isEmpty?.(data);
 	const state = toUiState(status, hasData);
 	const { label, tone } = states[state];
 	const subheading = Math.min(headingLevel + 1, 6) as typeof headingLevel;
@@ -49,7 +54,7 @@ export function ResultPanel<T>(props: ResultPanelProps<T>) {
 			break;
 		case "completed":
 			content = hasData ? (
-				props.renderResult(data)
+				props.renderResult?.(data)
 			) : (
 				<EmptyState
 					title="No results"

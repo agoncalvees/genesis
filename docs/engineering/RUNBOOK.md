@@ -66,7 +66,8 @@ Papéis: coordenador (arquitetura/integração), mecanismo central, experiência
 - Criar arquivo em `src/routes/` com `createFileRoute("/caminho")({ component: ... })` — modelo real: `src/routes/smoke.tsx:1-22` (`/smoke`), `src/routes/index.tsx` (`/`).
 - `src/routeTree.gen.ts` é gerado pelo plugin `tanstackStart()` em `vite.config.ts:11`; **não** editar na mão.
 - `src/routes/__root.tsx` controla `<head>`/`<html lang>`; ajustar título/meta ali se necessário.
-- Rotas são **arquivo coordenado** (`ORCHESTRATION.md:30`): combinar com o coordenador. Validar com `bun run dev` (`/smoke`) e `bun run test:e2e`; E2E em worktrees irmãs disputa a porta 3000 (`--strictPort`) — serializar (`ORCHESTRATION.md:35`).
+- Coordene alterações de rotas conforme `ORCHESTRATION.md:30`. Valide com `bun run dev` (`/smoke`) e `bun run test:e2e`. Para rodar em worktrees simultâneas, atribua uma porta por processo, por exemplo `PORT=3100 bun run test:e2e`. `dev` e `test:e2e:prod` também aceitam `PORT`, com padrão 3000.
+- Em formulários renderizados no servidor, use `<Button type="submit" requireHydration>` quando o envio deve aguardar o cliente. Use `useHydrated()` de `src/core/hydration.ts` para outros controles que dependem da hidratação, como em `/smoke`.
 
 ### 3.3 Adicionar feature sem tocar no core
 
@@ -94,7 +95,9 @@ Importar do barrel `src/design-system/index.ts:15-21` (`MotionProvider`, `Proces
 
 | Componente | Props reais (arquivo) | Uso |
 |---|---|---|
-| `ResultPanel<T>` | `title`, `renderResult(data)`, `headingLevel?`; união: `status: idle\|cancelled`, `running` + `feedback?`, `completed` + `data` + `isEmpty?`, `failed` + `error: AppError` + `onRetry?` (`src/design-system/patterns/result-panel.tsx:8-21`) | 6 estados via `toUiState(status, hasData)` (`src/core/contracts.ts:45-58`); expõe `data-state` e `<Badge role="status">` para testes (`:80-93`) |
+| `ResultPanel<T>` | `title`, `status` e `headingLevel?`. O estado `completed` exige `data` e exige `renderResult(data)` se houver dados. Use `isEmpty?` para identificar dados vazios. `failed` exige `error: AppError` e aceita `onRetry?`. `running` aceita `feedback?`. Para passar uma variável `status`, forneça os campos exigidos pelos estados que ela puder assumir. | Expõe seis estados de interface via `toUiState(status, hasData)`, `data-state` e `role="status"`. |
+| `BeforeAfter` | `before` e `after` aceitam descritores `{ src, alt }` ou conteúdo React. Inclua nomes acessíveis nas ilustrações. | Controle de comparação ajustável por teclado. O catálogo mostra dois SVGs. |
+| `EvidenceExcerpt` | `text`, `start` inclusivo, `end` exclusivo e `context?` por lado, em unidades UTF-16. `label?` descreve o destaque. | Marca o trecho e indica cortes no contexto com reticências. Um intervalo inválido exibe o texto integral. |
 | `ProcessingFeedback` | `steps: readonly ProcessStep[]`, `label?`, `progress?: number \| null` (`src/design-system/motion/processing-feedback.tsx:7-15`) | `Progress` + `ProcessTimeline` durante execução; passar como `feedback` do `ResultPanel` |
 | `Metric` | `result: EvaluationResult`, `locale?`, `format?: Intl.NumberFormatOptions` (`src/design-system/patterns/metric.tsx:3-11`) | mostra `metric`, `value`+`unit`, delta vs `baseline` e `sampleSize` (`:12-43`) |
 

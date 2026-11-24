@@ -14,6 +14,7 @@ import {
 	Dialog,
 	EmptyState,
 	ErrorState,
+	EvidenceExcerpt,
 	Expandable,
 	FadeIn,
 	Field,
@@ -404,7 +405,7 @@ const fixtures = {
 	cancelled: { status: "cancelled" },
 } as const;
 
-function comparisonImage(organized: boolean) {
+function ComparisonGraphic({ organized }: { organized: boolean }) {
 	const positions = organized
 		? [
 				[42, 24],
@@ -418,14 +419,32 @@ function comparisonImage(organized: boolean) {
 				[193, 55],
 				[255, 105],
 			];
-	const tiles = positions
-		.map(
-			([x, y]) =>
-				`<rect x="${x}" y="${y}" width="30" height="30" rx="4" fill="CanvasText"/>`,
-		)
-		.join("");
-	return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180"><rect width="320" height="180" fill="Canvas"/>${tiles}</svg>`)}`;
+	return (
+		<svg role="img" viewBox="0 0 320 180" className="size-full text-foreground">
+			<title>
+				{organized
+					? "After: four blocks aligned in a row"
+					: "Before: four scattered blocks"}
+			</title>
+			{positions.map(([x, y]) => (
+				<rect
+					key={x}
+					x={x}
+					y={y}
+					width="30"
+					height="30"
+					rx="4"
+					fill="currentColor"
+				/>
+			))}
+		</svg>
+	);
 }
+
+const fixtureSource =
+	"Fixture record. Review confirmed four blocks were aligned. The record was archived after review.";
+const fixtureHighlight = "four blocks were aligned";
+const fixtureStart = fixtureSource.indexOf(fixtureHighlight);
 
 function ResultExamples() {
 	const [state, setState] = useState<CatalogResultState>("idle");
@@ -466,14 +485,17 @@ function ResultExamples() {
 					<Heading level={3}>Before and after</Heading>
 					<BeforeAfter
 						label="Fixture comparison"
-						before={{
-							src: comparisonImage(false),
-							alt: "Before: four blocks scattered across the canvas.",
-						}}
-						after={{
-							src: comparisonImage(true),
-							alt: "After: four blocks aligned in a row.",
-						}}
+						before={<ComparisonGraphic organized={false} />}
+						after={<ComparisonGraphic organized />}
+					/>
+				</Card>
+				<Card className="grid content-start gap-4">
+					<Heading level={3}>Fixture evidence excerpt</Heading>
+					<EvidenceExcerpt
+						text={fixtureSource}
+						start={fixtureStart}
+						end={fixtureStart + fixtureHighlight.length}
+						context={15}
 					/>
 				</Card>
 			</Grid>

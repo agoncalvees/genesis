@@ -37,8 +37,8 @@ anteriormente, `baseline` é `null` com justificativa em `baselineJustification`
 Campos, na ordem estável usada em JSON e CSV: `benchmark`, `caseName`,
 `dataset`, `datasetSource`, `datasetVersion`, `codeVersion`, `codeDirty`,
 `modelVersion`, `config`, `baseline`, `baselineJustification`, `metric`,
-`value`, `unit`, `sampleSize`, `stats`, `rawResults`, `errors`, `durationMs`,
-`procedure`, `limitations`, `runtime`, `date`.
+`value`, `unit`, `sampleSize`, `stats`, `metricStats`, `rawResults`, `errors`,
+`durationMs`, `procedure`, `limitations`, `runtime`, `date`.
 
 `codeVersion` é o SHA curto do `git rev-parse --short HEAD` e `codeDirty`
 indica se `git status --porcelain` estava não vazio no momento da medição
@@ -50,6 +50,30 @@ apenas das medições bem-sucedidas. Um valor temporizado que lançou erro
 permanece em `rawResults` com `ok: false` e também em `errors`; nunca é
 removido silenciosamente. `value` é a mediana e `sampleSize` é `stats.n`.
 
+`metricStats` repete as mesmas sete estatísticas para cada métrica de qualidade
+retornada por `run()`, com os nomes das métricas em ordem alfabética e `{}`
+quando nenhuma métrica é retornada.
+
+## Métricas de qualidade por repetição
+
+Um caso pode retornar `{ metrics: Record<string, number> }`: o runner grava os
+valores finitos em `rawResults[].metrics` na repetição em que foram obtidos e
+calcula `metricStats[nome]` somente com os valores bem-sucedidos que trouxeram
+aquela métrica. Repetições que lançaram erro não têm `metrics`; valores
+não-numéricos, não-finitos ou um objeto `metrics` malformado são ignorados em
+vez de virarem zero. Um retorno com qualquer outra forma continua medindo
+apenas a duração, como antes.
+
+O benchmark neutro retorna `unsortedAdjacentPairs` (pares adjacentes ainda fora
+de ordem na saída ordenada): é uma checagem de correção, igual a zero nas duas
+implementações em toda repetição. A coluna aparece em JSON e CSV com os mesmos
+valores; o CSV usa uma coluna aninhada `metricStats`, equivalente à do JSON.
+
+Para comparar listas esperadas e obtidas (precisão/recall/F1), use
+`scoreClassification` de `src/evidence/classification.ts`: contagem por
+multiconjunto da chave fornecida, duplicatas com multiplicidade e zeros
+definidos quando o denominador é zero (`0`, nunca `NaN`).
+
 Cada entrada de `errors` traz `name` (classe do erro), `correlationId`
 (UUID), `caseName`, `phase`, `repetition` e — somente com
 `includeErrorMessages: true` na definição — uma `message` redigida. Por padrão
@@ -59,13 +83,15 @@ remover texto inofensivo. O benchmark neutro mantém a opção desligada.
 
 ## Serialização
 
-JSON: UTF-8, indentação de 2 espaços, chaves na ordem documentada, objetos
-aninhados com chaves ordenadas recursivamente. CSV: UTF-8, cabeçalho com os
-mesmos campos, todas as células entre aspas, aspas internas duplicadas, fim de
-linha LF. `config`, `stats`, `rawResults`, `errors`, `limitations` e `runtime`
-são serializados como JSON compacto com chaves ordenadas. `baseline` ausente é
-`null` no JSON e célula vazia no CSV. Números não finitos (amostra vazia) viram
-`null`, nunca `0` inventado.
+JSON: UTF-8, chaves na ordem documentada, indentação com tabs (largura de linha
+80, tab contado como duas colunas), arrays curtos em uma linha e objetos com
+uma chave por linha — o mesmo estilo do Biome, então o artefato gerado passa em
+`bun run check` sem reformatação manual. CSV: UTF-8, cabeçalho com os mesmos
+campos, todas as células entre aspas, aspas internas duplicadas, fim de linha
+LF. `config`, `stats`, `metricStats`, `rawResults`, `errors`, `limitations` e
+`runtime` são serializados como JSON com chaves ordenadas recursivamente.
+`baseline` ausente é `null` no JSON e célula vazia no CSV. Números não finitos
+(amostra vazia) viram `null`, nunca `0` inventado.
 
 ## Limitações
 

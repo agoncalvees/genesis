@@ -1,5 +1,13 @@
-import { cleanup, render, screen, within } from "@testing-library/react";
+import {
+	act,
+	cleanup,
+	render,
+	screen,
+	waitFor,
+	within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { afterEach, expect, test, vi } from "vitest";
 import {
@@ -51,6 +59,43 @@ test("Button safely disables loading interactions and IconButton has a name", as
 	expect(screen.getByRole("button", { name: "Close" })).toBeTruthy();
 });
 
+test("a submit button can stay disabled from SSR until hydration", async () => {
+	const onSubmit = vi.fn((event: { preventDefault: () => void }) =>
+		event.preventDefault(),
+	);
+	const form = (
+		<form onSubmit={onSubmit}>
+			<Button type="submit" requireHydration>
+				Save
+			</Button>
+			<Button>Cancel</Button>
+		</form>
+	);
+	const container = document.createElement("div");
+	container.innerHTML = renderToString(form);
+	document.body.append(container);
+	const submit = within(container).getByRole<HTMLButtonElement>("button", {
+		name: "Save",
+	});
+	expect(submit.disabled).toBe(true);
+	expect(
+		within(container).getByRole<HTMLButtonElement>("button", { name: "Cancel" })
+			.disabled,
+	).toBe(false);
+	await userEvent.click(submit);
+	expect(onSubmit).not.toHaveBeenCalled();
+
+	const root = hydrateRoot(container, form);
+	try {
+		await waitFor(() => expect(submit.disabled).toBe(false));
+		await userEvent.click(submit);
+		expect(onSubmit).toHaveBeenCalledOnce();
+	} finally {
+		act(() => root.unmount());
+		container.remove();
+	}
+});
+
 test("Field connects Input and Textarea to labels, help and text errors", async () => {
 	render(
 		<>
@@ -82,6 +127,7 @@ test("Select has a field name and accepts an option by keyboard", async () => {
 	render(
 		<Field label="Choice">
 			<Select
+				defaultValue="a"
 				options={[
 					{ value: "a", label: "Option A" },
 					{ value: "b", label: "Option B" },
@@ -93,10 +139,20 @@ test("Select has a field name and accepts an option by keyboard", async () => {
 	expect(document.activeElement).toBe(
 		screen.getByRole("combobox", { name: "Choice" }),
 	);
-	await user.keyboard("[Space][ArrowDown][Enter]");
+	await user.keyboard("[Space]");
+	const first = await screen.findByRole("option", { name: "Option A" });
+	await waitFor(() =>
+		expect(first.hasAttribute("data-highlighted")).toBe(true),
+	);
+	await user.keyboard("[ArrowDown]");
+	const second = screen.getByRole("option", { name: "Option B" });
+	await waitFor(() =>
+		expect(second.hasAttribute("data-highlighted")).toBe(true),
+	);
+	await user.keyboard("[Enter]");
 	expect(
 		screen.getByRole("combobox", { name: "Choice" }).textContent,
-	).toContain("Option A");
+	).toContain("Option B");
 });
 
 test("Checkbox and Switch accept Space and expose checked state", async () => {

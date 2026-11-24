@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
+import { useHydrated } from "../../core/hydration";
 import { cn } from "../lib/cn";
 import { SpinnerMark } from "./feedback";
 
@@ -30,12 +31,14 @@ const buttonStyles = cva(
 export type ButtonProps = ComponentProps<"button"> &
 	VariantProps<typeof buttonStyles> & {
 		loading?: boolean;
+		requireHydration?: boolean;
 	};
 
 export function Button({
 	variant,
 	size,
 	loading = false,
+	requireHydration = false,
 	disabled,
 	type = "button",
 	className,
@@ -43,11 +46,13 @@ export function Button({
 	"aria-busy": ariaBusy,
 	...props
 }: ButtonProps) {
+	const hydrated = useHydrated();
+
 	return (
 		<button
 			{...props}
 			type={type}
-			disabled={disabled || loading}
+			disabled={disabled || loading || (requireHydration && !hydrated)}
 			aria-busy={loading || ariaBusy}
 			className={cn(buttonStyles({ variant, size }), className)}
 		>

@@ -3,8 +3,11 @@
  *
  * It measures pure functions with `performance.now()`, records every measured
  * iteration (including failures), derives statistics only from successful raw
- * values and never invents a missing result. No IO and no optional features:
- * this module only imports a shared type from `core/`.
+ * values and never invents a missing result. A case may also return
+ * `{ metrics: Record<string, number> }`: those numeric values are recorded per
+ * repetition and summarised with the same statistics as duration, so quality
+ * and latency can be compared in the same evidence record. No IO and no
+ * optional features: this module only imports a shared type from `core/`.
  */
 
 import type { EvaluationResult } from "../core/contracts";
@@ -12,7 +15,11 @@ import type { EvaluationResult } from "../core/contracts";
 export type BenchmarkCase = {
 	/** Stable identifier of the implementation being measured. */
 	name: string;
-	/** The operation to time. It must close over its own input. */
+	/**
+	 * The operation to time. It must close over its own input. It may return
+	 * `{ metrics: Record<string, number> }` to record per-repetition quality
+	 * values; any other return shape is ignored (only duration is measured).
+	 */
 	run: () => unknown;
 };
 
@@ -65,6 +72,11 @@ export type RawMeasurement = {
 	iteration: number;
 	duration: number;
 	ok: boolean;
+	/**
+	 * Finite numeric values returned by `run()` for this repetition. Present
+	 * only when the call succeeded and actually returned usable metrics.
+	 */
+	metrics?: Record<string, number>;
 };
 
 /**
@@ -100,6 +112,12 @@ export type BenchmarkRecord = EvaluationResult & {
 	unit: string;
 	sampleSize: number;
 	stats: BenchmarkStats;
+	/**
+	 * Per-metric statistics, keyed by metric name and computed from the raw
+	 * values of successful repetitions that reported that metric. Names are
+	 * sorted; an empty object means no case returned usable metrics.
+	 */
+	metricStats?: Record<string, BenchmarkStats>;
 	rawResults: RawMeasurement[];
 	errors: MeasurementError[];
 	durationMs: number;
@@ -313,6 +331,63 @@ export function computeStats(values: readonly number[]): BenchmarkStats {
 	};
 }
 
+/**
+ * Recognise the documented `{ metrics: Record<string, number> }` return shape.
+ * Only finite numbers are kept; non-numeric or non-finite entries and a
+ * malformed/empty `metrics` value are treated as "no metrics" rather than a
+ * fabricated zero. Any other return value is ignored.
+ */
+export function extractMetrics(
+	value: unknown,
+): Record<string, number> | undefined {
+	if (typeof value !== "object" || value === null || Array.isArray(value)) {
+		return undefined;
+	}
+	const metrics = (value as { metrics?: unknown }).metrics;
+	if (
+		typeof metrics !== "object" ||
+		metrics === null ||
+		Array.isArray(metrics)
+	) {
+		return undefined;
+	}
+	const result: Record<string, number> = {};
+	for (const [name, rawValue] of Object.entries(metrics)) {
+		if (typeof rawValue === "number" && Number.isFinite(rawValue)) {
+			result[name] = rawValue;
+		}
+	}
+	return Object.keys(result).length > 0 ? result : undefined;
+}
+
+/**
+ * Compute the same statistics as `computeStats` for every metric name present
+ * in the successful measurements. Names are sorted for a stable export; a
+ * metric with no finite values is omitted instead of getting invented zeros.
+ */
+export function computeMetricStats(
+	rawResults: readonly RawMeasurement[],
+): Record<string, BenchmarkStats> {
+	const names = new Set<string>();
+	for (const measurement of rawResults) {
+		if (!measurement.ok || !measurement.metrics) continue;
+		for (const name of Object.keys(measurement.metrics)) names.add(name);
+	}
+
+	const stats: Record<string, BenchmarkStats> = {};
+	for (const name of [...names].sort()) {
+		const values: number[] = [];
+		for (const measurement of rawResults) {
+			const value = measurement.ok ? measurement.metrics?.[name] : undefined;
+			if (typeof value === "number" && Number.isFinite(value)) {
+				values.push(value);
+			}
+		}
+		if (values.length > 0) stats[name] = computeStats(values);
+	}
+	return stats;
+}
+
 function requireText(value: string, field: string): void {
 	if (typeof value !== "string" || value.trim() === "") {
 		throw new BenchmarkDefinitionError(`${field} must be a non-empty string`);
@@ -383,6 +458,7 @@ function buildProcedure(definition: BenchmarkDefinition): string {
 		`Medição: ${definition.repetitions} repetições por caso, temporizadas com performance.now() no mesmo processo.`,
 		"Cada medição bruta é registrada em rawResults, inclusive as que falharam; falhas também aparecem em errors.",
 		"Estatísticas (n, mean, median, p95, min, max, stddev) usam apenas valores brutos bem-sucedidos; p95 por interpolação linear e stddev amostral (n-1).",
+		"Métricas de qualidade: quando run() retorna { metrics: Record<string, number> }, cada valor finito é registrado em rawResults[].metrics e as mesmas estatísticas são calculadas por métrica em metricStats.",
 		"Nenhum valor ausente é preenchido; não comparar tarefas ou configurações diferentes sem normalização.",
 	].join(" ");
 }
@@ -439,8 +515,9 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 		for (let iteration = 1; iteration <= definition.repetitions; iteration++) {
 			const startedAt = performance.now();
 			let ok = true;
+			let returned: unknown;
 			try {
-				benchmarkCase.run();
+				returned = benchmarkCase.run();
 			} catch (error) {
 				ok = false;
 				errors.push(
@@ -453,12 +530,14 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 				);
 			}
 			const duration = performance.now() - startedAt;
+			const metrics = ok ? extractMetrics(returned) : undefined;
 			rawResults.push({
 				case: benchmarkCase.name,
 				phase: "measured",
 				iteration,
 				duration,
 				ok,
+				...(metrics ? { metrics } : {}),
 			});
 		}
 
@@ -466,6 +545,7 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 			.filter((measurement) => measurement.ok)
 			.map((measurement) => measurement.duration);
 		const stats = computeStats(successful);
+		const metricStats = computeMetricStats(rawResults);
 
 		records.push({
 			metric: definition.metric,
@@ -484,6 +564,7 @@ export function run(definition: BenchmarkDefinition): BenchmarkRecord[] {
 			config,
 			baselineJustification,
 			stats,
+			metricStats,
 			rawResults,
 			errors,
 			durationMs: performance.now() - caseStartedAt,

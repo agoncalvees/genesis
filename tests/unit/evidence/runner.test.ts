@@ -3,9 +3,12 @@ import type { EvaluationResult } from "../../../src/core/contracts";
 import { toJson } from "../../../src/evidence/export";
 import {
 	BenchmarkDefinitionError,
+	computeMetricStats,
+	computeStats,
 	defineBenchmark,
 	detectCodeDirty,
 	detectCodeVersion,
+	extractMetrics,
 	type GitResult,
 	type GitRunner,
 	redactSecrets,
@@ -297,6 +300,125 @@ describe("evidence runner", () => {
 		)[0];
 		const ids = record.errors.map((error) => error.correlationId);
 		expect(new Set(ids).size).toBe(3);
+	});
+});
+
+describe("quality metrics returned by a case", () => {
+	test("records every repetition's metrics and derives the same stats as duration", () => {
+		let call = 0;
+		const record = run(
+			defineBenchmark({
+				...BASE,
+				cases: [
+					{
+						name: "quality",
+						run: () => ({ metrics: { distance: call++, anchor: 2 } }),
+					},
+				],
+				warmup: 1,
+				repetitions: 5,
+			}),
+		)[0];
+
+		expect(call).toBe(6); // warm-up return value is discarded, not recorded
+		expect(record.rawResults).toHaveLength(5);
+		expect(record.rawResults.map((item) => item.metrics?.distance)).toEqual([
+			1, 2, 3, 4, 5,
+		]);
+		expect(record.rawResults.every((item) => item.metrics?.anchor === 2)).toBe(
+			true,
+		);
+		expect(Object.keys(record.metricStats ?? {})).toEqual([
+			"anchor",
+			"distance",
+		]);
+		expect(record.metricStats?.distance).toEqual(computeStats([1, 2, 3, 4, 5]));
+		expect(record.metricStats?.anchor).toEqual(computeStats([2, 2, 2, 2, 2]));
+		expect(record.stats.n).toBe(5);
+		expect(record.procedure).toContain("Métricas de qualidade");
+		expect(JSON.parse(toJson([record]))[0].metricStats.distance.n).toBe(5);
+	});
+
+	test("failed repetitions and malformed returns never invent metrics", () => {
+		let call = 0;
+		const record = run(
+			defineBenchmark({
+				...BASE,
+				cases: [
+					{
+						name: "mixed",
+						run: () => {
+							call++;
+							if (call === 2) throw new Error("failed repetition");
+							if (call === 3) {
+								return { metrics: { distance: Number.NaN, bad: "x" } };
+							}
+							if (call === 4) return { metrics: {} };
+							return { metrics: { distance: 7 } };
+						},
+					},
+				],
+				warmup: 1,
+				repetitions: 4,
+			}),
+		)[0];
+
+		expect(call).toBe(5);
+		expect(record.rawResults[0].ok).toBe(false);
+		expect(record.rawResults[0]).not.toHaveProperty("metrics");
+		expect(record.rawResults.slice(1, 3).every((item) => !item.metrics)).toBe(
+			true,
+		);
+		expect(record.rawResults[3].metrics).toEqual({ distance: 7 });
+		expect(record.metricStats).toEqual({ distance: computeStats([7]) });
+	});
+
+	test("extractMetrics accepts only finite numeric entries", () => {
+		const source = { metrics: { a: 1, b: Number.NaN, c: "x", d: null } };
+		expect(extractMetrics(source)).toEqual({ a: 1 });
+		expect(source.metrics).toEqual({ a: 1, b: Number.NaN, c: "x", d: null });
+		for (const value of [
+			null,
+			42,
+			"x",
+			[],
+			{},
+			{ metrics: [] },
+			{ metrics: {} },
+		]) {
+			expect(extractMetrics(value)).toBeUndefined();
+		}
+	});
+
+	test("computeMetricStats omits names with no finite values", () => {
+		expect(computeMetricStats([])).toEqual({});
+		const stats = computeMetricStats([
+			{
+				case: "c",
+				phase: "measured",
+				iteration: 1,
+				duration: 1,
+				ok: true,
+				metrics: { a: 1 },
+			},
+			{
+				case: "c",
+				phase: "measured",
+				iteration: 2,
+				duration: 1,
+				ok: false,
+			},
+			{
+				case: "c",
+				phase: "measured",
+				iteration: 3,
+				duration: 1,
+				ok: true,
+				metrics: { b: Number.NaN },
+			},
+		]);
+		expect(Object.keys(stats)).toEqual(["a"]);
+		expect(stats.a).toEqual(computeStats([1]));
 	});
 });
 

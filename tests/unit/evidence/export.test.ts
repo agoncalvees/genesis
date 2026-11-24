@@ -140,4 +140,59 @@ describe("evidence export", () => {
 		expect(toJson([])).toBe("[]\n");
 		expect(parseCsv(toCsv([]))).toEqual([]);
 	});
+
+	test("per-metric stats are a stable column and round-trip in both formats", () => {
+		const record = fixtureRecord({
+			metricStats: {
+				distance: fixtureRecord().stats,
+				anchor: {
+					n: 2,
+					mean: 2,
+					median: 2,
+					p95: 2,
+					min: 2,
+					max: 2,
+					stddev: 0,
+				},
+			},
+			rawResults: [
+				{
+					case: "flaky",
+					phase: "measured",
+					iteration: 1,
+					duration: 1,
+					ok: true,
+					metrics: { distance: 1, anchor: 2 },
+				},
+			],
+		});
+		const fields = [...RECORD_FIELDS];
+		expect(fields[fields.indexOf("stats") + 1]).toBe("metricStats");
+
+		const json = JSON.parse(toJson([record])) as Record<string, unknown>[];
+		expect(Object.keys(json[0].metricStats as object)).toEqual([
+			"anchor",
+			"distance",
+		]);
+		expect(parseCsv(toCsv([record]))).toEqual(json);
+	});
+
+	test("records without metrics still expose an empty metricStats column", () => {
+		const record = fixtureRecord();
+		const json = JSON.parse(toJson([record])) as Record<string, unknown>[];
+		expect(json[0].metricStats).toEqual({});
+		expect(parseCsv(toCsv([record]))[0].metricStats).toEqual({});
+	});
+
+	test("JSON follows Biome's layout: tabs, inline short arrays, one key per line", () => {
+		const json = toJson([
+			fixtureRecord({ config: { tags: ["a", "b"], zeta: 1 } }),
+		]);
+		expect(json.startsWith("[\n\t{\n")).toBe(true);
+		expect(json.endsWith("\n]\n")).toBe(true);
+		expect(json).not.toMatch(/\n {2}/);
+		expect(json).toContain('\t\t"errors": []');
+		expect(json).toContain('\t\t\t"tags": ["a", "b"]');
+		expect(json).toContain('\t\t"stats": {\n');
+	});
 });

@@ -19,6 +19,7 @@ Requer Bun 1.4.5 e Node 24.
 - `bun run build` — saída Vercel em `.vercel/output/`
 - `bun run check` (Biome), `bun run typecheck` (TS 7 strict)
 - `bun run test` (Vitest: projetos `unit` e `component`), `bun run test:e2e` (Playwright, Chromium)
+- `PORT=3100 bun run test:e2e` — usa outra porta para o Playwright e o servidor. `dev` e `test:e2e:prod` também aceitam `PORT`. O padrão é 3000.
 - `bun run test:e2e:prod` — compila com o preset Nitro `node-server`, serve `.output/` com Node e executa o projeto Playwright de produção.
 - `bun run bench` — executa o benchmark local.
 

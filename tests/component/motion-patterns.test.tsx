@@ -1,9 +1,12 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, test, vi } from "vitest";
+import type { ExecutionStatus } from "../../src/core/contracts";
 import {
 	AnimatedNumber,
 	AnimatedTabsIndicator,
+	BeforeAfter,
+	EvidenceExcerpt,
 	Expandable,
 	Metric,
 	MotionProvider,
@@ -82,23 +85,39 @@ test("uses the result contract for empty data, success, failure and retry", asyn
 	const user = userEvent.setup();
 	const onRetry = vi.fn();
 	const renderResult = (values: number[]) => <p>{values.join(", ")}</p>;
-	const props = { title: "Result", renderResult };
+	const props = { title: "Result" };
 	const { rerender } = render(
 		<ResultPanel
 			{...props}
 			status="completed"
 			data={[]}
+			renderResult={renderResult}
 			isEmpty={(values) => values.length === 0}
 		/>,
 	);
 	const panel = screen.getByRole("region", { name: "Result" });
 	expect(panel.dataset.state).toBe("empty");
 
-	rerender(<ResultPanel {...props} status="completed" data={[0]} />);
+	const error = { code: "FAILURE", message: "Read failed.", retryable: true };
+	function resultFor(status: ExecutionStatus) {
+		return (
+			<ResultPanel
+				{...props}
+				status={status}
+				data={[0]}
+				error={error}
+				renderResult={renderResult}
+			/>
+		);
+	}
+	rerender(resultFor("running"));
+	expect(panel.dataset.state).toBe("loading");
+	rerender(resultFor("completed"));
 	expect(panel.dataset.state).toBe("success");
 	expect(within(panel).getByText("0")).toBeTruthy();
 
-	const error = { code: "FAILURE", message: "Read failed.", retryable: true };
+	rerender(<ResultPanel {...props} status="completed" data={null} />);
+	expect(panel.dataset.state).toBe("empty");
 	rerender(
 		<ResultPanel {...props} status="failed" error={error} onRetry={onRetry} />,
 	);
@@ -121,6 +140,47 @@ test("uses the result contract for empty data, success, failure and retry", asyn
 	expect(
 		within(panel).queryByRole("button", { name: "Retry execution" }),
 	).toBeNull();
+});
+
+test("compares image descriptors and React content in the same figure", () => {
+	render(
+		<BeforeAfter
+			before={{ src: "/before.svg", alt: "Before graphic" }}
+			after={
+				<svg role="img">
+					<title>After graphic</title>
+				</svg>
+			}
+		/>,
+	);
+	expect(
+		screen.getByRole("img", { name: "Before graphic" }).getAttribute("src"),
+	).toBe("/before.svg");
+	expect(screen.getByRole("img", { name: "After graphic" })).toBeTruthy();
+	expect(
+		screen.getByRole("slider", { name: "After content revealed" }),
+	).toBeTruthy();
+});
+
+test("marks the requested excerpt and keeps context on each side", () => {
+	const { container, rerender } = render(
+		<EvidenceExcerpt
+			text="abcdefghi"
+			start={3}
+			end={6}
+			context={1}
+			label="Match"
+		/>,
+	);
+	expect(container.querySelector("mark")?.textContent).toBe("Match: def");
+	expect(container.textContent).toBe("…cMatch: defg…");
+
+	rerender(<EvidenceExcerpt text="abcdefghi" start={0} end={3} context={1} />);
+	expect(container.textContent).toBe("Highlighted evidence: abcd…");
+
+	rerender(<EvidenceExcerpt text="abcdefghi" start={4} end={10} />);
+	expect(container.querySelector("mark")).toBeNull();
+	expect(container.textContent).toBe("abcdefghi");
 });
 
 test("renders the metric unit and signed baseline delta", () => {

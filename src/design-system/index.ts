@@ -16,6 +16,7 @@ export { MotionProvider } from "./motion/motion-provider";
 export { durations, easings, type MotionDuration } from "./motion/presets";
 export { ProcessingFeedback } from "./motion/processing-feedback";
 export { BeforeAfter } from "./patterns/before-after";
+export { EvidenceExcerpt } from "./patterns/evidence-excerpt";
 export { Metric } from "./patterns/metric";
 export { type ProcessStep, ProcessTimeline } from "./patterns/process-timeline";
 export { ResultPanel } from "./patterns/result-panel";
