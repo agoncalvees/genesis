@@ -117,3 +117,17 @@ Objetivo: elevar a qualidade da primeira entrega visual a partir de um tema desc
 **Limitações.** n = 1 e sem comparação cega; avaliação cega do ISOTERMA continua pendente; mobile só em emulação; `design:verify` não detecta qualidade da camada computacional (fogo em blocos passou) — por isso o passo 8 exige olhar capturas durante a interação. Revisão independente do código da fundação: autorrevisão.
 
 **Retomada.** Revisar e, se aprovado, integrar `p10-creative-reset` em `main`. Para um tema novo: `AGENTS.md` → `CREATIVE-DIRECTION.md`.
+
+## Base e Lab · 24/11/2026 (ADR 0007)
+
+Aprovação do responsável: "pode criar um repo novo pra separar a base do lab". P10 integrada em `main` (merge local `027f88d`). Criada a **Genesis Base** em `/Users/arthurgoncalves/orca/projects/genesis-base` (histórico próprio, commit `6ed469a`, sem remoto): 146 arquivos versionados (Lab: 314). Este repositório passa a ser o Lab.
+
+- Removido da Base: Studio, demos, seletor de projetos, mundos e suas 7 fontes, layouts, padrões editoriais/resultado/métrica/BeforeAfter/ProcessingFeedback, FadeIn/Stagger, navegação, EmptyState/ErrorState, evidence, receitas, benchmarks, Convex vazio, docs de fases e experimentos.
+- Módulos opcionais: `ai` e `dataviz`, via `bun run new -- --with ai,dataviz`. O gerador copia arquivos versionados para um repositório novo, remove módulos não pedidos (arquivos, testes, dependências) e o próprio gerador, instala, valida e faz o commit inicial.
+- Tailwind restrito a `src/` (`source("../")`): CSS base 56,7 KB (Aceiro) → 32–34 KB (7 KB gzip).
+- `design:build`/`apply` falham com o comando `bun add` exato quando a fonte do DESIGN.md não está instalada. `design:apply example/aceiro` aplica o exemplo de referência.
+- Teste de teclado do `Select` sincronizado com o foco (correção do Codex no Aceiro), aplicado também no Lab.
+
+Verificação na Base: `check`, `typecheck`, `design:check`, `test` (178 passaram, 1 opt-in), `build` e `test:e2e` (2) = 0. Ensaio: `bun run new -- --name "Sonda" --slug sonda --with dataviz` em 7 s; produto com 129 arquivos, 122 testes = 0; `design:apply example/aceiro` pediu as três fontes; após `bun add`, `design:check`, `build` e `test:e2e` (2) = 0.
+
+Pendências: publicar a Base num remoto (GitHub privado) exige autorização; produtos antigos não migram; avaliação cega do ISOTERMA pendente.

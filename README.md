@@ -1,4 +1,6 @@
-# Genesis
+# Genesis Lab
+
+> **Para criar um produto novo, use a [Genesis Base](../genesis-base) (`/Users/arthurgoncalves/orca/projects/genesis-base`, ADR 0007).** Este repositório é o laboratório: Studio, mundos, demos, ensaios (ISOTERMA, Entrelaços, Aceiro) e o histórico das fases.
 Built for the unknown.
 
 Fundação de desenvolvimento modular para desafios ainda desconhecidos. Não é um produto, SaaS ou solução inscrita. A aplicação local reúne a fundação, o catálogo de componentes e os ensaios.
