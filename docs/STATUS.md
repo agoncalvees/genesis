@@ -34,3 +34,26 @@ Autorrevisão de código e inspeção no navegador do Orca, com capturas do Chro
 | `bun run design:verify` | 0 com Vite em `127.0.0.1:3000`. 175/175 verificações e 0 problemas globais. |
 
 Para retomar, rode `bun run dev --port 3000 --host 127.0.0.1` e abra `/`. Nenhuma dependência nova e nenhum bloqueio para os comandos exigidos.
+
+## Aceiro — refinamento visual 2
+
+Comparei `design/review/claude-run-a.png` e `claude-run-b.png` com `design/concept.webp` e revisei os cinco pontos da direção de arte.
+
+- Fogo e cicatriz partem de buffers de 160 × 120, ampliados com suavização de alta qualidade. O fogo ganha um halo aditivo de 7 px, um filamento irregular e pequenas labaredas. A cicatriz tem opacidade variável na borda e a hachura fica nítida por cima.
+- O aceiro acompanha o ponteiro com curvas e grãos de giz. Pontos vizinhos marcados por teclado formam um traço contínuo. A borracha corta os trechos correspondentes às células apagadas e a grade do autômato continua com a mesma rasterização.
+- A leitura de área cresce a cada passo conforme as células terminam de queimar. A carta mostra a hora e o passo e repete a área no mapa em telas estreitas. A área preservada e o cenário sem aceiros aparecem ao final.
+- A comparação usa uma camada de cinzas mais densa e uma linha fina de brasa onde o fogo parou. A escala de vento tem marcas de 0 a 40 km/h de 10 em 10 e aceita arrasto, teclado e as setas verticais do dial.
+- O teste de teclado do Select do Genesis agora espera a transferência de foco entre as opções antes de enviar a próxima tecla. Os testes do Aceiro cobrem as leituras durante a propagação, a escala de vento e a separação do traço de giz após apagar uma célula.
+
+As sete capturas atualizadas foram inspecionadas no Chromium. As novas evidências são `design/evidence/executando-1440.png` e `design/evidence/executando-360.png`. Nas capturas de resultado desta rodada, com dois focos e um aceiro sinuoso, queimaram 3.230,25 ha com aceiros e 3.721 ha sem aceiros, uma diferença de 490,75 ha. Elas substituem as imagens da rodada anterior nos mesmos caminhos. A validação mobile usou emulação.
+
+Na medição de quatro segundos a 1440 × 900 com CPU desacelerada em 4×, o desenho final registrou 59,5 fps, com dois intervalos superiores a 25 ms. O halo usa uma camada própria, atualizada no passo da simulação, e o vento é redesenhado até 30 vezes por segundo. A revisão foi feita por autorrevisão e inspeção das capturas. Nenhuma dependência nova.
+
+| Comando | Resultado |
+|---|---|
+| `bun run check` | 0. 250 arquivos verificados. |
+| `bun run typecheck` | 0. |
+| `bun run test` | 0. 277 passaram e 1 teste opcional de IA foi pulado. |
+| `bun run build` | 0. Avisos do empacotador sobre diretivas `use client` da dependência Motion. |
+| `bun run test:e2e` | 0. 13 passaram. Axe sem violações antes e depois da simulação. |
+| `bun run design:verify` | 0. 145/145 verificações e nenhum problema global. A tela inicial tem uma única leitura de área antes da comparação. |
