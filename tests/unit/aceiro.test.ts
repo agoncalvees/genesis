@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { eraseChalk, extendChalk } from "../../src/features/aceiro/chalk";
 import {
 	BARE,
 	classifyColor,
@@ -10,6 +11,24 @@ import {
 	SCRUB,
 	WATER,
 } from "../../src/features/aceiro/model";
+
+describe("traço de giz", () => {
+	it("junta a sequência do traço e abre espaço onde uma célula foi apagada", () => {
+		const start = { cell: 0, x: 0.25, y: 0.5 };
+		const middle = { cell: 1, x: 1.5, y: 0.5 };
+		const end = { cell: 3, x: 3.5, y: 0.5 };
+		const begin = extendChalk([], [0], start, start, false);
+		const first = extendChalk(begin, [0, 1], start, middle, true);
+		const linked = extendChalk(first, [1, 2, 3], middle, end, true);
+		expect(linked.map((stroke) => stroke.map((point) => point.cell))).toEqual([
+			[0, 1, 2, 3],
+		]);
+		const afterErase = eraseChalk(linked, new Set([1]));
+		expect(
+			afterErase.map((stroke) => stroke.map((point) => point.cell)),
+		).toEqual([[0], [2, 3]]);
+	});
+});
 
 describe("combustível do terreno", () => {
 	it("distingue vereda, cerrado, campo e rocha", () => {

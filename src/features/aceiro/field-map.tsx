@@ -8,8 +8,11 @@ import {
 	useRef,
 	useState,
 } from "react";
+import type { ChalkPoint, ChalkStroke } from "./chalk";
 import {
-	drawMarks,
+	drawChalk,
+	drawFire,
+	drawFoci,
 	drawScar,
 	drawWind,
 	FIELD_HEIGHT,
@@ -42,6 +45,10 @@ const contourLines = [
 	"M-54 350C29 335 83 390 152 342S239 331 270 350 293 411 361 408",
 ];
 
+function centerOf(cell: number): ChalkPoint {
+	return { x: (cell % WIDTH) + 0.5, y: Math.floor(cell / WIDTH) + 0.5, cell };
+}
+
 export type Comparison = { actual: Fire; baseline: Fire };
 
 type FieldProps = {
@@ -49,15 +56,17 @@ type FieldProps = {
 	onReady: (classes: Uint8Array) => void;
 	onError: () => void;
 	breaks: ReadonlySet<number>;
+	chalk: readonly ChalkStroke[];
 	foci: readonly number[];
 	phase: Phase;
 	weather: Weather;
 	fire: Fire | undefined;
+	burned: number | undefined;
 	comparison: Comparison | null;
 	stale: boolean;
 	reduced: boolean;
 	tool: Tool;
-	onEdit: (from: number, to: number) => void;
+	onEdit: (from: ChalkPoint, to: ChalkPoint, join?: boolean) => void;
 };
 
 export function FieldMap({
@@ -65,10 +74,12 @@ export function FieldMap({
 	onReady,
 	onError,
 	breaks,
+	chalk,
 	foci,
 	phase,
 	weather,
 	fire,
+	burned,
 	comparison,
 	stale,
 	reduced,
@@ -81,7 +92,11 @@ export function FieldMap({
 	const scar = useRef<HTMLCanvasElement>(null);
 	const baseline = useRef<HTMLCanvasElement>(null);
 	const details = useRef<HTMLCanvasElement>(null);
-	const pointer = useRef<number | null>(null);
+	const flames = useRef<HTMLCanvasElement>(null);
+	const glow = useRef<HTMLCanvasElement>(null);
+	const chalkCanvas = useRef<HTMLCanvasElement>(null);
+	const pointer = useRef<ChalkPoint | null>(null);
+	const keyboardMark = useRef<ChalkPoint | null>(null);
 	const [cursor, setCursor] = useState(71 * WIDTH + 48);
 	const [inspecting, setInspecting] = useState(false);
 	const [selection, setSelection] = useState<{
@@ -149,14 +164,7 @@ export function FieldMap({
 		) => {
 			context.clearRect(0, 0, FIELD_WIDTH, FIELD_HEIGHT);
 			if (!comparison) drawWind(context, now, weather, reduced, ink);
-			drawMarks(
-				context,
-				breaks,
-				comparison ? [] : foci,
-				comparison ? undefined : fire,
-				phase === "paused" ? 0 : now,
-				ink,
-			);
+			if (!comparison) drawFoci(context, foci, ink);
 		},
 	);
 	useEffect(() => {
@@ -164,8 +172,12 @@ export function FieldMap({
 		if (!context || reduced || comparison) return;
 		const ink = readInk();
 		let frame = 0;
+		let previous = -Infinity;
 		const paint = (time: number) => {
-			renderDetail(context, time, ink);
+			if (time - previous >= 1000 / 30) {
+				previous = time;
+				renderDetail(context, time, ink);
+			}
 			frame = requestAnimationFrame(paint);
 		};
 		paint(performance.now());
@@ -176,43 +188,78 @@ export function FieldMap({
 	useEffect(() => {
 		const context = details.current?.getContext("2d");
 		if (context && (reduced || comparison)) renderDetail(context, 0, readInk());
-	}, [reduced, comparison, breaks, foci, weather, tick]);
+	}, [reduced, comparison, foci, weather]);
 
-	const cellAt = (x: number, y: number) => {
+	const paintFire = useEffectEvent(
+		(
+			context: CanvasRenderingContext2D,
+			halo: CanvasRenderingContext2D,
+			time: number,
+			ink: ReturnType<typeof readInk>,
+		) => {
+			drawFire(
+				context,
+				halo,
+				reduced || comparison ? undefined : fire,
+				time,
+				ink,
+			);
+		},
+	);
+	useEffect(() => {
+		const context = flames.current?.getContext("2d");
+		const halo = glow.current?.getContext("2d");
+		if (!context || !halo) return;
+		const ink = readInk();
+		paintFire(context, halo, 0, ink);
+		if (phase !== "running" || reduced) return;
+		let previous = performance.now();
+		let frame: number;
+		const refresh = (time: number) => {
+			if (time - previous >= 1000 / 24) {
+				previous = time;
+				paintFire(context, halo, time, ink);
+			}
+			frame = requestAnimationFrame(refresh);
+		};
+		frame = requestAnimationFrame(refresh);
+		return () => cancelAnimationFrame(frame);
+	}, [phase, reduced]);
+
+	useEffect(() => {
+		const context = chalkCanvas.current?.getContext("2d");
+		if (context) drawChalk(context, chalk, readInk());
+	}, [chalk]);
+
+	const pointAt = (x: number, y: number): ChalkPoint => {
 		const rect = sheet.current?.getBoundingClientRect();
-		if (!rect) return cursor;
-		const col = clamp(
-			Math.floor(((x - rect.x) * WIDTH) / rect.width),
-			0,
-			WIDTH - 1,
-		);
-		const row = clamp(
-			Math.floor(((y - rect.y) * HEIGHT) / rect.height),
-			0,
-			HEIGHT - 1,
-		);
-		return row * WIDTH + col;
+		if (!rect) return centerOf(cursor);
+		const col = clamp(((x - rect.x) * WIDTH) / rect.width, 0, WIDTH - 0.001);
+		const row = clamp(((y - rect.y) * HEIGHT) / rect.height, 0, HEIGHT - 0.001);
+		return { x: col, y: row, cell: Math.floor(row) * WIDTH + Math.floor(col) };
 	};
 	const track = (event: PointerEvent<HTMLButtonElement>) => {
-		const cell = cellAt(event.clientX, event.clientY);
-		setCursor(cell);
+		const point = pointAt(event.clientX, event.clientY);
+		setCursor(point.cell);
 		setInspecting(event.pointerType === "mouse");
+		const previous = pointer.current;
 		if (
-			pointer.current !== null &&
-			pointer.current !== cell &&
-			tool !== "focus"
-		) {
-			onEdit(pointer.current, cell);
-			pointer.current = cell;
-		}
+			!previous ||
+			tool === "focus" ||
+			Math.hypot(point.x - previous.x, point.y - previous.y) < 0.16
+		)
+			return;
+		onEdit(previous, point, true);
+		pointer.current = point;
 	};
+
 	const moveCursor = (event: KeyboardEvent<HTMLButtonElement>) => {
 		const movement = cellKeys[event.key];
 		const rect = viewport.current?.getBoundingClientRect();
 		if (!movement || !rect) return;
 		event.preventDefault();
-		const first = cellAt(rect.left + 6, rect.top + 6);
-		const last = cellAt(rect.right - 6, rect.bottom - 6);
+		const first = pointAt(rect.left + 6, rect.top + 6).cell;
+		const last = pointAt(rect.right - 6, rect.bottom - 6).cell;
 		const x = clamp(
 			(cursor % WIDTH) + movement[0],
 			first % WIDTH,
@@ -296,7 +343,27 @@ export function FieldMap({
 						<canvas ref={baseline} width={FIELD_WIDTH} height={FIELD_HEIGHT} />
 					</div>
 				)}
+				<div className="ace-flame-wrap" aria-hidden="true">
+					<canvas
+						ref={glow}
+						width={WIDTH}
+						height={HEIGHT}
+						className="ace-detail ace-flame-glow"
+					/>
+					<canvas
+						ref={flames}
+						width={FIELD_WIDTH}
+						height={FIELD_HEIGHT}
+						className="ace-detail"
+					/>
+				</div>
 				<div className="ace-detail-wrap" aria-hidden="true">
+					<canvas
+						ref={chalkCanvas}
+						width={FIELD_WIDTH}
+						height={FIELD_HEIGHT}
+						className="ace-detail"
+					/>
 					<canvas
 						ref={details}
 						width={FIELD_WIDTH}
@@ -321,11 +388,12 @@ export function FieldMap({
 					aria-describedby="ace-map-description"
 					onPointerDown={(event) => {
 						if (event.button !== 0 || locked) return;
-						const cell = cellAt(event.clientX, event.clientY);
-						setCursor(cell);
-						pointer.current = cell;
+						const point = pointAt(event.clientX, event.clientY);
+						setCursor(point.cell);
+						keyboardMark.current = null;
+						pointer.current = point;
 						event.currentTarget.setPointerCapture(event.pointerId);
-						onEdit(cell, cell);
+						onEdit(point, point);
 					}}
 					onPointerMove={track}
 					onLostPointerCapture={() => {
@@ -334,16 +402,31 @@ export function FieldMap({
 					onPointerLeave={() => setInspecting(false)}
 					onKeyDown={moveCursor}
 					onClick={(event) => {
-						if (event.detail === 0 && !locked) onEdit(cursor, cursor);
+						if (event.detail !== 0 || locked) return;
+						const point = centerOf(cursor);
+						const previous = keyboardMark.current;
+						const joined =
+							tool === "break" &&
+							previous &&
+							breaks.has(previous.cell) &&
+							Math.max(
+								Math.abs(previous.x - point.x),
+								Math.abs(previous.y - point.y),
+							) === 1;
+						onEdit(joined ? previous : point, point, Boolean(joined));
+						keyboardMark.current = tool === "break" ? point : null;
 					}}
 					onFocus={() => setInspecting(true)}
-					onBlur={() => setInspecting(false)}
+					onBlur={() => {
+						keyboardMark.current = null;
+						setInspecting(false);
+					}}
 				/>
 				<p id="ace-map-description" className="ace-sr">
 					Terreno ilustrado com campo seco, vereda, cerrado arbustivo e rocha.
 					Use as setas para mover o cursor e Enter ou Espaço para aplicar a
 					ferramenta.
-					{` ${breaks.size} células de aceiro, ${foci.length} de 3 focos. Hora simulada ${clock}.`}
+					{` ${breaks.size} células de aceiro, ${foci.length} de 3 focos. Hora simulada ${clock}.${locked ? ` Passo ${tick}.` : ""}`}
 					{inspected &&
 						` Célula atual: ${inspected}, ${formatNumber(chance * 100)} por cento de chance de ignição a favor do vento.`}
 					{comparison &&
@@ -398,9 +481,14 @@ export function FieldMap({
 					</>
 				)}
 				<div className="ace-map-footer" aria-hidden="true">
-					<span>
-						<b>{clock}</b> Hora simulada
-					</span>
+					<div className="ace-clock">
+						<b>{clock}</b> {locked ? `· Passo ${tick}` : "Hora simulada"}
+						{burned !== undefined && (
+							<span className="ace-mobile-area" data-reading>
+								{formatNumber(burned)} ha queimados
+							</span>
+						)}
+					</div>
 					<span className="ace-map-scale">
 						<i />
 						250 m

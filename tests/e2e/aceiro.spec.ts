@@ -108,6 +108,51 @@ test("pausa e retoma a frente de fogo no modo animado", async ({ page }) => {
 	await expect(ignite(page)).toBeDisabled();
 });
 
+test("atualiza a área e o passo durante a propagação", async ({ page }) => {
+	await openField(page);
+	await markFocus(page);
+	await ignite(page).click();
+	const readings = page.getByRole("region", { name: "Leituras da simulação" });
+	const area = readings.locator("dd").first();
+	await expect(readings.locator("dt")).toHaveText(["Área queimada"]);
+	await expect
+		.poll(async () => {
+			const reading = (await area.textContent()) ?? "";
+			return Number(
+				reading.replace(" ha", "").replaceAll(".", "").replace(",", "."),
+			);
+		})
+		.toBeGreaterThan(5);
+	await expect(page.locator(".ace-map-footer")).toContainText(/passo \d+/i);
+	await page.getByRole("button", { name: "Pausar" }).click();
+	const pausedArea = (await area.textContent()) ?? "";
+	await expect(area).toHaveText(pausedArea);
+});
+
+test("ajusta a escala de vento por arrasto, teclado e pelo dial", async ({
+	page,
+}) => {
+	await openField(page);
+	const speed = page.getByRole("slider", { name: "Velocidade do vento" });
+	const dial = page.getByRole("slider", { name: "Direção do vento" });
+	await expect(page.locator(".ace-wind-speed")).toContainText(/010203040/);
+	await speed.press("Home");
+	await expect(speed).toHaveValue("0");
+	await dial.press("ArrowUp");
+	await expect(speed).toHaveValue("1");
+	const rect = await speed.boundingBox();
+	if (!rect) throw new Error("Escala de vento oculta");
+	await page.mouse.move(rect.x + 8, rect.y + rect.height / 2);
+	await page.mouse.down();
+	await page.mouse.move(rect.x + rect.width - 2, rect.y + rect.height / 2, {
+		steps: 8,
+	});
+	await page.mouse.up();
+	await expect(speed).toHaveValue("40");
+	await speed.press("ArrowLeft");
+	await expect(speed).toHaveValue("39");
+});
+
 for (const width of [360, 768, 1440]) {
 	test(`mapa e instrumentos cabem em ${width} px`, async ({ page }) => {
 		await page.setViewportSize({ width, height: 900 });

@@ -139,7 +139,11 @@
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
-	opacity: 0.77;
+	opacity: 0.84;
+}
+
+.ace-map[data-comparing="true"] .ace-scar {
+	opacity: 0.94;
 }
 
 .ace-map[data-comparing="true"] .ace-scar-actual {
@@ -157,10 +161,17 @@
 	}
 }
 
+.ace-flame-wrap,
 .ace-detail-wrap {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
+}
+
+.ace-flame-glow {
+	filter: blur(7px);
+	mix-blend-mode: plus-lighter;
+	opacity: 0.64;
 }
 
 .ace-map[data-comparing="true"] .ace-detail-wrap {
@@ -256,7 +267,8 @@
 	gap: 10px;
 }
 
-.ace-map-footer span,
+.ace-clock,
+.ace-map-scale,
 .ace-inspector,
 .ace-compare-labels span {
 	padding: 5px 8px;
@@ -266,6 +278,10 @@
 .ace-map-footer b {
 	margin-inline-end: 4px;
 	font-weight: 650;
+}
+
+.ace-mobile-area {
+	display: none;
 }
 
 .ace-map-scale {
@@ -349,6 +365,7 @@
 
 .ace-compare-handle input,
 .ace-dial-target,
+.ace-wind-scale input,
 .ace-humidity-instrument input,
 .ace-tool input {
 	position: absolute;
@@ -491,16 +508,68 @@
 }
 
 .ace-wind-speed {
-	display: flex;
+	display: grid;
+	grid-template-columns: auto minmax(44px, 1fr);
 	align-items: center;
-	justify-content: space-between;
 	gap: 10px;
+	margin-block-start: 2px;
 }
 
-.ace-wind-speed input {
-	min-inline-size: 44px;
-	inline-size: 50%;
-	block-size: 44px;
+.ace-wind-speed [data-reading] {
+	font-size: 0.86rem;
+	white-space: nowrap;
+}
+
+.ace-wind-scale {
+	position: relative;
+	min-block-size: 44px;
+	border-radius: var(--radius-control);
+}
+
+.ace-wind-scale input {
+	touch-action: pan-y;
+}
+
+.ace-wind-track {
+	position: absolute;
+	inset: 13px 4px auto;
+	block-size: 5px;
+	border: 1px solid var(--control-border);
+	background: linear-gradient(
+		90deg,
+		var(--vereda) 0 var(--wind-level),
+		transparent var(--wind-level)
+	);
+}
+
+.ace-wind-track i {
+	position: absolute;
+	inset: -4px auto -4px var(--wind-level);
+	inline-size: 6px;
+	transform: translateX(-50%);
+	background: var(--chalk);
+}
+
+.ace-wind-ticks {
+	position: absolute;
+	inset: 22px 0 auto;
+	display: flex;
+	justify-content: space-between;
+	font: 0.6rem / 1 var(--typeface-mono);
+	color: var(--muted);
+}
+
+.ace-wind-ticks span {
+	display: grid;
+	place-items: center;
+	gap: 3px;
+}
+
+.ace-wind-ticks span::before {
+	content: "";
+	inline-size: 1px;
+	block-size: 4px;
+	background: var(--control-border);
 }
 
 .ace-humidity-instrument {
@@ -614,6 +683,7 @@
 
 .ace-tool:has(input:focus-visible),
 .ace-compass:has(input:focus-visible),
+.ace-wind-scale:has(input:focus-visible),
 .ace-humidity-instrument:has(input:focus-visible),
 .ace-compare-handle:has(input:focus-visible) span {
 	outline: 2px solid var(--focus);
@@ -662,7 +732,7 @@
 	white-space: nowrap;
 }
 
-.ace-metric:last-child {
+.ace-metric:nth-child(3) {
 	grid-column: 1 / -1;
 	display: flex;
 	align-items: baseline;
@@ -670,8 +740,8 @@
 	color: var(--muted);
 }
 
-.ace-metric:last-child dt,
-.ace-metric:last-child dd {
+.ace-metric:nth-child(3) dt,
+.ace-metric:nth-child(3) dd {
 	font-size: 0.72rem;
 }
 
@@ -821,6 +891,11 @@
 
 	.ace-map-footer {
 		inset-block-end: 10px;
+		align-items: end;
+	}
+
+	.ace-mobile-area {
+		display: block;
 	}
 
 	.ace-inspector {

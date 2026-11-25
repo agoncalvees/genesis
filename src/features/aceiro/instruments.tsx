@@ -6,7 +6,13 @@ import {
 	Pause,
 } from "@phosphor-icons/react";
 import { animate } from "motion";
-import { type PointerEvent, useEffect, useId, useRef } from "react";
+import {
+	type CSSProperties,
+	type PointerEvent,
+	useEffect,
+	useId,
+	useRef,
+} from "react";
 import type { Weather } from "./model";
 
 export type Tool = "break" | "focus" | "erase";
@@ -173,17 +179,35 @@ export function WeatherInstruments({
 					<span data-reading>
 						{weather.speed} <small>km/h</small>
 					</span>
-					<input
-						type="range"
-						min="0"
-						max="40"
-						value={weather.speed}
-						aria-label="Velocidade do vento"
-						aria-valuetext={`${weather.speed} quilômetros por hora`}
-						onChange={(event) =>
-							onChange({ ...weather, speed: event.currentTarget.valueAsNumber })
+					<div
+						className="ace-wind-scale"
+						style={
+							{ "--wind-level": `${weather.speed * 2.5}%` } as CSSProperties
 						}
-					/>
+					>
+						<span className="ace-wind-track" aria-hidden="true">
+							<i />
+						</span>
+						<div className="ace-wind-ticks" aria-hidden="true">
+							{[0, 10, 20, 30, 40].map((mark) => (
+								<span key={mark}>{mark}</span>
+							))}
+						</div>
+						<input
+							type="range"
+							min="0"
+							max="40"
+							value={weather.speed}
+							aria-label="Velocidade do vento"
+							aria-valuetext={`${weather.speed} quilômetros por hora`}
+							onChange={(event) =>
+								onChange({
+									...weather,
+									speed: event.currentTarget.valueAsNumber,
+								})
+							}
+						/>
+					</div>
 				</div>
 			</div>
 			<div className="ace-humidity">

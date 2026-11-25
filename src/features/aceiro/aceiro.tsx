@@ -8,6 +8,12 @@ import {
 } from "react";
 import { useHydrated } from "../../core/hydration";
 import { readMotionTiming } from "../../design-system/motion/presets";
+import {
+	type ChalkPoint,
+	type ChalkStroke,
+	eraseChalk,
+	extendChalk,
+} from "./chalk";
 import { type Comparison, FieldMap } from "./field-map";
 import {
 	Actions,
@@ -87,19 +93,22 @@ function AreaReading({ value, reduced }: { value: number; reduced: boolean }) {
 
 function Results({
 	comparison,
+	burned,
 	stale,
 	reduced,
 }: {
 	comparison: Comparison | null;
+	burned: number | undefined;
 	stale: boolean;
 	reduced: boolean;
 }) {
 	const values = comparison && readings(comparison);
-	const metrics = [
-		{ label: "Área queimada", value: values?.burned },
-		{ label: "Área preservada", value: values?.saved },
-		{ label: "Sem aceiros", value: values?.baseline },
-	];
+	const metrics = [{ label: "Área queimada", value: values?.burned ?? burned }];
+	if (values)
+		metrics.push(
+			{ label: "Área preservada", value: values.saved },
+			{ label: "Sem aceiros", value: values.baseline },
+		);
 	return (
 		<section
 			className="ace-results ace-section"
@@ -111,12 +120,14 @@ function Results({
 				</p>
 			)}
 			<dl>
-				{metrics.map(({ label, value }) => (
+				{metrics.map(({ label, value }, index) => (
 					<div className="ace-metric" key={label}>
 						<dt data-label>{label}</dt>
 						<dd data-reading>
 							{value === undefined ? (
 								"—"
+							) : index === 0 ? (
+								formatNumber(value)
 							) : (
 								<AreaReading value={value} reduced={reduced} />
 							)}
@@ -147,6 +158,7 @@ export function Aceiro() {
 	const [tool, setTool] = useState<Tool>("break");
 	const [weather, setWeather] = useState<Weather>(DEFAULT_WEATHER);
 	const [breaks, setBreaks] = useState<ReadonlySet<number>>(noBreaks);
+	const [chalk, setChalk] = useState<readonly ChalkStroke[]>([]);
 	const [foci, setFoci] = useState<readonly number[]>([]);
 	const [phase, setPhase] = useState<Phase>("ready");
 	const [comparison, setComparison] = useState<Comparison | null>(null);
@@ -156,6 +168,11 @@ export function Aceiro() {
 	const [, renderStep] = useState(0);
 	const session = useRef<Session | null>(null);
 	const locked = phase === "paused" || phase === "running";
+	const fire = session.current?.actual;
+	const burned =
+		locked && fire
+			? (fire.total - fire.active.length) * HECTARES_PER_CELL
+			: undefined;
 	const canIgnite = hydrated && Boolean(classes) && (locked || foci.length > 0);
 	const hint =
 		feedback ||
@@ -219,7 +236,9 @@ export function Aceiro() {
 	const invalidate = () => {
 		if (comparison) setStale(true);
 	};
-	const edit = (from: number, to: number) => {
+	const edit = (start: ChalkPoint, end: ChalkPoint, join = false) => {
+		const from = start.cell;
+		const to = end.cell;
 		if (!classes || locked) return;
 		if (tool === "focus") {
 			if (breaks.has(to) || !terrain[classes[to]].fuel) {
@@ -240,7 +259,13 @@ export function Aceiro() {
 				else next.delete(cell);
 			}
 			const remaining = foci.filter((cell) => !cells.includes(cell));
-			if (next.size === breaks.size && remaining.length === foci.length) return;
+			const changed =
+				next.size !== breaks.size || remaining.length !== foci.length;
+			if (tool === "break")
+				setChalk((strokes) => extendChalk(strokes, cells, start, end, join));
+			else if (changed)
+				setChalk((strokes) => eraseChalk(strokes, new Set(cells)));
+			if (!changed) return;
 			setBreaks(next);
 			setFoci(remaining);
 		}
@@ -291,6 +316,7 @@ export function Aceiro() {
 		setWeather(DEFAULT_WEATHER);
 		setFoci([]);
 		setBreaks(noBreaks);
+		setChalk([]);
 		setTool("break");
 		setFeedback("");
 		setAnnouncement("Carta reiniciada.");
@@ -314,10 +340,12 @@ export function Aceiro() {
 				onReady={setClasses}
 				onError={() => setLoadFailed(true)}
 				breaks={breaks}
+				chalk={chalk}
 				foci={foci}
 				phase={phase}
 				weather={weather}
-				fire={session.current?.actual}
+				fire={fire}
+				burned={burned}
 				comparison={comparison}
 				stale={stale}
 				reduced={reduced}
@@ -365,7 +393,12 @@ export function Aceiro() {
 						{hint}
 					</p>
 				</section>
-				<Results comparison={comparison} stale={stale} reduced={reduced} />
+				<Results
+					comparison={comparison}
+					burned={burned}
+					stale={stale}
+					reduced={reduced}
+				/>
 				<footer className="ace-specimen ace-section">
 					<figure>
 						<img
