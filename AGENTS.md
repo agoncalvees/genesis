@@ -2,7 +2,7 @@
 
 Genesis é uma fundação para materializar uma experiência digital excepcional a partir de um tema desconhecido. A prioridade é a **qualidade da primeira entrega**, não o tamanho da fundação. Use português na documentação, inglês em código e identificadores, kebab-case em arquivos (salvo nomes convencionais).
 
-> Este repositório é o **Genesis Lab** (ADR 0007). A fundação canônica para novos produtos é `/Users/arthurgoncalves/orca/projects/genesis-base`; melhorias de fundação nascem lá.
+> Este repositório é o **Genesis Lab** (ADR 0007). A fundação canônica para novos produtos é a [Genesis Base](https://github.com/agoncalvees/genesis-base); melhorias de fundação nascem lá.
 
 ## Ao retomar
 Leia [STATUS](docs/STATUS.md) (checkpoint mais recente) e só os guias da tarefa. Não é preciso ler o repositório inteiro.
