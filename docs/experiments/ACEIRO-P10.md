@@ -34,6 +34,10 @@ Intervenções humanas: nenhuma. Intervenções do diretor de arte (Claude): uma
 - **O verificador de fidelidade** pegou o contrato tipográfico e de cor em todos os tamanhos; as regras de `data-*` deram ao implementador alvos explícitos.
 - Componentes do Genesis praticamente não foram usados na tela; a fundação contribuiu com scaffold, motor de tokens/fontes, verificação e testes.
 
+## Auditoria independente
+
+OpenCode `hy4-flash-free` (após `deepseek-v4.1-flash-free` esgotar a cota gratuita), estática: 0 altos, 5 médios, 6 baixos (`design/review/OC-AUDIT.md` no produto). Abertos: inspetor e estado "desatualizado" fora da região viva; marcas da escala de umidade sem unidade; espaçamento inconsistente de `%`; contagem animada em 2 de 3 leituras. O raio de 50 % nos marcadores circulares é intencional (forma, não painel). Sem texto em inglês, alvos < 44 px ou falha de reduced motion.
+
 ## Limitações
 
 - n = 1, mesmo diretor e mesmo implementador; não há comparação cega com uma versão sem protocolo.
