@@ -12,6 +12,7 @@
 			"!!.output",
 			"!!test-results",
 			"!!playwright-report",
+			"!!design/evidence",
 			"!!convex/_generated",
 			"!!.impeccable"
 		]

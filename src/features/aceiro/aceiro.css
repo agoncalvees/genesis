@@ -1,0 +1,906 @@
+:root {
+	--ember: #ff5a1f;
+	--ember-hot: #ffb347;
+	--ash: #3a332e;
+	--chalk: #efe6d2;
+	--vereda: #2f5552;
+	--hatch: rgb(239 230 210 / 0.18);
+	--field-dark: #21180f;
+	--map-ink: #1c160f;
+	--risk-low: #8c6a3a;
+	--risk-high: #ff5a1f;
+	--paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.87' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' d='M0 0h128v128H0z'/%3E%3C/svg%3E");
+}
+
+.aceiro {
+	min-block-size: 100dvh;
+	accent-color: var(--chalk);
+}
+
+.aceiro button:where(:not([aria-disabled="true"])),
+.aceiro input {
+	cursor: pointer;
+}
+
+.aceiro [data-label] {
+	font-family: var(--typeface-body);
+	font-stretch: 75%;
+	font-size: 0.8125rem;
+	font-weight: 650;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.aceiro [data-reading] {
+	font-family: var(--typeface-mono);
+	font-variant-numeric: tabular-nums;
+}
+
+.aceiro [data-reading] small {
+	font-size: 0.68rem;
+	color: var(--muted);
+}
+
+.ace-atlas {
+	position: relative;
+	min-inline-size: 0;
+}
+
+.ace-title {
+	position: absolute;
+	z-index: 5;
+	inset: 0 0 auto 0;
+	padding: clamp(20px, 3vw, 48px);
+	pointer-events: none;
+	background: radial-gradient(
+		ellipse at 24% 18%,
+		rgb(22 14 8 / 0.88),
+		rgb(22 14 8 / 0.48) 48%,
+		transparent 78%
+	);
+}
+
+.ace-title .ace-title-kicker {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	font-size: 0.72rem;
+	margin-block-end: 15px;
+}
+
+.ace-kicker-divider {
+	inline-size: 26px;
+	block-size: 1px;
+	background: currentColor;
+}
+
+.ace-title h1 {
+	font: 400 clamp(3rem, 6.2vw, 6.5rem) / 0.92 var(--typeface-display);
+	letter-spacing: -0.02em;
+	text-wrap: balance;
+}
+
+.ace-title em {
+	color: var(--ember);
+}
+
+.ace-map {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+	container-type: size;
+	aspect-ratio: 4 / 3;
+	background: var(--field-dark);
+	border-radius: 0;
+}
+
+.ace-sheet,
+.ace-scar canvas,
+.ace-detail,
+.ace-cursor-sheet {
+	position: absolute;
+	inset: 50% auto auto 50%;
+	inline-size: max(100cqw, 133.3333cqh);
+	block-size: max(100cqh, 75cqw);
+	max-inline-size: none;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.ace-sheet img,
+.ace-contours {
+	position: absolute;
+	inset: 0;
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+.ace-sheet img {
+	filter: brightness(0.84) saturate(1.15) contrast(1.13);
+}
+
+.ace-map::after {
+	content: "";
+	position: absolute;
+	z-index: 2;
+	inset: 0;
+	background: linear-gradient(0deg, rgb(20 13 8 / 0.68), transparent 16%);
+	pointer-events: none;
+}
+
+.ace-contours {
+	fill: none;
+	stroke: var(--chalk);
+	stroke-width: 0.55;
+	opacity: 0.31;
+}
+
+.ace-scar {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	opacity: 0.77;
+}
+
+.ace-map[data-comparing="true"] .ace-scar-actual {
+	clip-path: inset(0 0 0 var(--split));
+}
+
+.ace-scar-baseline {
+	clip-path: inset(0 calc(100% - var(--split)) 0 0);
+	transition: clip-path var(--duration-showcase) var(--ease-enter);
+}
+
+@starting-style {
+	.ace-scar-baseline {
+		clip-path: inset(0 100% 0 0);
+	}
+}
+
+.ace-detail-wrap {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+}
+
+.ace-map[data-comparing="true"] .ace-detail-wrap {
+	clip-path: inset(0 0 0 var(--split));
+}
+
+.ace-cursor-sheet {
+	z-index: 4;
+}
+
+.ace-map:has(.ace-compare-handle input:is(:active, :focus)) .ace-scar-baseline {
+	transition: none;
+}
+
+.ace-map[data-stale="true"] .ace-scar {
+	opacity: 0.5;
+}
+
+.ace-field-target {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	inline-size: 100%;
+	touch-action: none;
+}
+
+.aceiro .ace-field-target {
+	cursor: crosshair;
+}
+
+.ace-field-target:focus-visible {
+	outline-offset: -4px;
+}
+
+.ace-cell {
+	position: absolute;
+	z-index: 4;
+	display: none;
+	inline-size: max(1.3%, 9px);
+	aspect-ratio: 1;
+	transform: translate(-50%, -50%);
+	border: 1px solid var(--chalk);
+	outline: 1px solid var(--map-ink);
+}
+
+.ace-cell[data-visible="true"] {
+	display: block;
+}
+
+.ace-map-steps {
+	position: absolute;
+	z-index: 4;
+	inset: auto auto 12% clamp(16px, 3vw, 48px);
+	display: grid;
+	gap: 1px;
+	padding: 4px 9px 4px 5px;
+	border-inline-start: 1px solid var(--muted);
+	background: rgb(28 22 15 / 0.91);
+	font: 0.68rem / 1.3 var(--typeface-mono);
+	list-style: none;
+	pointer-events: none;
+}
+
+.ace-map-steps li {
+	width: max-content;
+	padding: 2px 3px;
+}
+
+.ace-map-steps b {
+	display: inline-grid;
+	place-items: center;
+	inline-size: 20px;
+	block-size: 20px;
+	margin-inline-end: 4px;
+	border: 1px solid var(--muted);
+	border-radius: 50%;
+	font-weight: 400;
+}
+
+.ace-map-footer,
+.ace-inspector,
+.ace-compare-labels {
+	position: absolute;
+	z-index: 4;
+	font: 0.6875rem / 1.4 var(--typeface-mono);
+	pointer-events: none;
+}
+
+.ace-map-footer {
+	inset: auto clamp(16px, 3vw, 48px) 17px;
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.ace-map-footer span,
+.ace-inspector,
+.ace-compare-labels span {
+	padding: 5px 8px;
+	background: var(--map-ink);
+}
+
+.ace-map-footer b {
+	margin-inline-end: 4px;
+	font-weight: 650;
+}
+
+.ace-map-scale {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.ace-map-scale i {
+	display: inline-block;
+	inline-size: max(3.125cqw, 4.16667cqh);
+	block-size: 5px;
+	border: 1px solid currentColor;
+	border-top: 0;
+}
+
+.ace-inspector {
+	inset: auto auto 50px clamp(16px, 3vw, 48px);
+	max-inline-size: calc(100% - 32px);
+}
+
+.ace-map:has(.ace-inspector) .ace-map-steps {
+	inset-block-end: 90px;
+}
+
+.ace-risk {
+	display: inline-block;
+	inline-size: 8px;
+	block-size: 8px;
+	margin-inline-end: 6px;
+	background: var(--border);
+}
+
+.ace-risk[data-level="low"] {
+	background: var(--risk-low);
+}
+.ace-risk[data-level="medium"] {
+	background: var(--accent);
+}
+.ace-risk[data-level="high"] {
+	background: var(--risk-high);
+}
+
+.ace-compare-labels {
+	inset: auto 16px 15%;
+	display: flex;
+	justify-content: space-between;
+	gap: 45px;
+	text-transform: uppercase;
+}
+
+.ace-compare-handle {
+	position: absolute;
+	z-index: 6;
+	inset: 0 auto 0 var(--split);
+	inline-size: 44px;
+	transform: translateX(-50%);
+	color: var(--chalk);
+	cursor: ew-resize;
+}
+
+.ace-compare-handle::before {
+	content: "";
+	position: absolute;
+	inset: 0 calc(50% - 1px);
+	background: var(--chalk);
+	box-shadow: 1px 0 var(--map-ink);
+}
+
+.ace-compare-handle span {
+	position: absolute;
+	display: grid;
+	place-items: center;
+	inset: 50% 0 auto;
+	block-size: 44px;
+	transform: translateY(-50%);
+	border: 1px solid var(--chalk);
+	border-radius: var(--radius-control);
+	background: var(--map-ink);
+}
+
+.ace-compare-handle input,
+.ace-dial-target,
+.ace-humidity-instrument input,
+.ace-tool input {
+	position: absolute;
+	opacity: 0;
+	inset: 0;
+	inline-size: 100%;
+	block-size: 100%;
+	margin: 0;
+}
+
+.aceiro :where(.ace-compare-handle) input {
+	cursor: ew-resize;
+	touch-action: none;
+}
+
+.ace-instruments {
+	position: relative;
+	isolation: isolate;
+	min-inline-size: 0;
+	padding: 25px clamp(20px, 2.23vw, 32px) 18px;
+	background: var(--background);
+}
+
+.ace-instruments::before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	inset: 0;
+	background-image: var(--paper-grain);
+	opacity: 0.055;
+	pointer-events: none;
+}
+
+.ace-panel-head {
+	padding-block-end: 14px;
+}
+
+.ace-panel-head [data-label] {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 0.93rem;
+}
+
+.ace-panel-head [data-label]::after {
+	content: "";
+	flex: 1;
+	block-size: 10px;
+	background: repeating-linear-gradient(
+		-45deg,
+		transparent 0 3px,
+		var(--hatch) 3px 4px
+	);
+}
+
+.ace-instruction {
+	font: italic 1rem / 1.25 var(--typeface-display);
+	color: var(--muted);
+}
+
+.ace-panel-head .ace-instruction {
+	margin-block-start: 4px;
+}
+
+.ace-section {
+	border-block-start: 1px solid var(--border);
+	padding-block: 15px;
+}
+
+.ace-weather {
+	display: grid;
+	grid-template-columns: 1fr minmax(112px, 0.82fr);
+}
+
+.ace-wind {
+	min-inline-size: 0;
+	padding-inline-end: 16px;
+}
+
+.ace-humidity {
+	position: relative;
+	min-inline-size: 0;
+	padding-inline-start: 18px;
+	border-inline-start: 1px solid var(--border);
+}
+
+.ace-compass {
+	position: relative;
+	margin: 3px auto 0;
+	max-inline-size: 161px;
+	aspect-ratio: 1;
+}
+
+.ace-compass svg {
+	display: block;
+	inline-size: 100%;
+	color: var(--chalk);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 0.8;
+}
+
+.ace-compass text {
+	font: 12px var(--typeface-display);
+	text-anchor: middle;
+	dominant-baseline: central;
+	fill: var(--chalk);
+	stroke: none;
+}
+
+.ace-compass-inner {
+	stroke-dasharray: 0.7 2.75;
+}
+
+.ace-compass-spoke {
+	fill: var(--chalk);
+	fill-opacity: 0.22;
+}
+
+.ace-compass-minor {
+	fill: var(--muted);
+	fill-opacity: 0.15;
+}
+
+.ace-needle {
+	fill: var(--chalk);
+	stroke: var(--map-ink);
+}
+
+.ace-needle-tail {
+	fill: var(--vereda);
+}
+
+.ace-compass-pin {
+	fill: var(--map-ink);
+}
+
+.ace-dial-target {
+	touch-action: none;
+}
+
+.ace-wind-speed {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.ace-wind-speed input {
+	min-inline-size: 44px;
+	inline-size: 50%;
+	block-size: 44px;
+}
+
+.ace-humidity-instrument {
+	position: relative;
+	display: flex;
+	gap: 12px;
+	block-size: 132px;
+	max-inline-size: 110px;
+	margin-block: 12px 5px;
+}
+
+.ace-humidity-tube {
+	position: relative;
+	block-size: 100%;
+	inline-size: 23px;
+	border: 1px solid var(--control-border);
+	border-radius: var(--radius-control);
+	overflow: hidden;
+}
+
+.ace-humidity-tube > span {
+	position: absolute;
+	inset: 0;
+	background: repeating-linear-gradient(
+		-45deg,
+		var(--vereda) 0 3px,
+		var(--info) 3px 4px
+	);
+	transform-origin: bottom;
+	transition: transform var(--duration-normal) var(--ease-standard);
+}
+
+.ace-humidity-instrument:where(:has(input:active))
+	:where(.ace-humidity-tube)
+	> span {
+	transition: none;
+}
+
+.ace-humidity-instrument input {
+	writing-mode: vertical-lr;
+	direction: rtl;
+	touch-action: none;
+}
+
+.ace-humidity-ticks {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	font: 0.67rem / 1 var(--typeface-mono);
+	color: var(--muted);
+}
+
+.ace-humidity-ticks span::before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	inline-size: 9px;
+	block-size: 1px;
+	margin-inline-end: 6px;
+	background: var(--control-border);
+}
+
+.ace-humidity-reading {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	min-block-size: 31px;
+	font-size: 1.0625rem;
+}
+
+.ace-tools {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 6px;
+	margin-block: 10px;
+	min-inline-size: 0;
+}
+
+.ace-tool {
+	position: relative;
+	display: block;
+	min-inline-size: 0;
+}
+
+.ace-tool > span,
+.ace-actions button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	min-inline-size: 44px;
+	min-block-size: 44px;
+	border: 1px solid var(--control-border);
+	border-radius: var(--radius-control);
+}
+
+.ace-tool > span {
+	font-size: 0.69rem;
+	letter-spacing: 0.05em;
+}
+
+.ace-tool input:checked + span {
+	background: var(--chalk);
+	color: var(--background);
+	border-color: var(--chalk);
+}
+
+.ace-tool:has(input:disabled) {
+	opacity: 0.65;
+}
+
+.ace-tool:has(input:focus-visible),
+.ace-compass:has(input:focus-visible),
+.ace-humidity-instrument:has(input:focus-visible),
+.ace-compare-handle:has(input:focus-visible) span {
+	outline: 2px solid var(--focus);
+	outline-offset: 3px;
+}
+
+.ace-actions {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 44px;
+	gap: 7px;
+}
+
+.ace-actions [data-action="ignite"] {
+	background: var(--ember);
+	color: var(--on-primary);
+	border-color: var(--ember);
+	font-size: 0.93rem;
+}
+
+.ace-actions [data-action="ignite"][aria-disabled="true"] {
+	cursor: not-allowed;
+}
+
+.ace-help {
+	min-block-size: 1.15em;
+	margin-block-start: 7px;
+	color: var(--muted);
+	font-size: 0.72rem;
+}
+
+.ace-results dl {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px 13px;
+}
+
+.ace-metric:nth-child(2) {
+	padding-inline-start: 12px;
+	border-inline-start: 1px solid var(--border);
+}
+
+.ace-metric dd {
+	margin: 2px 0 0;
+	font-size: clamp(1.5rem, 2.15vw, 2.125rem);
+	line-height: 1.05;
+	white-space: nowrap;
+}
+
+.ace-metric:last-child {
+	grid-column: 1 / -1;
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	color: var(--muted);
+}
+
+.ace-metric:last-child dt,
+.ace-metric:last-child dd {
+	font-size: 0.72rem;
+}
+
+.ace-stale {
+	margin-block-end: 8px;
+	color: var(--accent);
+}
+
+.ace-specimen {
+	padding-block-end: 0;
+}
+
+.ace-specimen figure {
+	display: grid;
+	grid-template-columns: minmax(84px, 0.6fr) minmax(0, 1fr);
+	align-items: center;
+	gap: 14px;
+}
+
+.ace-specimen img {
+	display: block;
+	inline-size: 100%;
+	block-size: clamp(88px, 9vw, 151px);
+	object-fit: contain;
+	mix-blend-mode: lighten;
+}
+
+.ace-specimen figcaption {
+	display: grid;
+	gap: 5px;
+	font: italic 1rem / 1.15 var(--typeface-display);
+	color: var(--muted);
+}
+
+.ace-specimen figcaption [data-label] {
+	font-style: normal;
+	color: var(--foreground);
+}
+
+.ace-model-note {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	gap: 4px 9px;
+	padding-block-start: 8px;
+	margin-block-start: 8px;
+	border-block-start: 1px solid var(--border);
+	font: 0.625rem / 1.4 var(--typeface-mono);
+	color: var(--muted);
+}
+
+.ace-sr {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.ace-tool:hover > span,
+	.ace-reset:hover {
+		border-color: var(--chalk);
+	}
+
+	.ace-actions [data-action="ignite"]:not([aria-disabled="true"]):hover {
+		background: var(--ember-hot);
+	}
+}
+
+@media (width >= 1024px) {
+	.aceiro {
+		display: grid;
+		grid-template-columns: minmax(0, 68fr) minmax(0, 32fr);
+		align-items: start;
+	}
+
+	.ace-atlas {
+		position: sticky;
+		inset-block-start: 0;
+	}
+
+	.ace-title {
+		padding: clamp(26px, 2.6vw, 46px);
+	}
+
+	.ace-title h1 {
+		font-size: clamp(4rem, 6.9vw, 6.5rem);
+	}
+
+	.ace-map {
+		block-size: 100dvh;
+		aspect-ratio: auto;
+	}
+
+	.ace-instruments {
+		min-block-size: 100dvh;
+		border-inline-start: 1px solid var(--border);
+	}
+}
+
+@media (768px <= width < 1024px) {
+	.ace-map {
+		block-size: max(55dvh, 410px);
+		aspect-ratio: auto;
+	}
+
+	.ace-instruments {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0 24px;
+	}
+
+	.ace-panel-head,
+	.ace-specimen {
+		grid-column: 1 / -1;
+	}
+
+	.ace-weather {
+		grid-row: span 2;
+	}
+}
+
+@media (width < 768px) {
+	.aceiro {
+		padding-block-end: calc(68px + env(safe-area-inset-bottom, 0px));
+	}
+
+	.ace-title {
+		position: relative;
+		background: none;
+		padding: 20px 16px 18px;
+	}
+
+	.ace-title .ace-title-kicker {
+		margin-block-end: 10px;
+	}
+
+	.ace-title h1 {
+		font-size: clamp(2.85rem, 12.8vw, 5rem);
+	}
+
+	.ace-map-steps {
+		inset-block-end: 38px;
+	}
+
+	.ace-map-footer {
+		inset-block-end: 10px;
+	}
+
+	.ace-inspector {
+		inset-block-end: 41px;
+	}
+
+	.ace-map:has(.ace-inspector) .ace-map-steps {
+		inset-block-end: 75px;
+	}
+
+	.ace-compare-labels {
+		inset-block-end: 38px;
+		font-size: 0.625rem;
+	}
+
+	.ace-instruments {
+		isolation: auto;
+		padding-block-start: 16px;
+	}
+
+	.ace-controls {
+		position: fixed;
+		z-index: 10;
+		inset: auto 0 0;
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+		align-items: center;
+		gap: 8px;
+		padding: 7px 10px calc(7px + env(safe-area-inset-bottom, 0px));
+		border-block-start: 1px solid var(--control-border);
+		background: var(--background);
+	}
+
+	.ace-help[data-feedback="true"] {
+		position: fixed;
+		z-index: 10;
+		inset: auto 0 calc(59px + env(safe-area-inset-bottom, 0px));
+		padding: 8px 12px;
+		background: var(--background);
+		color: var(--foreground);
+		border-block-start: 1px solid var(--control-border);
+	}
+
+	.ace-tools {
+		margin: 0;
+	}
+
+	.ace-tool > span {
+		flex-direction: column;
+		gap: 1px;
+		font-size: 0.64rem;
+	}
+
+	.ace-actions {
+		gap: 4px;
+	}
+
+	.ace-actions [data-action="ignite"] {
+		font-size: 0.72rem;
+		line-height: 1.12;
+	}
+
+	.ace-actions [data-action="ignite"] svg {
+		display: none;
+	}
+}
+
+@media (width < 350px) {
+	.ace-controls {
+		grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+	}
+
+	.ace-model-note {
+		display: grid;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ace-map .ace-scar-baseline,
+	.ace-humidity-instrument .ace-humidity-tube > span {
+		transition-duration: 0ms;
+	}
+}

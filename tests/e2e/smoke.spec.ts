@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { appConfig } from "../../src/core/app-config";
 
-test("serves the neutral home page", async ({ page }) => {
+test("serves the Aceiro field map", async ({ page }) => {
 	const response = await page.goto("/");
 
 	expect(response?.status()).toBe(200);
 	await expect(page).toHaveTitle(appConfig.name);
 	await expect(
-		page.getByRole("heading", { name: appConfig.name }),
+		page.getByRole("heading", { name: "O fogo lê o vento." }),
 	).toBeVisible();
 });
 
