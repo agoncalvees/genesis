@@ -1,0 +1,1582 @@
+{
+  "url": "http://127.0.0.1:3000/",
+  "checkedAt": "2026-11-25T00:07:57.112Z",
+  "issues": [],
+  "rows": [
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "background-color",
+      "expected": "{background} = rgb(21, 17, 14)",
+      "actual": "rgb(21, 17, 14)",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "color",
+      "expected": "{foreground} = rgb(239, 230, 210)",
+      "actual": "rgb(239, 230, 210)",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-family",
+      "expected": "{typeface-display} = \"Instrument Serif\", Georgia, serif",
+      "actual": "\"Instrument Serif\", Georgia, serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-weight",
+      "expected": "400",
+      "actual": "400",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "font-style",
+      "expected": "italic",
+      "actual": "italic",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "background-color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "border-radius",
+      "expected": "<= 4px",
+      "actual": "3px",
+      "ok": true
+    },
+    {
+      "viewport": 360,
+      "state": "inicial",
+      "probe": "Mapa sem moldura",
+      "property": "border-radius",
+      "expected": "= 0px",
+      "actual": "0px",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "background-color",
+      "expected": "{background} = rgb(21, 17, 14)",
+      "actual": "rgb(21, 17, 14)",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "color",
+      "expected": "{foreground} = rgb(239, 230, 210)",
+      "actual": "rgb(239, 230, 210)",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-family",
+      "expected": "{typeface-display} = \"Instrument Serif\", Georgia, serif",
+      "actual": "\"Instrument Serif\", Georgia, serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-weight",
+      "expected": "400",
+      "actual": "400",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "font-style",
+      "expected": "italic",
+      "actual": "italic",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "background-color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "border-radius",
+      "expected": "<= 4px",
+      "actual": "3px",
+      "ok": true
+    },
+    {
+      "viewport": 768,
+      "state": "inicial",
+      "probe": "Mapa sem moldura",
+      "property": "border-radius",
+      "expected": "= 0px",
+      "actual": "0px",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "background-color",
+      "expected": "{background} = rgb(21, 17, 14)",
+      "actual": "rgb(21, 17, 14)",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Fundo carvão",
+      "property": "color",
+      "expected": "{foreground} = rgb(239, 230, 210)",
+      "actual": "rgb(239, 230, 210)",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-family",
+      "expected": "{typeface-display} = \"Instrument Serif\", Georgia, serif",
+      "actual": "\"Instrument Serif\", Georgia, serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Manchete serifada",
+      "property": "font-weight",
+      "expected": "400",
+      "actual": "400",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Manchete grande (desktop)",
+      "property": "font-size",
+      "expected": ">= 80px",
+      "actual": "99.36px",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Palavra-sinal",
+      "property": "font-style",
+      "expected": "italic",
+      "actual": "italic",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-family",
+      "expected": "{typeface-mono} = \"JetBrains Mono Variable\", monospace",
+      "actual": "\"JetBrains Mono Variable\", monospace",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Leituras mono tabulares",
+      "property": "font-variant-numeric",
+      "expected": "~tabular-nums",
+      "actual": "tabular-nums",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-family",
+      "expected": "{typeface-body} = \"Archivo Variable\", system-ui, sans-serif",
+      "actual": "\"Archivo Variable\", system-ui, sans-serif",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "font-stretch",
+      "expected": "<= 87.5%",
+      "actual": "75%",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Rótulos condensados",
+      "property": "text-transform",
+      "expected": "uppercase",
+      "actual": "uppercase",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "background-color",
+      "expected": "{--ember} = rgb(255, 90, 31)",
+      "actual": "rgb(255, 90, 31)",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Ação de ignição",
+      "property": "border-radius",
+      "expected": "<= 4px",
+      "actual": "3px",
+      "ok": true
+    },
+    {
+      "viewport": 1440,
+      "state": "inicial",
+      "probe": "Mapa sem moldura",
+      "property": "border-radius",
+      "expected": "= 0px",
+      "actual": "0px",
+      "ok": true
+    }
+  ]
+}
