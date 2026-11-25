@@ -44,3 +44,10 @@ O `lang` padrão do documento passou a ser `pt-BR`, a Bricolage agora carrega a 
 - A Base funcionou como pretendido: o produto nasceu limpo e nada da fundação atrapalhou. Dela, a tela usou o motor de tokens e fontes, `useHydrated`, `CompareMask` e `design:verify`. O resto foi autoral.
 - Sem geração de imagem, a qualidade veio da direção e do mecanismo. Falta materialidade de ilustração em comparação com o Aceiro. Gerar a ilustração após o reset do Codex é o próximo passo natural.
 - O fluxo com um único agente (Claude Code) foi mais rápido que a orquestração do Aceiro, com qualidade comparável na camada de interação.
+
+## Rodada 2 — produto e pitch (feedback do responsável)
+
+"É bonito, mas ainda não resolve uma dor de produto de hackathon": o jurado não tem tempo de explorar. Mudanças na Base (`4ac998a`): protocolo de pitch antes da direção de arte, `PitchTour` e checagem da primeira dobra. No Senha:
+- Abertura: "Para coordenações de atenção básica" → título → dor com número (1h03 no distrito; 2h01 na UBS Jardim × 2 min na UBS Vila, mesma equipe) → promessa → **Ver em 60 segundos**. Visível sem rolar em 360 e 1440 px (verificado pelo `design:verify`).
+- `?demo=1`: 5 passos — corredor lotado → a pessoa que esperou 7h17 → médico ocioso na unidade vizinha → 2 plantões movidos (1h03 → 21 min, executado pelo tour) → comparação antes/depois. Funciona com passador de slides.
+- Bloco "Como funciona" (4 etapas do mecanismo) e "Próximos passos"; roteiro de 3 min em `docs/product/DEMO-SCRIPT.md` do produto.
