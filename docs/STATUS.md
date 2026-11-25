@@ -93,3 +93,27 @@ vitrine disponível sem elas e validação de build e responsividade.
 - `bun run dev:projects` aguardou os dois apps antes de anunciar a URL. No Chromium, a partir da vitrine, a versão C do ISOTERMA produziu um resultado de simulação e o Entrelaços apresentou uma atividade após analisar as respostas. Foram inspecionadas capturas desktop e mobile. Uma variável pública sintética do processo pai não chegou a nenhum dos três servidores. O encerramento por sinal liberou as três portas.
 - Revisão independente levou à espera pela prontidão dos apps, ao isolamento do ambiente e ao idioma `pt-BR` do documento. A vitrine está nas prévias do build. A abertura das aplicações usa o inicializador local.
 - `bun run check`, `typecheck`, `design:check`, `build` e Vitest passaram (279 passaram, um opt-in de IA ignorado). Playwright: 59 em desenvolvimento na reexecução isolada, 13 no build Node. A primeira execução de desenvolvimento teve duas falhas de carregamento de módulos ao iniciar Vite simultaneamente no mesmo checkout. A cobertura da vitrine inclui seleção por setas, troca de prévia, idioma, 360 px sem overflow e zero violações nas regras axe avaliadas.
+
+## P10 · Creative engineering reset · 24/11/2026
+
+Objetivo: elevar a qualidade da primeira entrega visual a partir de um tema desconhecido, sem aumentar a fundação. Branch local `p10-creative-reset`. Não avançar para a P11.
+
+**Diagnóstico.** ISOTERMA mostrou que o DESIGN.md é a alavanca e que os componentes pouco aceleram (3 peças reutilizadas, bundle +73 KB gzip). O que induzia interfaces genéricas: começar por um "mundo" pré-definido; layouts e padrões com moldura de card, texto em inglês e formato fixo (`BeforeAfter`, `ResultPanel`); fade-in/stagger como motion padrão; nenhum passo de conceito visual antes do código; nenhuma verificação entre intenção e CSS renderizado.
+
+**Decisões.**
+- Protocolo obrigatório de 9 passos em `docs/design/CREATIVE-DIRECTION.md` (problema → mecanismo → 3 referências → direção → conceito visual → DESIGN.md + fidelity.json → implementação → `design:verify` + comparação → refinamento), com princípios aplicáveis, sinais de interface gerada por IA e ferramentas visuais por ambiente com custo verificado. `AGENTS.md` e `CLAUDE.md` reescritos em torno dele, com mapa "tarefa → documento" para não exigir leitura do repositório.
+- `DESIGN-TEMPLATE.md`: seções de arte (composição, ritmo, escala, profundidade, densidade, narrativa, materiais, recursos gráficos, comportamento, motion).
+- `EXPERIENCES.md` (Experience Registry) por mecanismo, com versões e licenças conferidas no npm/GitHub. React Bits e Animate UI são MIT + Commons Clause: uso no produto, nunca redistribuição na fundação.
+- `MOTION.md` reescrito por intenção; fade/stagger deixam de ser padrão.
+- Mundos e layouts passam a ser exemplos; `--world neutral` + DESIGN.md próprio é o caminho recomendado. Nada foi removido.
+- Código novo na fundação: `design:verify` (`tools/design-engine/verify.ts`, `fidelity.ts`; estilos computados vs DESIGN.md e `{--var}` do produto, fontes carregadas, overflow, erros de página, capturas por viewport) e `CompareMask` (comparação headless sobre o mesmo quadro, arrasto direto e teclado, sem texto fixo).
+
+**Ensaio.** Aceiro — ver `docs/experiments/ACEIRO-P10.md` (capturas, tempos, limitações). Primeira tela convincente em ~37 min do brief ao refinamento, sem intervenção humana e com uma rodada de direção.
+
+**Ferramentas verificadas.** Codex `image_gen` disponível e usado (incluído no plano). Figma MCP conectado (conta estudante); `generate_image`/vetores consomem créditos de IA e não foram usados. OpenCode: `deepseek-v4.1-flash-free` esgotou a cota gratuita; troca para `hy4-flash-free`.
+
+**Verificação (Genesis).** `bun run check`, `typecheck`, `design:check`, `test` (289 passaram, 1 opt-in ignorado) e `build` = 0. `design:verify` exercitado contra `/` do Genesis (detectou divergência proposital) e no Aceiro (145/145). E2E do Genesis não reexecutado nesta fase (nenhuma rota alterada).
+
+**Limitações.** n = 1 e sem comparação cega; avaliação cega do ISOTERMA continua pendente; mobile só em emulação; `design:verify` não detecta qualidade da camada computacional (fogo em blocos passou) — por isso o passo 8 exige olhar capturas durante a interação. Revisão independente do código da fundação: autorrevisão.
+
+**Retomada.** Revisar e, se aprovado, integrar `p10-creative-reset` em `main`. Para um tema novo: `AGENTS.md` → `CREATIVE-DIRECTION.md`.
