@@ -1,18 +1,36 @@
 # Genesis — instruções para agentes
 
-Leia [README](README.md), [Blueprint](docs/BLUEPRINT.md), [Roadmap](docs/ROADMAP.md) e [Status](docs/STATUS.md) ao retomar o projeto. Consulte apenas os guias aplicáveis à tarefa. Use português na documentação, inglês em código e identificadores e kebab-case em arquivos, salvo nomes convencionais.
+Genesis é uma fundação para materializar uma experiência digital excepcional a partir de um tema desconhecido. A prioridade é a **qualidade da primeira entrega**, não o tamanho da fundação. Use português na documentação, inglês em código e identificadores, kebab-case em arquivos (salvo nomes convencionais).
+
+## Ao retomar
+Leia [STATUS](docs/STATUS.md) (checkpoint mais recente) e só os guias da tarefa. Não é preciso ler o repositório inteiro.
+
+| Tarefa | Leia |
+|---|---|
+| Interpretar o tema, direção de arte, referências, assets, Figma | [CREATIVE-DIRECTION](docs/design/CREATIVE-DIRECTION.md) |
+| Escrever o DESIGN.md | [DESIGN-TEMPLATE](docs/design/DESIGN-TEMPLATE.md), [DESIGN-ENGINE](docs/design/DESIGN-ENGINE.md) |
+| Iniciar um produto | [PORTABILITY](docs/engineering/PORTABILITY.md) |
+| Escolher bibliotecas e componentes | [EXPERIENCES](docs/design/EXPERIENCES.md), [COMPONENTS](docs/design/COMPONENTS.md) |
+| Motion | [MOTION](docs/design/MOTION.md) |
+| Validar a aparência | [FIDELITY](docs/design/FIDELITY.md), [VISUAL-ENGINEERING](docs/design/VISUAL-ENGINEERING.md) |
+| Gates e histórico | [Roadmap](docs/ROADMAP.md), [Blueprint](docs/BLUEPRINT.md) |
+
+## Fluxo de um tema novo
+1. Confirme as regras do evento. Preencha `CHALLENGE.md` e `PRODUCT-BRIEF.md`.
+2. `bun run genesis:new -- --name "<Nome>" --slug <slug> --world neutral --dir <abs>`. Trabalhe no produto; o domínio fica nele.
+3. **Protocolo de direção artística** (obrigatório, curto): problema e público → mecanismo tecnológico central → até 3 referências concretas → direção artística → conceito visual da tela principal → `design/DESIGN.md` + `design/fidelity.json` → implementação → `design:verify` e comparação com o conceito → uma rodada de refinamento antes de entregar.
+4. A direção escolhe os componentes. Mundos e layouts do Genesis são exemplos, não pontos de partida. Não imponha uma estética universal; a identidade é original e adequada ao público e ao contexto cultural.
+5. Construa primeiro o momento-assinatura onde o mecanismo aparece funcionando. Uma tela excepcional vale mais que várias medianas.
 
 ## Execução
+- Registre em poucas linhas objetivo, arquivos sob sua responsabilidade e critérios de aceitação. A fase 00 exige aprovação humana; exceções também.
+- Fundação agnóstica ao domínio e à marca; o núcleo não importa `features/`. Serviços opcionais fora do caminho crítico. Mudanças de escopo, stack ou custo na fundação exigem ADR com decisão humana. Dependências de **produto** são livres quando justificadas (licença, peso, acessibilidade) e registradas em `PROVENANCE.md`. Preserve o lockfile.
+- Promova algo à fundação só com uso real, outro uso plausível e sem texto/cor/fonte fixos.
+- Implemente a menor solução funcional; um responsável por arquivo ou contrato. Sem serviço externo, continue localmente e registre o bloqueio. Identifique fixtures e mocks; diferencie medições de estimativas; registre apenas testes executados.
+- Rode as verificações pertinentes e uma revisão independente quando houver; senão, autorrevisão declarada. Atualize o STATUS com comandos, resultados, bloqueios e ponto de retomada. Tudo deve funcionar pelo terminal em Claude Code e Codex, sem orquestrador.
+- Commits locais pequenos. Operações destrutivas, push, merge remoto, publicação, deploy, conexão de contas e gastos (inclusive créditos de IA do Figma) exigem autorização. Segredos fora do cliente, logs e Git.
 
-1. Registre em poucas linhas o objetivo, os arquivos sob sua responsabilidade e os critérios de aceitação. Siga os gates do Roadmap. A fase 00 é de análise e exige aprovação humana para avançar. Registre e obtenha aprovação de exceções.
-2. Mantenha a fundação agnóstica ao domínio e à marca. O núcleo não importa `features/`. Serviços e capacidades opcionais ficam fora do caminho crítico de inicialização. Mudanças de escopo, stack ou custo exigem ADR com evidência, alternativa, impacto e decisão humana. Confira documentação oficial, runtime e peers antes de alterar dependências. Preserve o lockfile.
-3. Após a revelação e confirmação das regras, preencha `CHALLENGE.md` e `PRODUCT-BRIEF.md` antes de implementar. Isole o produto com `genesis:new`; mantenha as funcionalidades de domínio no produto. Trabalhe na experiência central. Só promova melhorias à fundação com outro uso plausível e evidência de necessidade.
-4. Implemente a menor solução funcional. Um responsável por arquivo ou contrato; o coordenador revisa e integra. Continue o trabalho local quando faltar serviço externo e registre o bloqueio. Identifique fixtures e mocks, diferencie medições de estimativas e registre apenas testes executados.
-5. Rode as verificações pertinentes e faça revisão independente quando disponível. Na falta dela, faça autorrevisão e registre a limitação. Atualize o STATUS com comandos, resultados, bloqueios e ponto de retomada. Receitas, comandos e checkpoints devem funcionar em Codex e Claude Code pelo terminal, sem exigir um orquestrador ou modelo.
-6. Preserve o histórico com commits locais pequenos. Operações destrutivas exigem aprovação. Push, merges remotos, publicação, deploy, conexão de contas e ações externas pagas exigem autorização. Mantenha segredos fora do cliente, dos logs e do Git. Use ambiente local para credenciais. Respeite permissões de acesso e limites de coleta.
-
-## Design e validação
-
-- Defina direção artística antes da implementação, a partir do problema, público e contexto cultural. Selecione até três referências úteis e anote o que pretende aprender de cada uma. Use o Robin como referência de acabamento. Preserve identidades, licenças e autoria.
-- Cada produto tem seu próprio `design/DESIGN.md`. Mapear cores, tipografia, geometria, densidade e motion a tokens semânticos permite que a composição varie com o problema. Consulte o [índice de componentes](docs/design/COMPONENTS.md) e reutilize seletivamente.
-- Siga o [protocolo visual](docs/design/VISUAL-ENGINEERING.md) para escolher ferramentas, gerar assets e validar a aparência. Inspecione a aplicação no navegador e compare estilos computados de elementos centrais com o DESIGN.md. Verifique teclado, foco, contraste, erros, responsividade e movimento reduzido. Capture estados relevantes após o refinamento.
+## Qualidade visual
+- Referência de acabamento: Robin; referência de ambição: Awwwards/Godly. Preserve identidades, licenças e autoria; não copie marcas ou recursos protegidos.
+- Interface aprovada em testes não é interface profissional. Abra no navegador, capture 360/768/1440, compare com o conceito e com o DESIGN.md (`bun run design:verify`). Verifique teclado, foco, contraste, erros, responsividade e reduced motion.
+- Evite os sinais de interface gerada por IA listados em CREATIVE-DIRECTION.

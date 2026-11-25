@@ -24,6 +24,8 @@ Estado do Genesis como **motor de design adaptável** em 2026-11-24. O tema do h
 Números da última verificação completa no Genesis: `check`, `typecheck`, `build`, `design:check`, `design:lint` = 0; `test` 270+ passaram (1 opt-in de IA real ignorado); `test:e2e` 57; `test:e2e:prod` 12 em cada variante (Studio público e `VITE_STUDIO_DISABLED=1`).
 
 ## Como usar no dia
+
+> Substituído na P10 pelo fluxo de [AGENTS.md](../AGENTS.md) e [CREATIVE-DIRECTION](design/CREATIVE-DIRECTION.md): comece por `--world neutral` e um DESIGN.md próprio; os mundos abaixo são exemplos de composição.
 1. Creative sprint → `BRAND-BRIEF.md` (`FIGMA-WORKFLOW.md`, passos 1–2).
 2. Partir do mundo mais próximo em `design/worlds/` e ajustar o `DESIGN.md`; `bun run design:lint`.
 3. Iniciar o produto: `bun run genesis:new -- --name "<Nome>" --slug <slug> --world <id> --dir <caminho>`.

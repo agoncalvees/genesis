@@ -44,6 +44,7 @@ export {
 	StreamingText,
 } from "./patterns/ai-interface";
 export { BeforeAfter } from "./patterns/before-after";
+export { CompareMask, type CompareMaskProps } from "./patterns/compare-mask";
 export {
 	EvidenceHeadline,
 	Figure,
