@@ -141,14 +141,16 @@ test("Select has a field name and accepts an option by keyboard", async () => {
 	);
 	await user.keyboard("[Space]");
 	const first = await screen.findByRole("option", { name: "Option A" });
-	await waitFor(() =>
-		expect(first.hasAttribute("data-highlighted")).toBe(true),
-	);
+	await waitFor(() => {
+		expect(first.hasAttribute("data-highlighted")).toBe(true);
+		expect(document.activeElement).toBe(first);
+	});
 	await user.keyboard("[ArrowDown]");
 	const second = screen.getByRole("option", { name: "Option B" });
-	await waitFor(() =>
-		expect(second.hasAttribute("data-highlighted")).toBe(true),
-	);
+	await waitFor(() => {
+		expect(second.hasAttribute("data-highlighted")).toBe(true);
+		expect(document.activeElement).toBe(second);
+	});
 	await user.keyboard("[Enter]");
 	expect(
 		screen.getByRole("combobox", { name: "Choice" }).textContent,
