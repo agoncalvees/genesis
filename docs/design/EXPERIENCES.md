@@ -6,7 +6,7 @@ Onde procurar antes de escrever do zero. Organizado por **mecanismo a comunicar*
 
 | Para mostrar… | Recurso preferido | Alternativa | Genesis |
 |---|---|---|---|
-| Simulação, autômato, partículas, campo | Canvas 2D próprio + `requestAnimationFrame` (camada de dados separada da de pintura) | OGL (Unlicense) / three 0.187 (MIT) para GPU | — |
+| Simulação, autômato, partículas, campo | Canvas 2D próprio + `requestAnimationFrame` (camada de dados separada da de pintura). Pinte a grade em canvas na resolução do modelo e amplie com suavização + passe de brilho desfocado; traços do usuário como caminho contínuo, rasterizado só para o modelo. Blocos de pixel só se a direção pedir | OGL (Unlicense) / three 0.187 (MIT) para GPU | — |
 | Rede, grafo, relações | `d3-force` 3 (ISC) com render próprio em SVG/Canvas | `@xyflow/react` 13 (MIT) quando o usuário edita nós | — |
 | Mapa geográfico real | `maplibre-gl` 6 (BSD-3) com estilo próprio | `d3-geo` 3 (ISC) para cartogramas/projeções em SVG | — |
 | Território/diagrama ilustrado e selecionável | SVG autoral com regiões focáveis + legenda por faixas | Imagem gerada como base + máscara/grade de dados | — |

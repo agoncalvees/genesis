@@ -31,7 +31,8 @@ Extraídos de Robin (acabamento), Awwwards/Godly (direção), Framer (composiç�
 7. **Densidade calibrada ao público.** Especialista: denso, anotado, com unidades. Público geral: uma ideia por vez, com narrativa guiada. Nunca a densidade "média" de painel administrativo por omissão.
 8. **Motion explica.** O movimento mostra causa → efeito (ver [MOTION](MOTION.md)). A animação mais importante é a do mecanismo; o resto da interface é quase parado.
 9. **Interação direta.** Arraste, desenhe, gire, compare deslizando — sobre o próprio objeto. Formulários e sliders genéricos só quando o dado é realmente um número.
-10. **Acabamento invisível.** Estados vazios/erro/carregando desenhados, foco bonito, cursores corretos, alvos generosos, textos de interface específicos ao domínio, sem lorem e sem rótulos em inglês esquecidos.
+10. **O mecanismo tem o acabamento da arte.** A camada computacional (grade, partículas, grafo) é renderizada no mesmo material da direção: bordas suaves, brilho, traço de mão — não quadrados e linhas de debug sobre uma ilustração refinada. Durante o processamento, as leituras se atualizam ao vivo.
+11. **Acabamento invisível.** Estados vazios/erro/carregando desenhados, foco bonito, cursores corretos, alvos generosos, textos de interface específicos ao domínio, sem lorem e sem rótulos em inglês esquecidos.
 
 ### Sinais de interface gerada por IA (evite)
 
